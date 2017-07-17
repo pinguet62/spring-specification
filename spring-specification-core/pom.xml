@@ -5,11 +5,11 @@
 
 	<parent>
 		<groupId>fr.pinguet62</groupId>
-		<artifactId>spring-ruleengine</artifactId>
+		<artifactId>spring-specification</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>spring-ruleengine-core</artifactId>
+	<artifactId>spring-specification-core</artifactId>
 	<packaging>jar</packaging>
 
 	<dependencies>

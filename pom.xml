@@ -10,7 +10,7 @@
 	</parent>
 
 	<groupId>fr.pinguet62</groupId>
-	<artifactId>spring-ruleengine</artifactId>
+	<artifactId>spring-specification</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -19,10 +19,10 @@
 	</properties>
 
 	<modules>
-		<module>spring-ruleengine-core</module>
-		<module>spring-ruleengine-admin-server</module>
-		<module>spring-ruleengine-admin-client</module>
-		<module>spring-ruleengine-sample</module>
+		<module>spring-specification-core</module>
+		<module>spring-specification-admin-server</module>
+		<module>spring-specification-admin-client</module>
+		<module>spring-specification-sample</module>
 	</modules>
 
 	<dependencies>
