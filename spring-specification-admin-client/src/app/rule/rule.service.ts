@@ -32,4 +32,9 @@ export class RuleService {
         return this.http.put(url, body, this.options).map(res => res.json());
     }
 
+    update(rule: Rule): Observable<Rule> {
+        let url: string = this.resourceUrl + '/' + rule.id;
+        let body: string = JSON.stringify(rule);
+        return this.http.post(url, body, this.options).map(res => res.json());
+    }
 }

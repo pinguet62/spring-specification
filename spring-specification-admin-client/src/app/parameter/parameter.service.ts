@@ -3,7 +3,7 @@ import {Http, RequestOptionsArgs, Headers} from "@angular/http";
 import {Observable} from "rxjs/Observable";
 import * as Rx from "rxjs/Rx";
 import 'rxjs/Rx';
-import {Rule} from "./Rule";
+import {Rule} from "../rule/rule";
 import {Parameter} from "./parameter";
 
 @Injectable()

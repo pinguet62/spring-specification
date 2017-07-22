@@ -27,6 +27,7 @@ import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
 import fr.pinguet62.springruleengine.core.builder.database.repository.ParameterRepository;
 import fr.pinguet62.springruleengine.core.builder.database.repository.RuleRepository;
 import fr.pinguet62.springruleengine.server.dto.ParameterDto;
+import fr.pinguet62.springruleengine.server.dto.ParameterInputDto;
 
 @Transactional
 @RestController
@@ -62,7 +63,7 @@ public class ParameterController {
     }
 
     @PutMapping
-    public ResponseEntity<ParameterDto> create(@RequestBody ParameterDto dto) {
+    public ResponseEntity<ParameterDto> create(@RequestBody ParameterInputDto dto) {
         ParameterEntity entity = new ParameterEntity();
         // entity.setId();
         entity.setKey(dto.getKey());
@@ -75,7 +76,7 @@ public class ParameterController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<ParameterDto> update(@PathVariable("id") Integer id, @RequestBody ParameterDto dto) {
+    public ResponseEntity<ParameterDto> update(@PathVariable("id") Integer id, @RequestBody ParameterInputDto dto) {
         ParameterEntity entity = parameterRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.status(NOT_FOUND).build();

@@ -1,7 +1,10 @@
-insert into RULE_ENTITY (ID, KEY) values (1, 'and');
-    insert into RULE_ENTITY (ID, KEY, PARENT) values (11, 'hasColorRule', 1);
+insert into RULE_ENTITY (ID, KEY, DESCRIPTION) values (1, 'andRule', null);
+    insert into RULE_ENTITY (ID, KEY, DESCRIPTION, PARENT) values (11, 'hasColorRule', null, 1);
            insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (111, 11, 'color', 'black', 'java.lang.String');
-    insert into RULE_ENTITY (ID, KEY, PARENT) values (12, 'or', 1);
-		insert into RULE_ENTITY (ID, KEY, PARENT) values (121, 'onlyWeekendRule', 12);
-        insert into RULE_ENTITY (ID, KEY, PARENT) values (122, 'priceGreaterThanRule', 12);
+           insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (112, 11, 'a_key', 'a_value', 'java.lang.Integer');
+           insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (113, 11, 'b_key', 'b_value', 'java.lang.Integer');
+           insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (114, 11, 'c_key', 'c_value', 'java.lang.Integer');
+    insert into RULE_ENTITY (ID, KEY, DESCRIPTION, PARENT) values (12, 'orRule', '', 1);
+		insert into RULE_ENTITY (ID, KEY, DESCRIPTION, PARENT) values (121, 'onlyWeekendRule', 'The product can only be propoced the weekend.', 12);
+        insert into RULE_ENTITY (ID, KEY, DESCRIPTION, PARENT) values (122, 'priceGreaterThanRule', 'It''s necessary to have good profict.', 12);
                 insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (1221, 122, 'amount', '100.00', 'java.lang.Double');

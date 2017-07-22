@@ -1,15 +1,10 @@
 package fr.pinguet62.springruleengine.server.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class ParameterDto {
+public class ParameterInputDto {
 
     private Integer id;
 
@@ -18,5 +13,8 @@ public class ParameterDto {
     private String value;
 
     private String type;
+
+    /** @see RuleEntity#getId() */
+    private Integer rule;
 
 }

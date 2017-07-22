@@ -1,26 +1,35 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
-
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {CdkTableModule} from "@angular/cdk";
+import {MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule, MdSelectModule, MdTableModule} from '@angular/material';
 import {ButtonModule, DataTableModule, DialogModule, DropdownModule, InplaceModule, InputTextModule, SharedModule, TreeModule} from "primeng/primeng";
 
 import {AppComponent} from './app.component';
-import {RuleComponent} from "./rule.component";
-import {ParameterComponent} from "./parameter.component";
-import {RuleService} from "./rule.service";
-import {ParameterService} from "./parameter.service";
+import {RuleComponent, EditRuleDialog} from "./rule/rule.component";
+import {ParameterComponent, EditParameterDialog, DeleteParameterDialog} from "./parameter/parameter.component";
+import {RuleService} from "./rule/rule.service";
+import {ParameterService} from "./parameter/parameter.service";
 
 @NgModule({
-    declarations: [
-        AppComponent, RuleComponent, ParameterComponent
-    ],
     imports: [
-        BrowserModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, HttpModule,
-        ButtonModule, DataTableModule, DialogModule, DropdownModule, InplaceModule, InputTextModule, SharedModule, TreeModule
+        BrowserModule, FormsModule, ReactiveFormsModule, HttpModule, BrowserAnimationsModule,
+        ButtonModule, DataTableModule, DialogModule, DropdownModule, InplaceModule, InputTextModule, SharedModule, TreeModule,
+        CdkTableModule,
+        MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule, MdSelectModule, MdTableModule
     ],
     providers: [RuleService, ParameterService],
+    declarations: [
+        AppComponent,
+        RuleComponent, EditRuleDialog,
+        ParameterComponent, EditParameterDialog, DeleteParameterDialog
+    ],
+    entryComponents: [
+        EditRuleDialog,
+        EditParameterDialog, DeleteParameterDialog
+    ],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

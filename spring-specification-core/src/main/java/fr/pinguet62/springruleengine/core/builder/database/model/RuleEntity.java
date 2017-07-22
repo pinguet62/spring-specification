@@ -21,7 +21,11 @@ public class RuleEntity {
     @GeneratedValue
     private Integer id;
 
+    /** Key used by factory to find corresponding implementation. */
     private String key;
+
+    /** User's notes. */
+    private String description;
 
     @OneToMany(fetch = EAGER)
     @JoinColumn(name = "parent")
