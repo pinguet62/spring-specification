@@ -1,4 +1,4 @@
-import {Component, Inject} from "@angular/core";
+import {Component, Inject, Input, OnInit} from "@angular/core";
 import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from "@angular/material";
 import {SelectItem} from "primeng/primeng";
 import {convert, RuleTreeNode} from "./rule-tree-node";
@@ -66,7 +66,7 @@ export class SettingsRuleDialog {
 @Component({
     selector: 'p62-rule',
     template: `
-        <p-tree [value]="rules">
+        <p-tree [value]="treeNodes">
             <ng-template let-node pTemplate="default">
                 <div style="display: inline-flex;">
                     <span>{{node.label}}</span>
@@ -108,8 +108,11 @@ export class SettingsRuleDialog {
         '::ng-deep .ui-tree .ui-treenode-children { padding: 0 0 0 5em; }' // sub-nodes indentation size
     ]
 })
-export class RuleComponent {
-    rules: RuleTreeNode[];
+export class RuleComponent implements OnInit {
+    @Input()
+    rule: Rule;
+
+    treeNodes: RuleTreeNode[];
 
     // ----- For dialog -----
     displayDialog: boolean;
@@ -123,12 +126,15 @@ export class RuleComponent {
         ruleService.getAvailableKeys().subscribe(infos =>
             this.availableKeys = infos.map(info => <SelectItem> {label: info.name, value: info.key})
         );
+    }
+
+    ngOnInit(): void {
         this.refresh();
     }
 
     refresh(): void {
-        this.ruleService.getAllRoots().subscribe(rs =>
-            this.rules = rs.map(r => convert(r))
+        this.ruleService.get(this.rule.id).subscribe(r =>
+            this.treeNodes = [convert(r)]
         );
     }
 

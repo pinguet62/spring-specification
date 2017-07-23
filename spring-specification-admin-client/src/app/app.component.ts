@@ -1,4 +1,6 @@
 import {Component} from "@angular/core";
+import {RuleService} from "./rule/rule.service";
+import {Rule} from "./rule/rule";
 
 @Component({
     selector: 'app-root',
@@ -21,8 +23,16 @@ import {Component} from "@angular/core";
 				</md-nav-list>
 			</md-sidenav>
 			
-			<div>Hello world!</div>
+			<p62-rule *ngFor="let rule of rules" [rule]="rule"></p62-rule>
 			
 		</md-sidenav-container>`
 })
-export class AppComponent {}
+export class AppComponent {
+    rules: Rule[];
+
+    constructor(private ruleService: RuleService) {
+        this.ruleService.getAllRoots().subscribe(rs =>
+            this.rules = rs
+        );
+    }
+}

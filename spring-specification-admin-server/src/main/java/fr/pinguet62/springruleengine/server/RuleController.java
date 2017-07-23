@@ -48,6 +48,15 @@ public class RuleController {
         return ruleRepository.findByParentIsNull().stream().map(this::convert).collect(toList());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RuleDto> getById(@PathVariable("id") Integer id) {
+        RuleEntity entity = ruleRepository.findOne(id);
+        if (entity == null)
+            return ResponseEntity.status(NOT_FOUND).build();
+
+        return ResponseEntity.ok(convert(entity));
+    }
+
     @PutMapping
     public ResponseEntity<RuleDto> create(@RequestBody RuleInputDto dto) {
         RuleEntity entity = new RuleEntity();

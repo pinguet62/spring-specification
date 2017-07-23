@@ -16,13 +16,18 @@ export class RuleService {
 
     constructor(protected http: Http) {}
 
+    getAvailableKeys(): Observable<RuleInformation[]> {
+        let targetUrl: string = this.resourceUrl + '/key';
+        return this.http.get(targetUrl, this.options).map(res => res.json());
+    }
+
     getAllRoots(): Observable<Rule[]> {
         let targetUrl: string = this.resourceUrl;
         return this.http.get(targetUrl, this.options).map(res => res.json());
     }
 
-    getAvailableKeys(): Observable<RuleInformation[]> {
-        let targetUrl: string = this.resourceUrl + '/key';
+    get(id: number): Observable<Rule> {
+        let targetUrl: string = this.resourceUrl + '/' + id;
         return this.http.get(targetUrl, this.options).map(res => res.json());
     }
 
