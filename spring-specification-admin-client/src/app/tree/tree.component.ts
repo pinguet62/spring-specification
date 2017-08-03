@@ -27,7 +27,8 @@ import {DragulaService} from "ng2-dragula";
             </div>
             
             <ul #childrenUl [dragula]="dragulaBagId" [dragulaModel]="node.children">
-                <p62-tree-node [id]="child.data.rule.id" *ngFor="let child of node.children" [dragulaBagId]="dragulaBagId" [node]="child" [labelTemplate]="labelTemplate" [optionsTemplate]="optionsTemplate"></p62-tree-node>
+                <p62-tree-node *ngFor="let child of node.children" [dragulaBagId]="dragulaBagId" [node]="child" [labelTemplate]="labelTemplate" [optionsTemplate]="optionsTemplate"></p62-tree-node>
+                <li *ngIf="node.acceptChildren && node.children.length === 0 && showEmptyDropZones" class="tree-empty">-</li><!-- Workaround to drop into empty node -->
             </ul>
         </li>`,
     styleUrls: ['./tree.component.css']
@@ -35,6 +36,7 @@ import {DragulaService} from "ng2-dragula";
 export class TreeNodeComponent implements AfterContentInit {
     /** Used by Dragula to identify a <i>bag</i>, and so to restrict drag/drop only into current {@link TreeComponent}. */
     @Input() dragulaBagId: string;
+    showEmptyDropZones: boolean = false;
 
     @Input() node: TreeNode<any>;
 
@@ -47,7 +49,17 @@ export class TreeNodeComponent implements AfterContentInit {
     @ViewChildren(TreeNodeComponent) childrenTreeNodeComponents: QueryList<TreeNodeComponent>;
     @ViewChild('childrenUl', {read: ElementRef}) childrenUlElement: ElementRef;
 
-    constructor(public elementRef: ElementRef) {}
+    constructor(public elementRef: ElementRef, dragulaService: DragulaService) {
+        dragulaService.drag.subscribe(x =>
+            this.showEmptyDropZones = true
+        );
+        dragulaService.drop.subscribe(x =>
+            this.showEmptyDropZones = false
+        );
+        dragulaService.cancel.subscribe(x =>
+            this.showEmptyDropZones = false
+        );
+    }
 
     /** Fill each {@link ViewContainerRef} from corresponding {@link TemplateRef}. */
     ngAfterContentInit(): void {
@@ -84,12 +96,9 @@ export class TreeComponent {
             revertOnSpill: true,
             accepts: (el: Element, target: Element, source: Element, sibling: Element): boolean => this.canDropInto(el, target, source, sibling)
         });
-        dragulaService.dropModel.subscribe(value => {
-            console.log(value);
-            let movedTreeNodeElement: Element = value[1];
-            console.log(movedTreeNodeElement);
-            let tgtUlElement: Element = value[2];
-            console.log(tgtUlElement);
+        dragulaService.drop.subscribe(values => {
+            let movedTreeNodeElement: Element = values[1];
+            let tgtUlElement: Element = values[2];
             let found: { node: TreeNode<any>, parent: TreeNode<any>, index: number } = this.findParentTreeNodeComponent(movedTreeNodeElement, tgtUlElement);
             let event: NodeMovedEvent<any> = {
                 node: found.node,
@@ -102,7 +111,6 @@ export class TreeComponent {
 
     /** @return {@code null} if not found. */
     findParentTreeNodeComponent(movedTreeNodeElement: Element, tgtUlElement: Element): { node: TreeNode<any>, parent: TreeNode<any>, index: number } {
-        console.log(); console.log('===== findParentTreeNodeComponent =====');
         let result: any = {
             node: null,
             parent: null,
@@ -112,13 +120,8 @@ export class TreeComponent {
         let BreakException = {}; // workaround to use "break" inside "forEach"
         try {
             this.visitTreeNodes(treeNodeComponent => {
-                if (treeNodeComponent.childrenUlElement.nativeElement === tgtUlElement) {
+                if (treeNodeComponent.childrenUlElement && treeNodeComponent.childrenUlElement.nativeElement === tgtUlElement)
                     result.parent = treeNodeComponent.node;
-                    treeNodeComponent.childrenTreeNodeComponents.forEach(x => {
-                        console.log('indexing...');
-                        console.log(x.elementRef.nativeElement);
-                    });
-                }
                 if (treeNodeComponent.elementRef.nativeElement === movedTreeNodeElement)
                     result.node = treeNodeComponent.node;
             });

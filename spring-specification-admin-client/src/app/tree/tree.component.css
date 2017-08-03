@@ -75,3 +75,10 @@ li {
 .gu-unselectable {
     background-color: yellow;
 }
+
+/* Target drop zone of node without child. */
+.tree-empty {
+    background-color: #f0f0f0;
+    height: 40px;
+    margin-top: 0px;
+}

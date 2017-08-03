@@ -7,9 +7,10 @@ insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (1, 0, '
     insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (12, 1, 'orRule', '', 1);
         insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (121, 0, 'onlyWeekendRule', '.', 12);
         insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (122, 1, 'priceGreaterThanRule', '.', 12);
-        insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (123, 2, 'onlyWeekendRule', 'The product can only be propoced the weekend.', 12);
-        insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (124, 3, 'priceGreaterThanRule', 'It''s necessary to have good profict.', 12);
-                insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (1221, 122, 'amount', '100.00', 'java.lang.Double');
+        insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (123, 2, 'andRule', null, 12);
+        insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (124, 3, 'onlyWeekendRule', 'The product can only be propoced the weekend.', 12);
+        insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (125, 4, 'priceGreaterThanRule', 'It''s necessary to have good profict.', 12);
+                insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (1221, 125, 'amount', '100.00', 'java.lang.Double');
 insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (2, 0, 'notRule', null, null);
     insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (21, 0, 'onlyWeekendRule', null, 2);
 insert into RULE_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (3, 0, 'onlyWeekendRule', null, null);

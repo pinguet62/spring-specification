@@ -14,7 +14,7 @@ import {Rule} from "./rule/rule";
         </md-toolbar>
 
         <md-sidenav-container>
-            <md-sidenav #sidenav mode="side" [opened]="true">
+            <md-sidenav #sidenav mode="side">
                 <md-nav-list>
                     <md-list-item>
                         <md-icon md-list-icon>settings</md-icon>

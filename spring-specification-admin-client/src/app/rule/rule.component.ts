@@ -116,11 +116,11 @@ export class RuleComponent implements OnInit {
     }
 
     ruleMoved(event: NodeMovedEvent<RuleDataTreeNode>): void {
-        console.log('----- ruleMoved -----');
+        /*console.log('----- ruleMoved -----');
         console.log(event);
-        console.log('Parent (id): ' + event.parent.data.rule.id);
+        console.log('Parent (id): ' + (event.parent && event.parent.data.rule.id));
         console.log('Node (id): ' + event.node.data.rule.id);
-        console.log('Index: ' + event.index);
+        console.log('Index: ' + event.index);*/
     }
 
     openCreateDialog(parentRule: Rule): void {

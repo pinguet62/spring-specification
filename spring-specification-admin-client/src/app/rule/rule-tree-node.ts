@@ -12,6 +12,7 @@ export interface RuleDataTreeNode {
 export function convert(rule: Rule): TreeNode<RuleDataTreeNode> {
     let treeNode: TreeNode<RuleDataTreeNode> = <TreeNode<RuleDataTreeNode>> {
         expanded: true, // TODO test
+        acceptChildren: ['andRule', 'orRule', 'notRule'].includes(rule.key),
         children: [],
         data: <RuleDataTreeNode> {
             rule: rule,
