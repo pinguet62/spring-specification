@@ -1,8 +1,9 @@
 create table RULE_ENTITY (
     ID integer identity primary key,
+    INDEX integer /*NOT NULL*/,
     KEY varchar(99),
     DESCRIPTION varchar(99),
-    PARENT integer references RULE_ENTITY(ID)
+    PARENT_ID integer references RULE_ENTITY(ID)
 );
 create table PARAMETER_ENTITY (
     ID integer identity primary key,

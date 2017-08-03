@@ -1,6 +1,7 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject} from "@angular/core";
 import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from "@angular/material";
-import {SelectItem, TreeNode} from "primeng/primeng";
+import {SelectItem} from "primeng/primeng";
+import {convert, RuleTreeNode} from "./rule-tree-node";
 import {RuleService} from "./rule.service";
 import {Rule} from "./rule";
 import {RuleInformation} from "./rule-information";
@@ -16,7 +17,7 @@ import {RuleInformation} from "./rule-information";
                 </md-select>
                 <br>
                 <md-input-container>
-                    <input mdInput placeholder="Description" [(ngModel)]="rule.description" name="description" required>
+                    <input mdInput placeholder="Description" [(ngModel)]="rule.description" name="description">
                 </md-input-container>
             </form>
         </md-dialog-content>
@@ -42,6 +43,27 @@ export class EditRuleDialog {
 }
 
 @Component({
+    selector: 'p62-rule-settings',
+    template: `
+        <h2 md-dialog-title>Settings</h2>
+        <md-dialog-content>
+            <h3>Parameters</h3>
+            <p62-parameter [rule]="rule"></p62-parameter>
+            <br><!--bug-->
+        </md-dialog-content>`
+})
+export class SettingsRuleDialog {
+    rule: Rule;
+
+    constructor(
+        protected dialogRef: MdDialogRef<EditRuleDialog>,
+        @Inject(MD_DIALOG_DATA) public data: any
+    ) {
+        this.rule = <Rule> data.rule;
+    }
+}
+
+@Component({
     selector: 'p62-rule',
     template: `
         <p-tree [value]="rules">
@@ -49,18 +71,18 @@ export class EditRuleDialog {
                 <div style="display: inline-flex;">
                     <span>{{node.label}}</span>
                     
-                    <button md-icon-button><md-icon>arrow_upward</md-icon></button>
-                    <button md-icon-button><md-icon>arrow_downward</md-icon></button>
+                    <button md-icon-button *ngIf="node.parent != null && !node.data.first" (click)="upwardIndexRule(node)"><md-icon>arrow_upward</md-icon></button>
+                    <button md-icon-button *ngIf="node.parent != null && !node.data.last" (click)="downwardIndexRule(node)"><md-icon>arrow_downward</md-icon></button>
+                    
                     <button md-icon-button (click)="openUpdateDialog(node.data)"><md-icon>mode_edit</md-icon></button>
                     
+                    <!-- Customer: accept parameters -->
+                    <div *ngIf="!['andRule', 'orRule', 'notRule'].includes(node.label)">
+                        <button md-icon-button (click)="openSettingsDialog(node.data)"><md-icon>settings</md-icon></button>
+                    </div>
                     <!-- Composite: accept sub-rules -->
                     <div *ngIf="['andRule', 'orRule', 'notRule'].includes(node.label)">
                         <button md-icon-button (click)="openCreateDialog(node.data)"><md-icon>add</md-icon></button>
-                    </div>
-                    
-                    <!-- Custom: accept parameters -->
-                    <div *ngIf="node.label!=='and' && node.label!=='orRule'">
-                        <!--<p62-parameter [rule]="node.data"></p62-parameter>-->
                     </div>
                 </div>
             </ng-template>
@@ -87,7 +109,7 @@ export class EditRuleDialog {
     ]
 })
 export class RuleComponent {
-    rules: TreeNode[];
+    rules: RuleTreeNode[];
 
     // ----- For dialog -----
     displayDialog: boolean;
@@ -105,19 +127,9 @@ export class RuleComponent {
     }
 
     refresh(): void {
-        this.ruleService.getAny().subscribe(r =>
-            this.rules = [RuleComponent.ruleToNode(r)]
+        this.ruleService.getAllRoots().subscribe(rs =>
+            this.rules = rs.map(r => convert(r))
         );
-    }
-
-    static ruleToNode(rule: Rule): TreeNode {
-        return {
-            expanded: true, // TODO test
-            icon: 'fa-folder-open',
-            label: rule.key,
-            data: rule,
-            children: rule.components == null ? null : rule.components.map(RuleComponent.ruleToNode)
-        };
     }
 
     showDialogToAdd(rule: Rule): void {
@@ -168,6 +180,26 @@ export class RuleComponent {
                 this.refresh()
             );
         });
+    }
+
+    openSettingsDialog(rule: Rule): void {
+        let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
+        dialogConfig.data = { rule: Object.assign({}, rule) };
+        dialogConfig.disableClose = false; // override
+        //dialogConfig.width = '800px'; // custom
+        let createDialog: MdDialogRef<SettingsRuleDialog> = this.dialog.open(SettingsRuleDialog, dialogConfig);
+    }
+
+    upwardIndexRule(node: RuleTreeNode): void {
+        this.ruleService.changeIndex(node.data.rule, node.data.index-1).subscribe(x =>
+            this.refresh()
+        );
+    }
+
+    downwardIndexRule(node: RuleTreeNode): void {
+        this.ruleService.changeIndex(node.data.rule, node.data.index+1).subscribe(x =>
+            this.refresh()
+        );
     }
 
     getCommonDialogConfig(): MdDialogConfig {

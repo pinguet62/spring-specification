@@ -16,7 +16,7 @@ export class RuleService {
 
     constructor(protected http: Http) {}
 
-    getAny(): Observable<Rule> {
+    getAllRoots(): Observable<Rule[]> {
         let targetUrl: string = this.resourceUrl;
         return this.http.get(targetUrl, this.options).map(res => res.json());
     }
@@ -36,5 +36,10 @@ export class RuleService {
         let url: string = this.resourceUrl + '/' + rule.id;
         let body: string = JSON.stringify(rule);
         return this.http.post(url, body, this.options).map(res => res.json());
+    }
+
+    changeIndex(rule: Rule, index: number): Observable<Rule> {
+        let url: string = this.resourceUrl + '/' + rule.id + '/index/' + index;
+        return this.http.post(url, null, this.options).map(res => res.json());
     }
 }

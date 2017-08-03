@@ -3,18 +3,12 @@ package fr.pinguet62.springruleengine.server;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-import java.beans.Introspector;
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,21 +35,17 @@ public class RuleController {
     @Autowired
     private RuleRepository ruleRepository;
 
+    @Autowired
+    private RuleService ruleService;
+
     @GetMapping("/key")
     public List<RuleInformationDto> getAvailable() {
-        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
-        provider.addIncludeFilter(new AssignableTypeFilter(Rule.class));
-        String packag = "fr/pinguet62/springruleengine"; // TODO
-        Set<BeanDefinition> components = provider.findCandidateComponents(packag);
-        return components.stream().map(component -> (Class<Rule>) ClassUtils.resolveClassName(component.getBeanClassName(),
-                provider.getResourceLoader().getClassLoader())).map(this::convert).collect(toList());
+        return ruleService.getAllRules().stream().map(this::convert).collect(toList());
     }
 
     @GetMapping
-    public RuleDto getAny() {
-        RuleEntity entity = ruleRepository.findAll().get(0);
-        RuleDto dto = convert(entity);
-        return dto;
+    public List<RuleDto> getAllRoots() {
+        return ruleRepository.findByParentIsNull().stream().map(this::convert).collect(toList());
     }
 
     @PutMapping
@@ -83,7 +73,25 @@ public class RuleController {
             entity.setDescription(dto.getDescription());
         entity = ruleRepository.save(entity);
 
-        return ResponseEntity.created(URI.create("/rule/" + entity.getId())).body(convert(entity));
+        return ResponseEntity.ok(convert(entity));
+    }
+
+    @PostMapping("/{id}/index/{index}")
+    public ResponseEntity<RuleDto> changeIndex(@PathVariable("id") Integer id, @PathVariable("index") Integer tgtIndex) {
+        RuleEntity entity = ruleRepository.findOne(id);
+        if (entity == null)
+            return ResponseEntity.status(NOT_FOUND).build();
+
+        int srcIndex = entity.getIndex();
+        int sens = (tgtIndex > srcIndex ? -1 : +1); // delta on index
+        List<RuleEntity> otherRules = entity.getParent().getComponents();
+        for (int i = srcIndex - sens; i != tgtIndex - sens; i -= sens) {
+            RuleEntity moved = otherRules.get(i);
+            moved.setIndex(moved.getIndex() + sens);
+        }
+        entity.setIndex(tgtIndex);
+
+        return ResponseEntity.ok(convert(entity));
     }
 
     private RuleDto convert(RuleEntity entity) {
@@ -120,7 +128,7 @@ public class RuleController {
         // @formatter:off
         return RuleInformationDto
                 .builder()
-                .key(Introspector.decapitalize(ClassUtils.getShortName(ruleType)))
+                .key(ruleService.getKey(ruleType))
                 .name(ruleType.isAnnotationPresent(RuleName.class) ? ruleType.getDeclaredAnnotation(RuleName.class).value() : null)
                 .description(ruleType.isAnnotationPresent(RuleDescription.class) ? ruleType.getDeclaredAnnotation(RuleDescription.class).value() : null)
                 .build();

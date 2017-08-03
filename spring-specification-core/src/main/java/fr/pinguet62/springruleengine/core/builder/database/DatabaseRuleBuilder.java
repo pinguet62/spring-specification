@@ -39,13 +39,13 @@ public class DatabaseRuleBuilder implements RuleBuilder {
 
     private Rule convert(RuleEntity ruleEntity) {
         String key = ruleEntity.getKey();
-        if (key.equals("and")) {
+        if (key.equals("andRule")) {
             List<Rule> rules = ruleEntity.getComponents().stream().map(this::convert).collect(toList());
             return new AndRule(rules);
-        } else if (key.equals("or")) {
+        } else if (key.equals("orRule")) {
             List<Rule> rules = ruleEntity.getComponents().stream().map(this::convert).collect(toList());
             return new OrRule(rules);
-        } else if (key.equals("not")) {
+        } else if (key.equals("notRule")) {
             Rule rule = convert(ruleEntity.getComponents().get(0));
             return new NotRule(rule);
         } else {

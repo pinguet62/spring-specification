@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import lombok.Data;
 
@@ -21,14 +23,20 @@ public class RuleEntity {
     @GeneratedValue
     private Integer id;
 
+    private Integer index;
+
     /** Key used by factory to find corresponding implementation. */
     private String key;
 
     /** User's notes. */
     private String description;
 
-    @OneToMany(fetch = EAGER)
-    @JoinColumn(name = "parent")
+    @ManyToOne
+    private RuleEntity parent;
+
+    @OneToMany
+    @JoinColumn(name = "parent_id")
+    @OrderBy("index")
     private List<RuleEntity> components = new ArrayList<>();
 
     @OneToMany(mappedBy = "rule", fetch = EAGER)

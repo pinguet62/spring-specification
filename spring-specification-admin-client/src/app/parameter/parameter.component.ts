@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from "@angular/core";
 import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from "@angular/material";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {ObservableDataSource} from "../simple-data-source";
@@ -82,8 +82,10 @@ export class DeleteParameterDialog {
                 <ng-container cdkColumnDef="options">
                     <md-header-cell *cdkHeaderCellDef></md-header-cell>
                     <md-cell *cdkCellDef="let parameter">
-                        <button md-icon-button (click)="openUpdateDialog(parameter)"><md-icon>mode_edit</md-icon></button>
-                        <button md-icon-button (click)="deleteParameter(parameter)"><md-icon>delete</md-icon></button>
+                        <div style="display: flex;"><!--flex: no line break-->
+                            <button md-icon-button (click)="openUpdateDialog(parameter)"><md-icon>mode_edit</md-icon></button>
+                            <button md-icon-button (click)="deleteParameter(parameter)"><md-icon>delete</md-icon></button>
+                        </div>
                     </md-cell>
                 </ng-container>
                 
@@ -92,7 +94,18 @@ export class DeleteParameterDialog {
             </md-table>
 
             <button (click)="openCreateDialog()" md-mini-fab style="position: absolute; bottom: 0; margin-bottom: 5px; right: 0; margin-right: 5px;"><md-icon>add</md-icon></button>
-        </div>`
+        </div>`,
+    styles: [
+        `.example-container {
+            display: flex;
+            flex-direction: column;
+            max-height: 500px;
+            min-width: 300px;
+        }
+        .mat-table {
+            overflow: auto;
+        }`
+    ]
 })
 export class ParameterComponent implements OnInit {
 

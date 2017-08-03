@@ -13,7 +13,7 @@ import fr.pinguet62.springruleengine.sample.model.Product;
 
 @Component
 @Scope("prototype")
-@RuleName("Hash color")
+@RuleName("Has color")
 @RuleDescription("Test \"$context.product.color=$params.color\"")
 public class HasColorRule implements Rule {
 
