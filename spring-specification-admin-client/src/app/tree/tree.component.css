@@ -1,0 +1,77 @@
+.tree-container {
+}
+
+/* Remove root level format */
+.tree-container > ul {
+    margin-left: -40px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.tree-container > ul:before {
+    content: none;
+}
+.tree-container > ul > ::ng-deep p62-tree-node > li:before {
+    content: none;
+}
+
+ul:before {
+    content: "";
+    border-left: 1px dotted black;
+    /* position de la barre */
+    position: absolute;
+    top: -20px;
+    bottom: +20px;
+    left: +20px;
+}
+ul {
+    position: relative; /* utilisation de top/left/bottom dans ul:before */
+}
+ul:after {
+}
+
+li:before {
+    content: "";
+    border-top: 1px dotted black;
+    width: 40px;
+    /* position de la barre */
+    position: absolute;
+    top: +20px;
+    left: -20px;
+}
+li {
+    list-style: none;
+    position: relative; /* utilisation de top/left/bottom dans ul:before */
+
+    margin-top: 20px;
+}
+
+.tree-content {
+    /* line with or without button (for expand/collapse) with same height */
+    height: 40px;
+    /* vertical center */
+    display: flex;
+    align-items: center;
+    /* fix "vertical center" */
+    margin-top: -20px;
+}
+
+.tree-content:hover {
+    background-color: #f0f0f0;
+}
+
+/* Dragula */
+/* overlay */
+.gu-mirror {
+    box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12); /* mat-elevation-z8 */
+    background-color: #f0f0f0; /* TODO variable */
+}
+/* target */
+.gu-transit {
+    color: #c0c0c0;
+}
+.gu-hide {
+    background-color: blue;
+}
+.gu-unselectable {
+    background-color: yellow;
+}

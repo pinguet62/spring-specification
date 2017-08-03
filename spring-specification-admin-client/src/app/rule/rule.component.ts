@@ -1,8 +1,8 @@
 import {Component, Inject, Input, OnInit} from "@angular/core";
 import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from "@angular/material";
-import {SelectItem} from "primeng/primeng";
-import {convert, RuleTreeNode} from "./rule-tree-node";
+import {NodeMovedEvent, TreeNode} from "../tree/tree-node";
 import {RuleService} from "./rule.service";
+import {convert, RuleDataTreeNode} from "./rule-tree-node";
 import {Rule} from "./rule";
 import {RuleInformation} from "./rule-information";
 
@@ -49,7 +49,7 @@ export class EditRuleDialog {
         <md-dialog-content>
             <h3>Parameters</h3>
             <p62-parameter [rule]="rule"></p62-parameter>
-            <br><!--bug-->
+            <br><!--fix-->
         </md-dialog-content>`
 })
 export class SettingsRuleDialog {
@@ -66,43 +66,29 @@ export class SettingsRuleDialog {
 @Component({
     selector: 'p62-rule',
     template: `
-        <p-tree [value]="treeNodes">
-            <ng-template let-node pTemplate="default">
+        <p62-tree [value]="treeNodes" (nodeMoved)="ruleMoved($event)">
+            <ng-template #label let-node>
+                <span>{{node.data.rule.id}} - {{node.data.rule.key}}</span>
+            </ng-template>
+            <ng-template #options let-node>
                 <div style="display: inline-flex;">
-                    <span>{{node.label}}</span>
-                    
                     <button md-icon-button *ngIf="node.parent != null && !node.data.first" (click)="upwardIndexRule(node)"><md-icon>arrow_upward</md-icon></button>
                     <button md-icon-button *ngIf="node.parent != null && !node.data.last" (click)="downwardIndexRule(node)"><md-icon>arrow_downward</md-icon></button>
                     
                     <button md-icon-button (click)="openUpdateDialog(node.data)"><md-icon>mode_edit</md-icon></button>
                     
                     <!-- Customer: accept parameters -->
-                    <div *ngIf="!['andRule', 'orRule', 'notRule'].includes(node.label)">
-                        <button md-icon-button (click)="openSettingsDialog(node.data)"><md-icon>settings</md-icon></button>
+                    <div *ngIf="!['andRule', 'orRule', 'notRule'].includes(node.data.rule.key)">
+                        <button md-icon-button (click)="openSettingsDialog(node.data.rule.key)"><md-icon>settings</md-icon></button>
                     </div>
                     <!-- Composite: accept sub-rules -->
-                    <div *ngIf="['andRule', 'orRule', 'notRule'].includes(node.label)">
-                        <button md-icon-button (click)="openCreateDialog(node.data)"><md-icon>add</md-icon></button>
+                    <div *ngIf="['andRule', 'orRule', 'notRule'].includes(node.data.rule.key)">
+                        <button md-icon-button (click)="openCreateDialog(node.data.rule.key)"><md-icon>add</md-icon></button>
                     </div>
                 </div>
             </ng-template>
-        </p-tree>
-        
-        <p-dialog header="New rule" [(visible)]="displayDialog" [modal]="true">
-            <div *ngIf="selectedRule" class="ui-grid ui-grid-responsive ui-fluid">
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-4"><label for="key">Key</label></div>
-                    <div class="ui-grid-col-8"><p-dropdown id="key" [options]="availableKeys" [(ngModel)]="selectedRule.key" [style]="{'width':'100%'}"></p-dropdown></div>
-                </div>
-            </div>
-            <p-footer>
-                <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                    <button pButton (click)="cancel()" label="Cancel" icon="fa-close"></button>
-                    <button pButton (click)="createAndAddNewRule()" label="Validate" icon="fa-check"></button>
-                </div>
-            </p-footer>
-        </p-dialog>
-    `, styles: [
+        </p62-tree>`,
+    styles: [
         '::ng-deep .ui-tree .ui-treenode-label { vertical-align: top !important; }', // vertical align because of element with different height
         '::ng-deep .ui-tree { width: 100%; }', // all screen width
         '::ng-deep .ui-tree .ui-treenode-children { padding: 0 0 0 5em; }' // sub-nodes indentation size
@@ -112,21 +98,12 @@ export class RuleComponent implements OnInit {
     @Input()
     rule: Rule;
 
-    treeNodes: RuleTreeNode[];
-
-    // ----- For dialog -----
-    displayDialog: boolean;
-    selectedRule: Rule;
-    availableKeys: SelectItem[];
+    treeNodes: TreeNode<RuleDataTreeNode>[];
 
     constructor(
         private dialog: MdDialog,
         private ruleService: RuleService
-    ) {
-        ruleService.getAvailableKeys().subscribe(infos =>
-            this.availableKeys = infos.map(info => <SelectItem> {label: info.name, value: info.key})
-        );
-    }
+    ) {}
 
     ngOnInit(): void {
         this.refresh();
@@ -138,24 +115,12 @@ export class RuleComponent implements OnInit {
         );
     }
 
-    showDialogToAdd(rule: Rule): void {
-        this.selectedRule = <Rule> {};
-        this.selectedRule.parent = rule.id;
-
-        this.displayDialog = true;
-    }
-
-    createAndAddNewRule(): void {
-        this.ruleService.create(this.selectedRule).subscribe(x =>
-            this.refresh()
-        );
-        this.displayDialog = false;
-        this.selectedRule = null;
-    }
-
-    cancel(): void {
-        this.displayDialog = false;
-        this.selectedRule = null;
+    ruleMoved(event: NodeMovedEvent<RuleDataTreeNode>): void {
+        console.log('----- ruleMoved -----');
+        console.log(event);
+        console.log('Parent (id): ' + event.parent.data.rule.id);
+        console.log('Node (id): ' + event.node.data.rule.id);
+        console.log('Index: ' + event.index);
     }
 
     openCreateDialog(parentRule: Rule): void {
@@ -196,13 +161,13 @@ export class RuleComponent implements OnInit {
         let createDialog: MdDialogRef<SettingsRuleDialog> = this.dialog.open(SettingsRuleDialog, dialogConfig);
     }
 
-    upwardIndexRule(node: RuleTreeNode): void {
+    upwardIndexRule(node: TreeNode<RuleDataTreeNode>): void {
         this.ruleService.changeIndex(node.data.rule, node.data.index-1).subscribe(x =>
             this.refresh()
         );
     }
 
-    downwardIndexRule(node: RuleTreeNode): void {
+    downwardIndexRule(node: TreeNode<RuleDataTreeNode>): void {
         this.ruleService.changeIndex(node.data.rule, node.data.index+1).subscribe(x =>
             this.refresh()
         );
