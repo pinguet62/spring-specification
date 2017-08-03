@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {CdkTableModule} from "@angular/cdk";
-import {MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule, MdSelectModule, MdTableModule} from '@angular/material';
+import {MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule, MdListModule, MdSelectModule, MdSidenavModule, MdTableModule, MdToolbarModule} from '@angular/material';
 import {ButtonModule, DataTableModule, DialogModule, DropdownModule, InplaceModule, InputTextModule, SharedModule, TreeModule} from "primeng/primeng";
 
 import {AppComponent} from './app.component';
@@ -18,7 +18,7 @@ import {ParameterService} from "./parameter/parameter.service";
         BrowserModule, FormsModule, ReactiveFormsModule, HttpModule, BrowserAnimationsModule,
         ButtonModule, DataTableModule, DialogModule, DropdownModule, InplaceModule, InputTextModule, SharedModule, TreeModule,
         CdkTableModule,
-        MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule, MdSelectModule, MdTableModule
+        MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule, MdListModule, MdSelectModule, MdSidenavModule, MdTableModule, MdToolbarModule
     ],
     providers: [RuleService, ParameterService],
     declarations: [
