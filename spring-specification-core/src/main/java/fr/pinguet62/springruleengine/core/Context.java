@@ -2,12 +2,12 @@ package fr.pinguet62.springruleengine.core;
 
 import java.util.Map;
 
-import fr.pinguet62.springruleengine.core.rule.Rule;
+import fr.pinguet62.springruleengine.core.api.Rule;
 
-/** Parameter for {@link Rule} methods. */
+/** Parameter for {@link Rule} methods execution. */
 public interface Context extends Map<String, Object> {
 
-    public default <T> T get(String key, Class<T> type) {
+    default <T> T get(String key, Class<T> type) {
         Object value = get(key);
         if (value == null)
             return null;

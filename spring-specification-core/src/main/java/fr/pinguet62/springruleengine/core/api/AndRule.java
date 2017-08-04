@@ -1,9 +1,13 @@
-package fr.pinguet62.springruleengine.core.rule;
+package fr.pinguet62.springruleengine.core.api;
 
 import java.util.Collection;
 
 import fr.pinguet62.springruleengine.core.Context;
+import fr.pinguet62.springruleengine.core.RuleDescription;
+import fr.pinguet62.springruleengine.core.RuleName;
 
+@RuleName(value = "\"AND\" combinator")
+@RuleDescription("Combination of rules using \"AND\" operator. True if empty.")
 public class AndRule extends AbstractCompositeRule {
 
     public AndRule(Rule... rules) {

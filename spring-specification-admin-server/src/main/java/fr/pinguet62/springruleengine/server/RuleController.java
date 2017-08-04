@@ -21,7 +21,7 @@ import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
 import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
 import fr.pinguet62.springruleengine.core.builder.database.repository.RuleRepository;
-import fr.pinguet62.springruleengine.core.rule.Rule;
+import fr.pinguet62.springruleengine.core.api.Rule;
 import fr.pinguet62.springruleengine.server.dto.ParameterDto;
 import fr.pinguet62.springruleengine.server.dto.RuleDto;
 import fr.pinguet62.springruleengine.server.dto.RuleInformationDto;
@@ -29,7 +29,7 @@ import fr.pinguet62.springruleengine.server.dto.RuleInputDto;
 
 @Transactional
 @RestController
-@RequestMapping("/rule")
+@RequestMapping("/api")
 public class RuleController {
 
     @Autowired
@@ -67,7 +67,7 @@ public class RuleController {
 
         ruleRepository.findOne(dto.getParent()).getComponents().add(entity);
 
-        return ResponseEntity.created(URI.create("/rule/" + entity.getId())).body(convert(entity));
+        return ResponseEntity.created(URI.create("/api/" + entity.getId())).body(convert(entity));
     }
 
     @PostMapping("/{id}")

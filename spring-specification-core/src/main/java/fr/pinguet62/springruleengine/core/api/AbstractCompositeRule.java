@@ -1,4 +1,4 @@
-package fr.pinguet62.springruleengine.core.rule;
+package fr.pinguet62.springruleengine.core.api;
 
 public abstract class AbstractCompositeRule implements Rule {
 

@@ -15,7 +15,7 @@ import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
-import fr.pinguet62.springruleengine.core.rule.Rule;
+import fr.pinguet62.springruleengine.core.api.Rule;
 
 @Service
 public class RuleService {

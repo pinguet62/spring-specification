@@ -15,6 +15,7 @@ import javax.persistence.OrderBy;
 
 import lombok.Data;
 
+/** Usage of a {@link Rule}. */
 @Data
 @Entity
 public class RuleEntity {
@@ -31,11 +32,11 @@ public class RuleEntity {
     /** User's notes. */
     private String description;
 
+    /** {@code null} when root {@link Rule}. */
     @ManyToOne
     private RuleEntity parent;
 
-    @OneToMany
-    @JoinColumn(name = "parent_id")
+    @OneToMany(mappedBy = "parent")
     @OrderBy("index")
     private List<RuleEntity> components = new ArrayList<>();
 

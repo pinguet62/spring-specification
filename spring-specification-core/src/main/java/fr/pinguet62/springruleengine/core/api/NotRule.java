@@ -1,4 +1,4 @@
-package fr.pinguet62.springruleengine.core.rule;
+package fr.pinguet62.springruleengine.core.api;
 
 import fr.pinguet62.springruleengine.core.Context;
 

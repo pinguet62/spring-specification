@@ -1,7 +1,9 @@
-insert into RULE_ENTITY (id, key) values (1, 'and');
-    insert into RULE_ENTITY (id, key, parent) values (11, 'hasColorRule', 1);
-           insert into PARAMETER_ENTITY (id, rule_id, key, value, type) values ('11_p1', 11, 'color', 'black', 'java.lang.String');
-    insert into RULE_ENTITY (id, key, parent) values (12, 'or', 1);
-		insert into RULE_ENTITY (id, key, parent) values (121, 'onlyWeekendRule', 12);
-        insert into RULE_ENTITY (id, key, parent) values (122, 'priceGreaterThanRule', 12);
-                insert into PARAMETER_ENTITY (id, rule_id, key, value, type) values ('122_p1', 122, 'amount', '100.00', 'java.lang.Double');
+insert into RULE_ENTITY (id, key) values (1, 'andRule');
+    insert into RULE_ENTITY (id, key, parent_id) values (11, 'notRule', 1);
+        insert into RULE_ENTITY (id, key, parent_id) values (111, 'firstCustomRule', 11);
+                insert into PARAMETER_ENTITY (id, rule_id, key, value, type) values (1111, 111, '111_k1', '111_v1', 'java.lang.String');
+                insert into PARAMETER_ENTITY (id, rule_id, key, value, type) values (1112, 111, '111_k2', '111_v2', 'java.lang.String');
+    insert into RULE_ENTITY (id, key, parent_id) values (12, 'orRule', 1);
+        insert into RULE_ENTITY (id, key, parent_id) values (121, 'secondCustomRule', 12);
+        insert into RULE_ENTITY (id, key, parent_id) values (122, 'thirdCustomRule', 12);
+                insert into PARAMETER_ENTITY (id, rule_id, key, value, type) values (1221, 122, '122_k1', '122_v1', 'java.lang.String');

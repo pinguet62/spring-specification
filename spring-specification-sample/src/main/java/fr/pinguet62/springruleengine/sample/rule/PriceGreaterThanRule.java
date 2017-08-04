@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import fr.pinguet62.springruleengine.core.Context;
 import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
-import fr.pinguet62.springruleengine.core.rule.Rule;
+import fr.pinguet62.springruleengine.core.api.Rule;
 import fr.pinguet62.springruleengine.sample.model.Product;
 
 @Component

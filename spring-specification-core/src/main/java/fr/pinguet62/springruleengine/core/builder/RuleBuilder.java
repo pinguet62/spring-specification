@@ -1,9 +1,12 @@
 package fr.pinguet62.springruleengine.core.builder;
 
-import fr.pinguet62.springruleengine.core.rule.Rule;
+import fr.pinguet62.springruleengine.core.api.Rule;
 
-public interface RuleBuilder {
+import java.util.function.Function;
 
-    Rule build();
+public interface RuleBuilder extends Function<Integer, Rule> {
+
+    @Override
+    Rule apply(Integer key);
 
 }

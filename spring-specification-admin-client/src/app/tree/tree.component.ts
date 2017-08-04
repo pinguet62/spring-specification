@@ -26,7 +26,7 @@ import {DragulaService} from "ng2-dragula";
                 </div>
             </div>
             
-            <ul #childrenUl [dragula]="dragulaBagId" [dragulaModel]="node.children">
+            <ul #childrenUl *ngIf="node.expanded" [dragula]="dragulaBagId" [dragulaModel]="node.children">
                 <p62-tree-node *ngFor="let child of node.children" [dragulaBagId]="dragulaBagId" [node]="child" [labelTemplate]="labelTemplate" [optionsTemplate]="optionsTemplate"></p62-tree-node>
                 <li *ngIf="node.acceptChildren && node.children.length === 0 && showEmptyDropZones" class="tree-empty">-</li><!-- Workaround to drop into empty node -->
             </ul>

@@ -3,7 +3,7 @@ package fr.pinguet62.springruleengine.core;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import fr.pinguet62.springruleengine.core.rule.Rule;
+import fr.pinguet62.springruleengine.core.api.Rule;
 
 public class RuleEngine {
 
