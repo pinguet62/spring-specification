@@ -6,6 +6,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/** Long description used to help user into <i>admin UI</i>. */
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface RuleDescription {

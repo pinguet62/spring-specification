@@ -44,8 +44,8 @@ public class CustomRuleFactory implements RuleFactory {
         // Build
         Object[] args = parameters.isEmpty() ? new Object[] {} : new Object[] { parameters };
         try {
-            String beanName = ruleEntity.getKey();
-            Rule rule = (Rule) factory.getBean(beanName, args);
+            String className = ruleEntity.getKey();
+            Rule rule = (Rule) factory.getBean(className, args);
             return of(rule);
         } catch (NoSuchBeanDefinitionException e) {
             return empty();

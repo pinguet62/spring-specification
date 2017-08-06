@@ -68,7 +68,9 @@ export class SettingsRuleDialog {
     template: `
         <p62-tree [value]="treeNodes" (nodeMoved)="ruleMoved($event)">
             <ng-template #label let-node>
-                <span>{{node.data.rule.id}} - {{node.data.rule.key}}</span>
+                <b>#{{node.data.rule.id}}</b> - 
+                <span>{{node.data.rule.name}}</span> - 
+                <small>{{node.data.rule.key}}</small>
             </ng-template>
             <ng-template #options let-node>
                 <div style="display: inline-flex;">
@@ -78,11 +80,11 @@ export class SettingsRuleDialog {
                     <button md-icon-button (click)="openUpdateDialog(node.data)"><md-icon>mode_edit</md-icon></button>
                     
                     <!-- Customer: accept parameters -->
-                    <div *ngIf="!['andRule', 'orRule', 'notRule'].includes(node.data.rule.key)">
+                    <div *ngIf="!['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.rule.key)">
                         <button md-icon-button (click)="openSettingsDialog(node.data.rule.key)"><md-icon>settings</md-icon></button>
                     </div>
                     <!-- Composite: accept sub-rules -->
-                    <div *ngIf="['andRule', 'orRule', 'notRule'].includes(node.data.rule.key)">
+                    <div *ngIf="['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.rule.key)">
                         <button md-icon-button (click)="openCreateDialog(node.data.rule.key)"><md-icon>add</md-icon></button>
                     </div>
                 </div>

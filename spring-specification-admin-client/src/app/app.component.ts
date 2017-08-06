@@ -23,7 +23,7 @@ import {Rule} from "./rule/rule";
                 </md-nav-list>
             </md-sidenav>
 
-            <div *ngFor="let rule of rules" class="mat-elevation-z8" style="width: 500px; margin: 50px;">
+            <div *ngFor="let rule of rules" class="mat-elevation-z8" style="width: 800px; margin: 50px;">
                 <p62-rule [rule]="rule"></p62-rule>
             </div>
 

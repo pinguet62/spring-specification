@@ -7,6 +7,7 @@ import fr.pinguet62.springruleengine.core.api.Rule;
 /** Parameter for {@link Rule} methods execution. */
 public interface Context extends Map<String, Object> {
 
+    /** @throws IllegalArgumentException If {@link Map#get(Object) value} is not of type {@code type}. */
     default <T> T get(String key, Class<T> type) {
         Object value = get(key);
         if (value == null)

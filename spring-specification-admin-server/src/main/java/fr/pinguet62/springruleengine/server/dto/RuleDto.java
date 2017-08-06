@@ -17,6 +17,8 @@ public class RuleDto {
 
     private String key;
 
+    private String name;
+
     private String description;
 
     private List<RuleDto> components;

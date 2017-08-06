@@ -26,7 +26,10 @@ public class RuleEntity {
 
     private Integer index;
 
-    /** Key used by factory to find corresponding implementation. */
+    /**
+     * {@link Rule} class.
+     * @see Class#getName()
+     */
     private String key;
 
     /** User's notes. */

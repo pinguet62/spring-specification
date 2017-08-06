@@ -8,7 +8,10 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-/** Short name of {@link Rule}. */
+/**
+ * Short name of {@link Rule}.<br>
+ * Default: {@link Class#getSimpleName()}.
+ */
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface RuleName {

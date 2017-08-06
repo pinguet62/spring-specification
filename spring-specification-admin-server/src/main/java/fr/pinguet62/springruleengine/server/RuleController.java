@@ -29,7 +29,7 @@ import fr.pinguet62.springruleengine.server.dto.RuleInputDto;
 
 @Transactional
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/rule")
 public class RuleController {
 
     @Autowired
@@ -105,31 +105,36 @@ public class RuleController {
 
     private RuleDto convert(RuleEntity entity) {
         // @formatter:off
-        return RuleDto
-                .builder()
-                .id(entity.getId())
-                .key(entity.getKey())
-                .description(entity.getDescription())
-                .components(
-                        entity
-                            .getComponents()
-                            .stream()
-                            .map(this::convert)
-                            .collect(toList()))
-                .parameters(
-                        entity
-                            .getParameters()
-                            .stream()
-                            .map(p ->
-                                    ParameterDto
-                                        .builder()
-                                        .id(p.getId())
-                                        .key(p.getKey())
-                                        .value(p.getValue())
-                                        .type(p.getType())
-                                        .build())
-                            .collect(toList()))
-                .build();
+        try {
+            return RuleDto
+                    .builder()
+                    .id(entity.getId())
+                    .key(entity.getKey())
+                    .name(Class.forName(entity.getKey()).isAnnotationPresent(RuleName.class) ? Class.forName(entity.getKey()).getDeclaredAnnotation(RuleName.class).value() : Class.forName(entity.getKey()).getName()) // TODO
+                    .description(entity.getDescription())
+                    .components(
+                            entity
+                                .getComponents()
+                                .stream()
+                                .map(this::convert)
+                                .collect(toList()))
+                    .parameters(
+                            entity
+                                .getParameters()
+                                .stream()
+                                .map(p ->
+                                        ParameterDto
+                                            .builder()
+                                            .id(p.getId())
+                                            .key(p.getKey())
+                                            .value(p.getValue())
+                                            .type(p.getType())
+                                            .build())
+                                .collect(toList()))
+                    .build();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         // @formatter:on
     }
 
@@ -138,7 +143,7 @@ public class RuleController {
         return RuleInformationDto
                 .builder()
                 .key(ruleService.getKey(ruleType))
-                .name(ruleType.isAnnotationPresent(RuleName.class) ? ruleType.getDeclaredAnnotation(RuleName.class).value() : null)
+                .name(ruleType.isAnnotationPresent(RuleName.class) ? ruleType.getDeclaredAnnotation(RuleName.class).value() : ruleType.getSimpleName())
                 .description(ruleType.isAnnotationPresent(RuleDescription.class) ? ruleType.getDeclaredAnnotation(RuleDescription.class).value() : null)
                 .build();
         // @formatter:on
