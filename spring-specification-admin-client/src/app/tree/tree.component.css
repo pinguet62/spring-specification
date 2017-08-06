@@ -1,16 +1,5 @@
-.tree-container {
-}
-
 /* Remove root level format */
-.tree-container > ul {
-    margin-left: -40px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-.tree-container > ul:before {
-    content: none;
-}
-.tree-container > ul > ::ng-deep p62-tree-node > li:before {
+.tree-container > ::ng-deep p62-tree-node > li:before {
     content: none;
 }
 
@@ -25,8 +14,6 @@ ul:before {
 }
 ul {
     position: relative; /* utilisation de top/left/bottom dans ul:before */
-}
-ul:after {
 }
 
 li:before {

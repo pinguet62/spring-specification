@@ -66,7 +66,7 @@ export class SettingsRuleDialog {
 @Component({
     selector: 'p62-rule',
     template: `
-        <p62-tree [value]="treeNodes" (nodeMoved)="ruleMoved($event)">
+        <p62-tree [value]="treeNode" (nodeMoved)="ruleMoved($event)">
             <ng-template #label let-node>
                 <b>#{{node.data.rule.id}}</b> - 
                 <span>{{node.data.rule.name}}</span> - 
@@ -100,7 +100,7 @@ export class RuleComponent implements OnInit {
     @Input()
     rule: Rule;
 
-    treeNodes: TreeNode<RuleDataTreeNode>[];
+    treeNode: TreeNode<RuleDataTreeNode>;
 
     constructor(
         private dialog: MdDialog,
@@ -113,7 +113,7 @@ export class RuleComponent implements OnInit {
 
     refresh(): void {
         this.ruleService.get(this.rule.id).subscribe(r =>
-            this.treeNodes = [convert(r)]
+            this.treeNode = convert(r)
         );
     }
 

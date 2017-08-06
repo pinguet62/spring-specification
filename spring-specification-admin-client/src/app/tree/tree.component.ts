@@ -28,7 +28,7 @@ import {DragulaService} from "ng2-dragula";
             
             <ul #childrenUl *ngIf="node.expanded" [dragula]="dragulaBagId" [dragulaModel]="node.children">
                 <p62-tree-node *ngFor="let child of node.children" [dragulaBagId]="dragulaBagId" [node]="child" [labelTemplate]="labelTemplate" [optionsTemplate]="optionsTemplate"></p62-tree-node>
-                <li *ngIf="node.acceptChildren && node.children.length === 0 && showEmptyDropZones" class="tree-empty">-</li><!-- Workaround to drop into empty node -->
+                <li *ngIf="showEmptyDropZones" class="tree-empty">-</li><!-- Workaround to drop into empty node -->
             </ul>
         </li>`,
     styleUrls: ['./tree.component.css']
@@ -51,7 +51,7 @@ export class TreeNodeComponent implements AfterContentInit {
 
     constructor(public elementRef: ElementRef, dragulaService: DragulaService) {
         dragulaService.drag.subscribe(x =>
-            this.showEmptyDropZones = true
+            this.showEmptyDropZones = this.node.acceptChildren && this.node.children.length === 0
         );
         dragulaService.drop.subscribe(x =>
             this.showEmptyDropZones = false
@@ -72,9 +72,7 @@ export class TreeNodeComponent implements AfterContentInit {
     selector: 'p62-tree',
     template: `
         <div class="tree-container">
-            <ul [dragula]="dragulaBagId" [dragulaModel]="value">
-                <p62-tree-node #chil *ngFor="let child of value" [dragulaBagId]="dragulaBagId" [node]="child" [labelTemplate]="labelTemplate" [optionsTemplate]="optionsTemplate"></p62-tree-node>
-            </ul>
+            <p62-tree-node *ngIf="value" #chil [dragulaBagId]="dragulaBagId" [node]="value" [labelTemplate]="labelTemplate" [optionsTemplate]="optionsTemplate"></p62-tree-node>
         </div>`,
     styleUrls: ['./tree.component.css'],
     viewProviders: [DragulaService /* fix: multiple-event handling */]
@@ -82,7 +80,7 @@ export class TreeNodeComponent implements AfterContentInit {
 export class TreeComponent {
     dragulaBagId: string = 'dagula-bag-' + new Date().getTime().toString();
 
-    @Input() value: TreeNode<any>[];
+    @Input() value: TreeNode<any>;
 
     @Output() nodeMoved: EventEmitter<NodeMovedEvent<any>> = new EventEmitter<NodeMovedEvent<any>>();
 
