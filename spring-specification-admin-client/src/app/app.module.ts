@@ -10,6 +10,7 @@ import {AppComponent} from "./app.component";
 import {TreeModule} from "./tree/tree.module";
 import {RuleComponent, EditRuleDialog, SettingsRuleDialog} from "./rule/rule.component";
 import {ParameterComponent, EditParameterDialog, DeleteParameterDialog} from "./parameter/parameter.component";
+import {RuleCatalogService} from "./rule/rule-information.service";
 import {RuleService} from "./rule/rule.service";
 import {ParameterService} from "./parameter/parameter.service";
 
@@ -20,7 +21,7 @@ import {ParameterService} from "./parameter/parameter.service";
         CdkTableModule,
         TreeModule
     ],
-    providers: [RuleService, ParameterService],
+    providers: [RuleCatalogService, RuleService, ParameterService],
     declarations: [
         AppComponent,
         RuleComponent, EditRuleDialog, SettingsRuleDialog,

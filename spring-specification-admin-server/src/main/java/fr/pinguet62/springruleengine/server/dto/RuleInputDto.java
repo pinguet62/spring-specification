@@ -8,14 +8,16 @@ public class RuleInputDto {
 
     private Integer id;
 
-    private String key;
-
-    private String description;
-
     /**
      * @see RuleEntity#getId()
      * @see RuleEntity#getComponents()
      */
     private Integer parent;
+
+    private String key;
+
+    private String description;
+
+    private Integer index;
 
 }

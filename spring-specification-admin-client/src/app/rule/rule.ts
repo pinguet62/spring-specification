@@ -9,5 +9,6 @@ export interface Rule {
     parameters?: Parameter[];
 
     // used when client>server
-    parent: number;
+    parent?: number;
+    index?: number;
 }

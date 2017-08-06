@@ -1,31 +1,21 @@
 package fr.pinguet62.springruleengine.server;
 
-import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import fr.pinguet62.springruleengine.core.RuleName;
+import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
+import fr.pinguet62.springruleengine.core.builder.database.repository.RuleRepository;
+import fr.pinguet62.springruleengine.server.dto.ParameterDto;
+import fr.pinguet62.springruleengine.server.dto.RuleDto;
+import fr.pinguet62.springruleengine.server.dto.RuleInputDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import fr.pinguet62.springruleengine.core.RuleDescription;
-import fr.pinguet62.springruleengine.core.RuleName;
-import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
-import fr.pinguet62.springruleengine.core.builder.database.repository.RuleRepository;
-import fr.pinguet62.springruleengine.core.api.Rule;
-import fr.pinguet62.springruleengine.server.dto.ParameterDto;
-import fr.pinguet62.springruleengine.server.dto.RuleDto;
-import fr.pinguet62.springruleengine.server.dto.RuleInformationDto;
-import fr.pinguet62.springruleengine.server.dto.RuleInputDto;
+import static java.util.stream.Collectors.toList;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Transactional
 @RestController
@@ -34,14 +24,6 @@ public class RuleController {
 
     @Autowired
     private RuleRepository ruleRepository;
-
-    @Autowired
-    private RuleService ruleService;
-
-    @GetMapping("/key")
-    public List<RuleInformationDto> getAvailable() {
-        return ruleService.getAllRules().stream().map(this::convert).collect(toList());
-    }
 
     @GetMapping
     public List<RuleDto> getAllRoots() {
@@ -61,16 +43,17 @@ public class RuleController {
     public ResponseEntity<RuleDto> create(@RequestBody RuleInputDto dto) {
         RuleEntity entity = new RuleEntity();
         // entity.setId();
+        entity.setParent(ruleRepository.findOne(dto.getParent()));
         entity.setKey(dto.getKey());
         entity.setDescription(dto.getDescription());
         entity = ruleRepository.save(entity);
 
         ruleRepository.findOne(dto.getParent()).getComponents().add(entity);
 
-        return ResponseEntity.created(URI.create("/api/" + entity.getId())).body(convert(entity));
+        return ResponseEntity.created(URI.create("/rule/" + entity.getId())).body(convert(entity));
     }
 
-    @PostMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<RuleDto> update(@PathVariable("id") Integer id, @RequestBody RuleInputDto dto) {
         RuleEntity entity = ruleRepository.findOne(id);
         if (entity == null)
@@ -80,25 +63,28 @@ public class RuleController {
             entity.setKey(dto.getKey());
         if (dto.getDescription() != null)
             entity.setDescription(dto.getDescription());
-        entity = ruleRepository.save(entity);
 
-        return ResponseEntity.ok(convert(entity));
-    }
-
-    @PostMapping("/{id}/index/{index}")
-    public ResponseEntity<RuleDto> changeIndex(@PathVariable("id") Integer id, @PathVariable("index") Integer tgtIndex) {
-        RuleEntity entity = ruleRepository.findOne(id);
-        if (entity == null)
-            return ResponseEntity.status(NOT_FOUND).build();
-
-        int srcIndex = entity.getIndex();
-        int sens = (tgtIndex > srcIndex ? -1 : +1); // delta on index
-        List<RuleEntity> otherRules = entity.getParent().getComponents();
-        for (int i = srcIndex - sens; i != tgtIndex - sens; i -= sens) {
-            RuleEntity moved = otherRules.get(i);
-            moved.setIndex(moved.getIndex() + sens);
+        if (dto.getIndex() != null) {
+            // reset next rule index of initial parent
+            List<RuleEntity> srcChildren = entity.getParent().getComponents();
+            for (int i = entity.getIndex(); i != srcChildren.size(); i++) {
+                RuleEntity moved = srcChildren.get(i);
+                moved.setIndex(moved.getIndex() - 1);
+            }
+            // offset next rule of target parent
+            RuleEntity tgtParent = dto.getParent() == null ? entity.getParent() : ruleRepository.findOne(dto.getParent());
+            int tgtIndex = dto.getIndex();
+            for (int i = tgtIndex; i < tgtParent.getComponents().size(); i++) {
+                RuleEntity moved = tgtParent.getComponents().get(i);
+                moved.setIndex(moved.getIndex() + 1);
+            }
+            entity.setIndex(tgtIndex);
         }
-        entity.setIndex(tgtIndex);
+
+        if (dto.getParent() != null)
+            entity.setParent(ruleRepository.findOne(dto.getParent()));
+
+        entity = ruleRepository.save(entity);
 
         return ResponseEntity.ok(convert(entity));
     }
@@ -135,17 +121,6 @@ public class RuleController {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        // @formatter:on
-    }
-
-    private RuleInformationDto convert(Class<Rule> ruleType) {
-        // @formatter:off
-        return RuleInformationDto
-                .builder()
-                .key(ruleService.getKey(ruleType))
-                .name(ruleType.isAnnotationPresent(RuleName.class) ? ruleType.getDeclaredAnnotation(RuleName.class).value() : ruleType.getSimpleName())
-                .description(ruleType.isAnnotationPresent(RuleDescription.class) ? ruleType.getDeclaredAnnotation(RuleDescription.class).value() : null)
-                .build();
         // @formatter:on
     }
 

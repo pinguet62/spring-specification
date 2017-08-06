@@ -52,8 +52,8 @@ public class ParameterController {
         return ResponseEntity.ok(supportedTypes);
     }
 
-    @GetMapping(params = "api")
-    public ResponseEntity<List<ParameterDto>> getByRule(@RequestParam("api") Integer ruleId) {
+    @GetMapping(params = "rule")
+    public ResponseEntity<List<ParameterDto>> getByRule(@RequestParam("rule") Integer ruleId) {
         RuleEntity rule = ruleRepository.findOne(ruleId);
         if (rule == null)
             return ResponseEntity.notFound().build();

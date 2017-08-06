@@ -5,6 +5,7 @@ import {RuleService} from "./rule.service";
 import {convert, RuleDataTreeNode} from "./rule-tree-node";
 import {Rule} from "./rule";
 import {RuleInformation} from "./rule-information";
+import {RuleCatalogService} from "./rule-information.service";
 
 @Component({
     selector: 'p62-rule-update',
@@ -33,10 +34,10 @@ export class EditRuleDialog {
     constructor(
         protected dialogRef: MdDialogRef<EditRuleDialog>,
         @Inject(MD_DIALOG_DATA) public data: any,
-        ruleService: RuleService
+        ruleInformationService: RuleCatalogService
     ) {
         this.rule = <Rule> (data && data.rule || {}); // update or create
-        ruleService.getAvailableKeys().subscribe(infos =>
+        ruleInformationService.getAvailableKeys().subscribe(infos =>
             this.availableKeys = infos
         );
     }
@@ -77,15 +78,15 @@ export class SettingsRuleDialog {
                     <button md-icon-button *ngIf="node.parent != null && !node.data.first" (click)="upwardIndexRule(node)"><md-icon>arrow_upward</md-icon></button>
                     <button md-icon-button *ngIf="node.parent != null && !node.data.last" (click)="downwardIndexRule(node)"><md-icon>arrow_downward</md-icon></button>
                     
-                    <button md-icon-button (click)="openUpdateDialog(node.data)"><md-icon>mode_edit</md-icon></button>
+                    <button md-icon-button (click)="openUpdateDialog(node.data.rule)"><md-icon>mode_edit</md-icon></button>
                     
                     <!-- Customer: accept parameters -->
                     <div *ngIf="!['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.rule.key)">
-                        <button md-icon-button (click)="openSettingsDialog(node.data.rule.key)"><md-icon>settings</md-icon></button>
+                        <button md-icon-button (click)="openSettingsDialog(node.data.rule)"><md-icon>settings</md-icon></button>
                     </div>
                     <!-- Composite: accept sub-rules -->
                     <div *ngIf="['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.rule.key)">
-                        <button md-icon-button (click)="openCreateDialog(node.data.rule.key)"><md-icon>add</md-icon></button>
+                        <button md-icon-button (click)="openCreateDialog(node.data.rule)"><md-icon>add</md-icon></button>
                     </div>
                 </div>
             </ng-template>
@@ -118,11 +119,14 @@ export class RuleComponent implements OnInit {
     }
 
     ruleMoved(event: NodeMovedEvent<RuleDataTreeNode>): void {
-        /*console.log('----- ruleMoved -----');
-        console.log(event);
-        console.log('Parent (id): ' + (event.parent && event.parent.data.rule.id));
-        console.log('Node (id): ' + event.node.data.rule.id);
-        console.log('Index: ' + event.index);*/
+        let rule: Rule = {
+            id: event.node.data.rule.id,
+            parent: event.parent.data.rule.id,
+            index: event.index
+        };
+        this.ruleService.update(rule).subscribe( x =>
+            this.refresh()
+        );
     }
 
     openCreateDialog(parentRule: Rule): void {
@@ -163,19 +167,7 @@ export class RuleComponent implements OnInit {
         let createDialog: MdDialogRef<SettingsRuleDialog> = this.dialog.open(SettingsRuleDialog, dialogConfig);
     }
 
-    upwardIndexRule(node: TreeNode<RuleDataTreeNode>): void {
-        this.ruleService.changeIndex(node.data.rule, node.data.index-1).subscribe(x =>
-            this.refresh()
-        );
-    }
-
-    downwardIndexRule(node: TreeNode<RuleDataTreeNode>): void {
-        this.ruleService.changeIndex(node.data.rule, node.data.index+1).subscribe(x =>
-            this.refresh()
-        );
-    }
-
     getCommonDialogConfig(): MdDialogConfig {
         return { disableClose: true };
-    };
+    }
 }

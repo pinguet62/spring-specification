@@ -4,7 +4,7 @@ import fr.pinguet62.springruleengine.core.Context;
 import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
 
-@RuleName(value = "\"OR\" combinator")
+@RuleName(value = "\"NOT\" combinator")
 @RuleDescription("Combination of rule using \"NOT\" operator.")
 public class NotRule implements Rule {
 
