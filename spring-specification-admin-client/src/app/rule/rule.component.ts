@@ -5,7 +5,7 @@ import {RuleService} from "./rule.service";
 import {convert, RuleDataTreeNode} from "./rule-tree-node";
 import {Rule} from "./rule";
 import {RuleInformation} from "./rule-information";
-import {RuleCatalogService} from "./rule-information.service";
+import {RuleInformationService} from "./rule-information.service";
 
 @Component({
     selector: 'p62-rule-update',
@@ -34,7 +34,7 @@ export class EditRuleDialog {
     constructor(
         protected dialogRef: MdDialogRef<EditRuleDialog>,
         @Inject(MD_DIALOG_DATA) public data: any,
-        ruleInformationService: RuleCatalogService
+        ruleInformationService: RuleInformationService
     ) {
         this.rule = <Rule> (data && data.rule || {}); // update or create
         ruleInformationService.getAvailableKeys().subscribe(infos =>
@@ -69,9 +69,9 @@ export class SettingsRuleDialog {
     template: `
         <p62-tree [value]="treeNode" (nodeMoved)="ruleMoved($event)">
             <ng-template #label let-node>
-                <b>#{{node.data.rule.id}}</b> - 
-                <span>{{node.data.rule.name}}</span> - 
-                <small>{{node.data.rule.key}}</small>
+                <code>#{{node.data.rule.id}}</code> - <!--TODO test-->
+                <b>{{ruleInformationService.getFromKey(node.data.rule.key).name}}</b>
+                <small>{{node.data.rule.description}}</small>
             </ng-template>
             <ng-template #options let-node>
                 <div style="display: inline-flex;">
@@ -105,7 +105,8 @@ export class RuleComponent implements OnInit {
 
     constructor(
         private dialog: MdDialog,
-        private ruleService: RuleService
+        private ruleService: RuleService,
+        private ruleInformationService: RuleInformationService
     ) {}
 
     ngOnInit(): void {
