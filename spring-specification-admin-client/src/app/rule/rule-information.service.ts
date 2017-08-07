@@ -8,7 +8,7 @@ import {isNullOrUndefined} from "util";
 @Injectable()
 export class RuleInformationService {
 
-    private baseUrl: string = 'http://localhost:8080';
+    private baseUrl: string = window.location.href;
     private resourceUrl: string = this.baseUrl + '/ruleCatalog';
 
     private options: RequestOptionsArgs = { headers: new Headers({ 'Content-Type': 'application/json' }) };

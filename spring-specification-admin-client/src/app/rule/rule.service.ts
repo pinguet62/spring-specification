@@ -7,7 +7,7 @@ import {Rule} from "./rule";
 @Injectable()
 export class RuleService {
 
-    private baseUrl: string = 'http://localhost:8080';
+    private baseUrl: string = window.location.href;
     private resourceUrl: string = this.baseUrl + '/rule';
 
     private options: RequestOptionsArgs = { headers: new Headers({ 'Content-Type': 'application/json' }) };

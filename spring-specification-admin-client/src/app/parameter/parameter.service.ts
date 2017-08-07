@@ -9,7 +9,7 @@ import {Parameter} from "./parameter";
 @Injectable()
 export class ParameterService {
 
-    private baseUrl: string = 'http://localhost:8080';
+    private baseUrl: string = window.location.href;
     private resourceUrl: string = this.baseUrl + '/parameter';
 
     private options: RequestOptionsArgs = { headers: new Headers({ 'Content-Type': 'application/json' }) };
