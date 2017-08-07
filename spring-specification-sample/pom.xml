@@ -13,9 +13,15 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<!-- Webservice + UI -->
 		<dependency>
 			<groupId>fr.pinguet62</groupId>
-			<artifactId>spring-specification-core</artifactId>
+			<artifactId>spring-specification-admin-server</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.pinguet62</groupId>
+			<artifactId>spring-specification-admin-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

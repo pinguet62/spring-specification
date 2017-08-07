@@ -23,13 +23,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-		<!-- TODO debug -->
-		<dependency>
-			<groupId>fr.pinguet62</groupId>
-			<artifactId>spring-specification-sample</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
 
 </project>
