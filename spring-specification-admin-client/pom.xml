@@ -60,7 +60,7 @@
 
         <resources>
             <resource>
-                <directory>dist/</directory>
+                <directory>dist</directory>
                 <targetPath>META-INF/spring-specification-admin-client</targetPath>
             </resource>
         </resources>
