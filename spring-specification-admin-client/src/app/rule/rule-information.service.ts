@@ -17,7 +17,7 @@ export class RuleInformationService {
 
     constructor(protected http: Http) {}
 
-    protected load(): Observable<RuleInformation[]> {
+    load(): Observable<RuleInformation[]> {
         let url: string = this.resourceUrl + '/';
         return this.http.get(url, this.options).map(res => res.json());
     }

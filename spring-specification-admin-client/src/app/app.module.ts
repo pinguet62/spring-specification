@@ -23,6 +23,7 @@ import {AppComponent} from "./app.component";
 import {TreeModule} from "./tree/tree.module";
 import {RuleInformationService, RuleInformationServiceResolver} from "./rule/rule-information.service";
 import {RuleService} from "./rule/rule.service";
+import {RulesComponent} from "./rule/rules.component";
 import {EditRuleDialog, RuleComponent, SettingsRuleDialog} from "./rule/rule.component";
 import {ParameterService} from "./parameter/parameter.service";
 import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from "./parameter/parameter.component";
@@ -37,7 +38,7 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from "./
     providers: [RuleInformationService, RuleInformationServiceResolver, RuleService, ParameterService],
     declarations: [
         AppComponent,
-        RuleComponent, EditRuleDialog, SettingsRuleDialog,
+        RulesComponent, RuleComponent, EditRuleDialog, SettingsRuleDialog,
         ParameterComponent, EditParameterDialog, DeleteParameterDialog
     ],
     entryComponents: [
@@ -46,4 +47,5 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from "./
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}
