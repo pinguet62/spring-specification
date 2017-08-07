@@ -1,0 +1,20 @@
+# https://travis-ci.org/pinguet62/spring-specification
+
+language: java
+jdk: oraclejdk8
+
+after_success:
+    # Reports
+    # https://coveralls.io/github/pinguet62/spring-specification
+    - mvn jacoco:report coveralls:report
+    # https://codecov.io/gh/pinguet62/spring-specification
+    - bash <(curl -s https://codecov.io/bash)
+    
+    # Deploy SNAPSHOT
+    - echo '<settings><servers><server><id>ossrh</id><username>${env.OSSRH_USER}</username><password>${env.OSSRH_PASS}</password></server></servers></settings>' > deploy-settings.xml
+    - "[[ ${TRAVIS_PULL_REQUEST} == 'false' ]] && [[ ${TRAVIS_TAG} == '' ]] && mvn deploy -DskipTests -Dgpg.skip --settings deploy-settings.xml"
+
+# Deploy
+after_script:
+    # Deploy sample to Heroku
+    - mvn -DskipTests heroku:deploy -pl spring-specification-sample
