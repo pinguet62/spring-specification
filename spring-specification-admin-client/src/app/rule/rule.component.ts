@@ -37,9 +37,7 @@ export class EditRuleDialog {
         ruleInformationService: RuleInformationService
     ) {
         this.rule = <Rule> (data && data.rule || {}); // update or create
-        ruleInformationService.getAvailableKeys().subscribe(infos =>
-            this.availableKeys = infos
-        );
+        this.availableKeys = ruleInformationService.getAll();
     }
 }
 
