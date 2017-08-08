@@ -2,14 +2,14 @@ import {Injectable} from "@angular/core";
 import {Headers, Http, RequestOptionsArgs} from "@angular/http";
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
 import {Observable} from "rxjs/Observable";
+import 'rxjs/add/operator/map';
+import {environment} from "../../environments/environment";
 import {RuleInformation} from "./rule-information";
-import {isNullOrUndefined} from "util";
 
 @Injectable()
 export class RuleInformationService {
 
-    private baseUrl: string = window.location.href;
-    private resourceUrl: string = this.baseUrl + '/ruleCatalog';
+    private static readonly resourceUrl: string = environment.apiUrl + '/ruleCatalog';
 
     private options: RequestOptionsArgs = { headers: new Headers({ 'Content-Type': 'application/json' }) };
 
@@ -18,7 +18,7 @@ export class RuleInformationService {
     constructor(protected http: Http) {}
 
     load(): Observable<RuleInformation[]> {
-        let url: string = this.resourceUrl + '/';
+        let url: string = RuleInformationService.resourceUrl + '/';
         return this.http.get(url, this.options).map(res => res.json());
     }
 

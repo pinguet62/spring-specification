@@ -32,7 +32,7 @@ export class EditRuleDialog {
     availableKeys: RuleInformation[];
 
     constructor(
-        protected dialogRef: MdDialogRef<EditRuleDialog>,
+        public dialogRef: MdDialogRef<EditRuleDialog>,
         @Inject(MD_DIALOG_DATA) public data: any,
         ruleInformationService: RuleInformationService
     ) {

@@ -65,7 +65,8 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>run build</arguments>
+                            <!-- ng build &#x002d;&#x002d;prod -->
+                            <arguments>run ng -- build --prod</arguments>
                         </configuration>
                     </execution>
                 </executions>

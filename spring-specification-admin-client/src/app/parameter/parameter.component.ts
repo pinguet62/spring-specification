@@ -35,7 +35,7 @@ export class EditParameterDialog {
     availableTypes: string[];
 
     constructor(
-        protected dialogRef: MdDialogRef<EditParameterDialog>,
+        public dialogRef: MdDialogRef<EditParameterDialog>,
         @Inject(MD_DIALOG_DATA) public data: any,
         parameterService: ParameterService
     ) {
@@ -59,7 +59,7 @@ export class EditParameterDialog {
         </md-dialog-actions>`
 })
 export class DeleteParameterDialog {
-    constructor(protected dialogRef: MdDialogRef<EditParameterDialog>) {}
+    constructor(public dialogRef: MdDialogRef<EditParameterDialog>) {}
 }
 
 @Component({
