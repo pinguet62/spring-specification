@@ -1,7 +1,10 @@
 package fr.pinguet62.springruleengine.core.api;
 
+import lombok.Getter;
+
 public abstract class AbstractCompositeRule implements Rule {
 
+    @Getter
     protected final Rule[] rules;
 
     public AbstractCompositeRule(Rule... rules) {

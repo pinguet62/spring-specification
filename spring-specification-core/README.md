@@ -47,7 +47,9 @@ Rule composedRule = first.not().and( second.or(third) );
 
 ### Parameter
 
-Objective: create minimal parameterized rules, instead of create many specific rules.
+#### Objective
+
+Create minimal parameterized rules, instead of create many specific rules.
 
 Bad:
 ```java
@@ -61,23 +63,46 @@ Good:
 class ColorProductRule implements Rule {
     String color;
     
-    ColorProductRule(Map<String, Object> parameters) {
-        this.color = parameters.get("color");
+    ColorProductRule(String param) {
+        this.color = param;
     }
     
     // ...
 }
 
-Rule redProductRule = new ColorProductRule( Map.of("color","red") );
-Rule bleuProductRule = new ColorProductRule( Map.of("color","bleu") );
-Rule greenProductRule = new ColorProductRule( Map.of("color","green") );
+Rule redProductRule = new ColorProductRule("red");
+Rule bleuProductRule = new ColorProductRule("bleu");
+Rule greenProductRule = new ColorProductRule("green");
 ```
 
-TODO: injection (by setter or annotation) instead of `Map`
+#### Usage
+
+For **manual** usage the parameter can be set using _constructor_ or _setter_. 
+
+For **dynamic engine usage**, the property (field or setter) must be annotated with `RuleParameter`.
+
+```java
+class ColorProductRule implements Rule {
+    
+    @RuleParameter("color") // one or ...
+    String color;
+    
+    @Override
+    boolean test(Context context) {
+        System.out.println(color);
+        // ...
+    }
+    
+    @RuleParameter("color") // ... the other
+    void setColor(String param) {
+        color = param;
+    }
+}
+```
 
 ### Context
 
-The `Context` correspondsto the *context execution* of rules, with processed data.
+The `Context` corresponds to the *context execution* of rules, with processed data.
 
 ```java
 Context context = new ContextImpl(
