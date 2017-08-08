@@ -15,6 +15,20 @@
     <build>
         <plugins>
             <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>node_modules</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>dist</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.5</version>
@@ -24,19 +38,19 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>node-install</id>
-                        <phase>generate-resources</phase>
+                        <id>node-npm</id>
+                        <phase>initialize</phase>
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v6.9.1</nodeVersion><!-- TODO v8.2.1 -->
+                            <nodeVersion>v6.9.1</nodeVersion>
                             <npmVersion>3.10.9</npmVersion>
                         </configuration>
                     </execution>
                     <execution>
                         <id>npm-install</id>
-                        <phase>generate-resources</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
@@ -46,7 +60,7 @@
                     </execution>
                     <execution>
                         <id>npm-build</id>
-                        <phase>package</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
