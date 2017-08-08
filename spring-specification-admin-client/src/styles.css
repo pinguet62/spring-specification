@@ -9,3 +9,7 @@
 
 /* Dragula */
 @import "../node_modules/dragula/dist/dragula.css";
+
+body {
+    margin: 0px;
+}

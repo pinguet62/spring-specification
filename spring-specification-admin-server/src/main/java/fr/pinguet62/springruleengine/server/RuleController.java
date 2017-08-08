@@ -44,6 +44,7 @@ public class RuleController {
         RuleEntity entity = new RuleEntity();
         // entity.setId();
         entity.setParent(ruleRepository.findOne(dto.getParent()));
+        entity.setIndex(entity.getParent().getComponents().size()); // default: at the end
         entity.setKey(dto.getKey());
         entity.setDescription(dto.getDescription());
         entity = ruleRepository.save(entity);
