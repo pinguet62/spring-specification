@@ -1,19 +1,13 @@
 package fr.pinguet62.springruleengine.core.builder.database.model;
 
-import static javax.persistence.FetchType.EAGER;
+import lombok.Data;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-
-import lombok.Data;
+import static javax.persistence.CascadeType.REMOVE;
+import static javax.persistence.FetchType.EAGER;
 
 /** Usage of a {@link Rule}. */
 @Data
@@ -39,11 +33,11 @@ public class RuleEntity {
     @ManyToOne
     private RuleEntity parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = REMOVE)
     @OrderBy("index")
     private List<RuleEntity> components = new ArrayList<>();
 
-    @OneToMany(mappedBy = "rule", fetch = EAGER)
+    @OneToMany(mappedBy = "rule", fetch = EAGER, cascade = REMOVE)
     private List<ParameterEntity> parameters = new ArrayList<>();
 
 }

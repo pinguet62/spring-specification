@@ -35,4 +35,9 @@ export class RuleService {
         let body: string = JSON.stringify(rule);
         return this.http.patch(url, body, this.options).map(res => res.json());
     }
+
+    delete(rule: Rule): Observable<Rule> {
+        let url: string = RuleService.resourceUrl + '/' + rule.id;
+        return this.http.delete(url, this.options).map(res => res.json());
+    }
 }

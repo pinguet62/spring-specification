@@ -47,7 +47,7 @@ export class EditParameterDialog {
 }
 
 @Component({
-    selector: 'p62-parameter-create',
+    selector: 'p62-parameter-delete',
     template: `
         <h2 md-dialog-title>Delete</h2>
         <md-dialog-content>
@@ -59,7 +59,7 @@ export class EditParameterDialog {
         </md-dialog-actions>`
 })
 export class DeleteParameterDialog {
-    constructor(public dialogRef: MdDialogRef<EditParameterDialog>) {}
+    constructor(public dialogRef: MdDialogRef<DeleteParameterDialog>) {}
 }
 
 @Component({
@@ -84,7 +84,7 @@ export class DeleteParameterDialog {
                     <md-cell *cdkCellDef="let parameter">
                         <div style="display: flex;"><!--flex: no line break-->
                             <button md-icon-button (click)="openUpdateDialog(parameter)"><md-icon>mode_edit</md-icon></button>
-                            <button md-icon-button (click)="deleteParameter(parameter)"><md-icon>delete</md-icon></button>
+                            <button md-icon-button (click)="openDeleteParameter(parameter)"><md-icon>delete</md-icon></button>
                         </div>
                     </md-cell>
                 </ng-container>
@@ -161,9 +161,9 @@ export class ParameterComponent implements OnInit {
         });
     }
 
-    deleteParameter(parameter: Parameter): void {
-        let createDialog: MdDialogRef<DeleteParameterDialog> = this.dialog.open(DeleteParameterDialog, this.getCommonDialogConfig());
-        createDialog.afterClosed().subscribe((confirm: boolean) => {
+    openDeleteParameter(parameter: Parameter): void {
+        let deleteDialog: MdDialogRef<DeleteParameterDialog> = this.dialog.open(DeleteParameterDialog, this.getCommonDialogConfig());
+        deleteDialog.afterClosed().subscribe((confirm: boolean) => {
             if (confirm)
                 this.parameterService.delete(parameter).subscribe(x =>
                     this.refresh()

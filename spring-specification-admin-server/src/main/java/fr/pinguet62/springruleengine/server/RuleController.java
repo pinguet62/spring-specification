@@ -90,6 +90,17 @@ public class RuleController {
         return ResponseEntity.ok(convert(entity));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<RuleDto> delete(@PathVariable("id") Integer id) {
+        RuleEntity entity = ruleRepository.findOne(id);
+        if (entity == null)
+            return ResponseEntity.status(NOT_FOUND).build();
+
+        RuleDto dto = convert(entity);
+        ruleRepository.delete(entity);
+        return ResponseEntity.ok(dto);
+    }
+
     private RuleDto convert(RuleEntity entity) {
         // @formatter:off
         return RuleDto
