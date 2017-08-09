@@ -21,6 +21,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/META-INF/spring-specification-admin-client/")
                 .resourceChain(true);
+
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
     }
 
     /**
