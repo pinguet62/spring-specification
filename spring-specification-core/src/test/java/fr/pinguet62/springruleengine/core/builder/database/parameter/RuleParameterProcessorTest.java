@@ -9,7 +9,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
 /**
- * @see RuleParameterProcessor
+ * @see RuleParameterBeanPostProcessor
  */
 public class RuleParameterProcessorTest {
 
@@ -34,7 +34,7 @@ public class RuleParameterProcessorTest {
         parameters.put("k2", "v2");
         TestModel rule = new TestModel();
 
-        RuleParameterProcessor.process(rule, parameters);
+        new RuleParameterBeanPostProcessor(parameters).postProcessBeforeInitialization(rule, null);
 
         assertEquals("v1", rule.getAttr());
         assertEquals("v2", rule.getSetter());

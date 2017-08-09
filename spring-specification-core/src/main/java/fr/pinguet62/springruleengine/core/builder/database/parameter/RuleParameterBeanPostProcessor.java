@@ -1,18 +1,36 @@
 package fr.pinguet62.springruleengine.core.builder.database.parameter;
 
-import lombok.experimental.UtilityClass;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+// TODO Spring workflow (fix parameter with prototype scope?)
 /**
- * @see RuleParameter
+ * Process each {@link Field} and {@link Method setter} annotated with {@link RuleParameter}.
  */
-@UtilityClass
-public class RuleParameterProcessor {
+public class RuleParameterBeanPostProcessor implements BeanPostProcessor {
 
-    public void process(Object rule, Map<String, Object> parameters) {
+    private final Map<String, Object> parameters;
+
+    public RuleParameterBeanPostProcessor(Map<String, Object> parameters) {
+        this.parameters = parameters;
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        processRuleParameterAnnotations(bean);
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    public void processRuleParameterAnnotations(Object rule) {
         try {
             Class<?> type = rule.getClass();
 

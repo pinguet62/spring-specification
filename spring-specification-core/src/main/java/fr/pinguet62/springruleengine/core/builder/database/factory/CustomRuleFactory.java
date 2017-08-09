@@ -4,7 +4,7 @@ import fr.pinguet62.springruleengine.core.api.Rule;
 import fr.pinguet62.springruleengine.core.builder.database.ParameterConverter;
 import fr.pinguet62.springruleengine.core.builder.database.model.ParameterEntity;
 import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
-import fr.pinguet62.springruleengine.core.builder.database.parameter.RuleParameterProcessor;
+import fr.pinguet62.springruleengine.core.builder.database.parameter.RuleParameterBeanPostProcessor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class CustomRuleFactory implements RuleFactory {
         Function<ParameterEntity, Object> converter = p -> parameterConverter.convert(p.getValue(),
                 checkedClassForName.apply(p.getType()));
         Map<String, Object> parameters = ruleEntity.getParameters().stream().collect(toMap(p -> p.getKey(), converter));
-        RuleParameterProcessor.process(rule, parameters);
+        new RuleParameterBeanPostProcessor(parameters).postProcessBeforeInitialization(rule, null);
 
         return of(rule);
     }
