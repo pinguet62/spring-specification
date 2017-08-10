@@ -31,7 +31,7 @@ public class CustomRuleFactory implements RuleFactory {
     private ParameterConverter parameterConverter;
 
     @Override
-    public Optional<Rule> apply(RuleEntity ruleEntity) {
+    public Optional<Rule<?>> apply(RuleEntity ruleEntity) {
         // Build
         Rule rule;
         try {

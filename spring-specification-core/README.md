@@ -82,13 +82,13 @@ For **manual** usage the parameter can be set using _constructor_ or _setter_.
 For **dynamic engine usage**, the property (field or setter) must be annotated with `RuleParameter`.
 
 ```java
-class ColorProductRule implements Rule {
+class ColorProductRule implements Rule<Model> {
     
     @RuleParameter("color") // one or ...
     String color;
     
     @Override
-    boolean test(Context context) {
+    boolean test(Model model) {
         System.out.println(color);
         // ...
     }

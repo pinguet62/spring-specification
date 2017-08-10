@@ -17,8 +17,8 @@ public class CompositeRuleFactory implements RuleFactory {
     private CustomRuleFactory customRuleFactory;
 
     @Override
-    public Optional<Rule> apply(RuleEntity ruleEntity) {
-        Optional<Rule> apiRule = apiRuleFactory.apply(ruleEntity);
+    public Optional<Rule<?>> apply(RuleEntity ruleEntity) {
+        Optional<Rule<?>> apiRule = apiRuleFactory.apply(ruleEntity);
         if (apiRule.isPresent())
             return apiRule;
         else

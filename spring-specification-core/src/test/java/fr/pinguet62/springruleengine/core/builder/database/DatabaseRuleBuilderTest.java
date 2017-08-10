@@ -1,6 +1,5 @@
 package fr.pinguet62.springruleengine.core.builder.database;
 
-import fr.pinguet62.springruleengine.core.Context;
 import fr.pinguet62.springruleengine.core.TestApplication;
 import fr.pinguet62.springruleengine.core.api.AndRule;
 import fr.pinguet62.springruleengine.core.api.NotRule;
@@ -45,7 +44,7 @@ public class DatabaseRuleBuilderTest {
     @Component
     public static class TestRules {
         @Component("firstCustomRule")
-        public static class FirstCustomRule implements Rule {
+        public static class FirstCustomRule implements Rule<Void> {
             @Getter
             @RuleParameter("111_k1")
             private String param1;
@@ -55,27 +54,27 @@ public class DatabaseRuleBuilderTest {
             private String param2;
 
             @Override
-            public boolean test(Context context) {
+            public boolean test(Void value) {
                 return true;
             }
         }
 
         @Component("secondCustomRule")
-        public static class SecondCustomRule implements Rule {
+        public static class SecondCustomRule implements Rule<Void> {
             @Override
-            public boolean test(Context context) {
+            public boolean test(Void value) {
                 return true;
             }
         }
 
         @Component("thirdCustomRule")
-        public static class ThirdCustomRule implements Rule {
+        public static class ThirdCustomRule implements Rule<Void> {
             @Getter
             @RuleParameter("122_k1")
             private String param;
 
             @Override
-            public boolean test(Context context) {
+            public boolean test(Void value) {
                 return true;
             }
         }

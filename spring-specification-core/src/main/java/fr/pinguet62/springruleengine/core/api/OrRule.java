@@ -2,13 +2,12 @@ package fr.pinguet62.springruleengine.core.api;
 
 import java.util.Collection;
 
-import fr.pinguet62.springruleengine.core.Context;
 import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
 
 @RuleName(value = "\"OR\" combinator")
 @RuleDescription("Combination of rules using \"OR\" operator. False if empty.")
-public class OrRule extends AbstractCompositeRule {
+public class OrRule<T> extends AbstractCompositeRule<T> {
 
     public OrRule(Rule... rules) {
         super(rules);
@@ -19,10 +18,10 @@ public class OrRule extends AbstractCompositeRule {
     }
 
     @Override
-    public boolean test(Context context) {
+    public boolean test(T value) {
         boolean result = false;
         for (Rule rule : rules)
-            result |= rule.test(context);
+            result |= rule.test(value);
         return result;
     }
 

@@ -18,11 +18,11 @@ public class DatabaseRuleBuilder implements RuleBuilder {
     private CompositeRuleFactory compositeRuleFactory;
 
     @Override
-    public Rule apply(Integer key) {
+    public Rule<?> apply(Integer key) {
         return convert(ruleRepository.findOne(key));
     }
 
-    private Rule convert(RuleEntity ruleEntity) {
+    private Rule<?> convert(RuleEntity ruleEntity) {
         return compositeRuleFactory.apply(ruleEntity).orElseThrow(IllegalArgumentException::new);
     }
 

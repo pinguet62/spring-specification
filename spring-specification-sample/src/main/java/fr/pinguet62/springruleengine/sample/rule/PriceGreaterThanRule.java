@@ -1,6 +1,5 @@
 package fr.pinguet62.springruleengine.sample.rule;
 
-import fr.pinguet62.springruleengine.core.Context;
 import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
 import fr.pinguet62.springruleengine.core.api.Rule;
@@ -14,18 +13,15 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 @RuleName("Price greater than")
 @RuleDescription("Test \"$context.product.color>$params.amount\"")
-public class PriceGreaterThanRule implements Rule {
+public class PriceGreaterThanRule implements Rule<Product> {
 
     @Setter
     @RuleParameter("amount")
     private Double minimalAmount;
 
     @Override
-    public boolean test(Context context) {
-        Product product = context.get("product", Product.class);
-        Double actualPrice = product.getPrice();
-
-        return actualPrice > minimalAmount;
+    public boolean test(Product product) {
+        return product.getPrice() > minimalAmount;
     }
 
 }

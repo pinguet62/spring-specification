@@ -22,35 +22,35 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class RuleService {
 
-    public @NotNull List<Class<Rule>> getAllRules() {
+    public @NotNull List<Class<Rule<?>>> getAllRules() {
         String packag = "fr/pinguet62/springruleengine" /* TODO */;
 
         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
         provider.addIncludeFilter(new AssignableTypeFilter(Rule.class));
         Set<BeanDefinition> components = provider.findCandidateComponents(packag);
-        return components.stream().map(component -> (Class<Rule>) ClassUtils.resolveClassName(component.getBeanClassName(),
+        return components.stream().map(component -> (Class<Rule<?>>) ClassUtils.resolveClassName(component.getBeanClassName(),
                 provider.getResourceLoader().getClassLoader())).collect(toList());
     }
 
     /** @return {@link RuleName} or {@link Class#getName()} */
-    public String getKey(@NotNull Class<Rule> ruleType) {
+    public String getKey(@NotNull Class<Rule<?>> ruleType) {
         return ruleType.getName();
     }
 
     /** @return {@link RuleName} or {@link Class#getSimpleName()} */
-    public String getName(@NotNull Class<Rule> ruleType) {
+    public String getName(@NotNull Class<Rule<?>> ruleType) {
         return ruleType.isAnnotationPresent(RuleName.class) ? ruleType.getDeclaredAnnotation(RuleName.class).value() : ruleType.getSimpleName();
     }
 
     /** @return {@link RuleDescription} or {@code null} */
-    public String getDescription(@NotNull Class<Rule> ruleType) {
+    public String getDescription(@NotNull Class<Rule<?>> ruleType) {
         return ruleType.isAnnotationPresent(RuleDescription.class) ? ruleType.getDeclaredAnnotation(RuleDescription.class).value() : null;
     }
 
     /** @throws IllegalArgumentException Target {@link Class} is not of type {@link Rule}. */
-    public @NotNull Optional<Class<Rule>> getFromKey(@NotBlank String key) {
+    public @NotNull Optional<Class<Rule<?>>> getFromKey(@NotBlank String key) {
         try {
-            return of((Class<Rule>) Class.forName(key));
+            return of((Class<Rule<?>>) Class.forName(key));
         } catch (ClassCastException e) {
             throw new IllegalArgumentException(e);
         } catch (ClassNotFoundException e) {

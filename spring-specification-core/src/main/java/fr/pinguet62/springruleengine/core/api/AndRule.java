@@ -2,27 +2,26 @@ package fr.pinguet62.springruleengine.core.api;
 
 import java.util.Collection;
 
-import fr.pinguet62.springruleengine.core.Context;
 import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
 
 @RuleName(value = "\"AND\" combinator")
 @RuleDescription("Combination of rules using \"AND\" operator. True if empty.")
-public class AndRule extends AbstractCompositeRule {
+public class AndRule<T> extends AbstractCompositeRule<T> {
 
-    public AndRule(Rule... rules) {
+    public AndRule(Rule<T>... rules) {
         super(rules);
     }
 
-    public AndRule(Collection<Rule> rules) {
+    public AndRule(Collection<Rule<T>> rules) {
         super(rules.toArray(new Rule[rules.size()]));
     }
 
     @Override
-    public boolean test(Context context) {
+    public boolean test(T value) {
         boolean result = true;
-        for (Rule rule : rules)
-            result &= rule.test(context);
+        for (Rule<T> rule : rules)
+            result &= rule.test(value);
         return result;
     }
 

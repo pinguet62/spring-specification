@@ -23,7 +23,7 @@ public class RuleInformationController {
         return ruleService.getAllRules().stream().map(this::convert).collect(toList());
     }
 
-    private RuleInformationDto convert(Class<Rule> ruleType) {
+    private RuleInformationDto convert(Class<Rule<?>> ruleType) {
         // @formatter:off
         return RuleInformationDto
                 .builder()
