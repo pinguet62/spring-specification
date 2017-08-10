@@ -1,25 +1,26 @@
-import {Injectable} from "@angular/core";
-import {Headers, Http, RequestOptionsArgs} from "@angular/http";
-import {Observable} from "rxjs/Observable";
+import {Injectable} from '@angular/core';
+import {Headers, Http, RequestOptionsArgs} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {environment} from "../../environments/environment";
-import {Rule} from "./rule";
+import {environment} from '../../environments/environment';
+import {Rule} from './rule';
 
 @Injectable()
 export class RuleService {
 
     private static readonly resourceUrl: string = environment.apiUrl + '/rule';
 
-    private options: RequestOptionsArgs = { headers: new Headers({ 'Content-Type': 'application/json' }) };
+    private options: RequestOptionsArgs = {headers: new Headers({'Content-Type': 'application/json'})};
 
-    constructor(protected http: Http) {}
+    constructor(protected http: Http) {
+    }
 
     getAllRoots(): Observable<Rule[]> {
         let url: string = RuleService.resourceUrl;
         return this.http.get(url, this.options).map(res => res.json());
     }
 
-    get(id: number): Observable<Rule> {
+    get (id: number): Observable<Rule> {
         let url: string = RuleService.resourceUrl + '/' + id;
         return this.http.get(url, this.options).map(res => res.json());
     }
@@ -40,4 +41,5 @@ export class RuleService {
         let url: string = RuleService.resourceUrl + '/' + rule.id;
         return this.http.delete(url, this.options).map(res => res.json());
     }
+
 }

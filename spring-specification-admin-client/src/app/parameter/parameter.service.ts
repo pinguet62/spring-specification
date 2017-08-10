@@ -1,19 +1,20 @@
-import {Injectable} from "@angular/core";
-import {Headers, Http, RequestOptionsArgs} from "@angular/http";
-import {Observable} from "rxjs/Observable";
+import {Injectable} from '@angular/core';
+import {Headers, Http, RequestOptionsArgs} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {environment} from "../../environments/environment";
-import {Rule} from "../rule/rule";
-import {Parameter} from "./parameter";
+import {environment} from '../../environments/environment';
+import {Rule} from '../rule/rule';
+import {Parameter} from './parameter';
 
 @Injectable()
 export class ParameterService {
 
     private static readonly resourceUrl: string = environment.apiUrl + '/parameter';
 
-    private options: RequestOptionsArgs = { headers: new Headers({ 'Content-Type': 'application/json' }) };
+    private options: RequestOptionsArgs = {headers: new Headers({'Content-Type': 'application/json'})};
 
-    constructor(private http: Http) {}
+    constructor(private http: Http) {
+    }
 
     getSupportedTypes(): Observable<string[]> {
         let url: string = ParameterService.resourceUrl + '/type';
@@ -41,4 +42,5 @@ export class ParameterService {
         let url: string = ParameterService.resourceUrl + '/' + parameter.id;
         return this.http.delete(url, this.options).map(res => res.json());
     }
+
 }

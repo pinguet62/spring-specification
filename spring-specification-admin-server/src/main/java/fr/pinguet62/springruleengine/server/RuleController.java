@@ -1,6 +1,5 @@
 package fr.pinguet62.springruleengine.server;
 
-import fr.pinguet62.springruleengine.core.RuleName;
 import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
 import fr.pinguet62.springruleengine.core.builder.database.repository.RuleRepository;
 import fr.pinguet62.springruleengine.server.dto.ParameterDto;
@@ -110,23 +109,23 @@ public class RuleController {
                 .description(entity.getDescription())
                 .components(
                         entity
-                            .getComponents()
-                            .stream()
-                            .map(this::convert)
-                            .collect(toList()))
+                                .getComponents()
+                                .stream()
+                                .map(this::convert)
+                                .collect(toList()))
                 .parameters(
                         entity
-                            .getParameters()
-                            .stream()
-                            .map(p ->
-                                    ParameterDto
-                                        .builder()
-                                        .id(p.getId())
-                                        .key(p.getKey())
-                                        .value(p.getValue())
-                                        .type(p.getType())
-                                        .build())
-                            .collect(toList()))
+                                .getParameters()
+                                .stream()
+                                .map(p ->
+                                        ParameterDto
+                                                .builder()
+                                                .id(p.getId())
+                                                .key(p.getKey())
+                                                .value(p.getValue())
+                                                .type(p.getType())
+                                                .build())
+                                .collect(toList()))
                 .build();
         // @formatter:on
     }

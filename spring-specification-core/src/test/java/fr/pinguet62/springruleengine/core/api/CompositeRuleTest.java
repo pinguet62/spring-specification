@@ -9,7 +9,9 @@ import static org.junit.Assert.assertTrue;
 
 public class CompositeRuleTest {
 
-    /** @see AndRule */
+    /**
+     * @see AndRule
+     */
     @Test
     public void test_and() {
         assertTrue(new AndRule(TRUE_RULE, TRUE_RULE).test(null));
@@ -18,7 +20,9 @@ public class CompositeRuleTest {
         assertFalse(new AndRule(FALSE_RULE, FALSE_RULE).test(null));
     }
 
-    /** @see OrRule */
+    /**
+     * @see OrRule
+     */
     @Test
     public void test_or() {
         assertTrue(new OrRule(TRUE_RULE, TRUE_RULE).test(null));
@@ -27,7 +31,9 @@ public class CompositeRuleTest {
         assertFalse(new OrRule(FALSE_RULE, FALSE_RULE).test(null));
     }
 
-    /** @see NotRule */
+    /**
+     * @see NotRule
+     */
     @Test
     public void test_not() {
         assertFalse(new NotRule(TRUE_RULE).test(null));

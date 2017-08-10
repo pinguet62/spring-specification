@@ -1,12 +1,11 @@
 package fr.pinguet62.springruleengine.sample.rule;
 
-import fr.pinguet62.springruleengine.sample.model.Product;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
 import fr.pinguet62.springruleengine.core.api.Rule;
+import fr.pinguet62.springruleengine.sample.model.Product;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")

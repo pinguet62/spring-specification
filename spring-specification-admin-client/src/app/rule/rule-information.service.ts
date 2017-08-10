@@ -1,21 +1,22 @@
-import {Injectable} from "@angular/core";
-import {Headers, Http, RequestOptionsArgs} from "@angular/http";
-import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
-import {Observable} from "rxjs/Observable";
+import {Injectable} from '@angular/core';
+import {Headers, Http, RequestOptionsArgs} from '@angular/http';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {environment} from "../../environments/environment";
-import {RuleInformation} from "./rule-information";
+import {environment} from '../../environments/environment';
+import {RuleInformation} from './rule-information';
 
 @Injectable()
 export class RuleInformationService {
 
     private static readonly resourceUrl: string = environment.apiUrl + '/ruleCatalog';
 
-    private options: RequestOptionsArgs = { headers: new Headers({ 'Content-Type': 'application/json' }) };
+    private options: RequestOptionsArgs = {headers: new Headers({'Content-Type': 'application/json'})};
 
     CACHE: RuleInformation[];
 
-    constructor(protected http: Http) {}
+    constructor(protected http: Http) {
+    }
 
     load(): Observable<RuleInformation[]> {
         let url: string = RuleInformationService.resourceUrl + '/';
@@ -43,11 +44,14 @@ export class RuleInformationService {
 /** {@link Resolve} used to load {@link RuleInformationService#CACHE} on startup. */
 @Injectable()
 export class RuleInformationServiceResolver implements Resolve<RuleInformation[]> {
-    constructor(private ruleInformationService: RuleInformationService) {}
+
+    constructor(private ruleInformationService: RuleInformationService) {
+    }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<RuleInformation[]> | Promise<RuleInformation[]> | RuleInformation[] {
         return this.ruleInformationService.load().map(x =>
             this.ruleInformationService.CACHE = x
         );
     }
+
 }

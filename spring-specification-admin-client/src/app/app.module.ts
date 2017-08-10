@@ -1,9 +1,9 @@
-import {NgModule} from "@angular/core";
-import {BrowserModule} from "@angular/platform-browser";
-import {RouterModule} from "@angular/router";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HttpModule} from "@angular/http";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {RouterModule} from '@angular/router';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpModule} from '@angular/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
     MdButtonModule,
     MdCheckboxModule,
@@ -15,18 +15,18 @@ import {
     MdSidenavModule,
     MdTableModule,
     MdToolbarModule
-} from "@angular/material";
-import {CdkTableModule} from "@angular/cdk";
+} from '@angular/material';
+import {CdkTableModule} from '@angular/cdk';
 
 import {appRoutes} from './app.route';
-import {AppComponent} from "./app.component";
-import {TreeModule} from "./tree/tree.module";
-import {RuleInformationService, RuleInformationServiceResolver} from "./rule/rule-information.service";
-import {RuleService} from "./rule/rule.service";
-import {RulesComponent} from "./rule/rules.component";
-import {DeleteRuleDialog, EditRuleDialog, RuleComponent, SettingsRuleDialog} from "./rule/rule.component";
-import {ParameterService} from "./parameter/parameter.service";
-import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from "./parameter/parameter.component";
+import {AppComponent} from './app.component';
+import {TreeModule} from './tree/tree.module';
+import {RuleInformationService, RuleInformationServiceResolver} from './rule/rule-information.service';
+import {RuleService} from './rule/rule.service';
+import {RulesComponent} from './rule/rules.component';
+import {DeleteRuleDialog, EditRuleDialog, RuleComponent, SettingsRuleDialog} from './rule/rule.component';
+import {ParameterService} from './parameter/parameter.service';
+import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './parameter/parameter.component';
 
 @NgModule({
     imports: [

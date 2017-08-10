@@ -1,19 +1,14 @@
 package fr.pinguet62.springruleengine.core.builder.database.model;
 
-import static javax.persistence.FetchType.LAZY;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
 import lombok.Data;
+
+import javax.persistence.*;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Data
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "rule_id", "key" }) })
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"rule_id", "key"})})
 public class ParameterEntity {
 
     @Id

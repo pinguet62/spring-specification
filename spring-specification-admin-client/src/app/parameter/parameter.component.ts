@@ -1,10 +1,10 @@
-import {Component, Inject, Input, OnInit} from "@angular/core";
-import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from "@angular/material";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {ObservableDataSource} from "../simple-data-source";
-import {Parameter} from "./parameter";
-import {ParameterService} from "./parameter.service";
-import {Rule} from "../rule/rule";
+import {Component, Inject, Input, OnInit} from '@angular/core';
+import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from '@angular/material';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {ObservableDataSource} from '../simple-data-source';
+import {Parameter} from './parameter';
+import {ParameterService} from './parameter.service';
+import {Rule} from '../rule/rule';
 
 @Component({
     selector: 'p62-parameter-edit',
@@ -31,19 +31,19 @@ import {Rule} from "../rule/rule";
         </md-dialog-actions>`
 })
 export class EditParameterDialog {
+
     parameter: Parameter;
     availableTypes: string[];
 
-    constructor(
-        public dialogRef: MdDialogRef<EditParameterDialog>,
-        @Inject(MD_DIALOG_DATA) public data: any,
-        parameterService: ParameterService
-    ) {
+    constructor(public dialogRef: MdDialogRef<EditParameterDialog>,
+                @Inject(MD_DIALOG_DATA) public data: any,
+                parameterService: ParameterService) {
         this.parameter = <Parameter> (data && data.parameter || {}); // update or create
         parameterService.getSupportedTypes().subscribe(types =>
             this.availableTypes = types
         );
     }
+
 }
 
 @Component({
@@ -59,7 +59,10 @@ export class EditParameterDialog {
         </md-dialog-actions>`
 })
 export class DeleteParameterDialog {
-    constructor(public dialogRef: MdDialogRef<DeleteParameterDialog>) {}
+
+    constructor(public dialogRef: MdDialogRef<DeleteParameterDialog>) {
+    }
+
 }
 
 @Component({
@@ -83,25 +86,32 @@ export class DeleteParameterDialog {
                     <md-header-cell *cdkHeaderCellDef></md-header-cell>
                     <md-cell *cdkCellDef="let parameter">
                         <div style="display: flex;"><!--flex: no line break-->
-                            <button md-icon-button (click)="openUpdateDialog(parameter)"><md-icon>mode_edit</md-icon></button>
-                            <button md-icon-button (click)="openDeleteParameter(parameter)"><md-icon>delete</md-icon></button>
+                            <button md-icon-button (click)="openUpdateDialog(parameter)">
+                                <md-icon>mode_edit</md-icon>
+                            </button>
+                            <button md-icon-button (click)="openDeleteParameter(parameter)">
+                                <md-icon>delete</md-icon>
+                            </button>
                         </div>
                     </md-cell>
                 </ng-container>
-                
+
                 <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
                 <md-row *cdkRowDef="let parameter; columns: displayedColumns;"></md-row>
             </md-table>
 
-            <button (click)="openCreateDialog()" md-mini-fab style="position: absolute; bottom: 0; margin-bottom: 5px; right: 0; margin-right: 5px;"><md-icon>add</md-icon></button>
+            <button (click)="openCreateDialog()" md-mini-fab style="position: absolute; bottom: 0; margin-bottom: 5px; right: 0; margin-right: 5px;">
+                <md-icon>add</md-icon>
+            </button>
         </div>`,
     styles: [
-        `.example-container {
+            `.example-container {
             display: flex;
             flex-direction: column;
             max-height: 500px;
             min-width: 300px;
         }
+
         .mat-table {
             overflow: auto;
         }`
@@ -116,10 +126,9 @@ export class ParameterComponent implements OnInit {
     displayedColumns = ['key', 'value', 'type', 'options'];
     dataSource: ObservableDataSource<Parameter> = new ObservableDataSource<Parameter>(new BehaviorSubject<Parameter[]>([]));
 
-    constructor(
-        private dialog: MdDialog,
-        private parameterService: ParameterService
-    ) {}
+    constructor(private dialog: MdDialog,
+                private parameterService: ParameterService) {
+    }
 
     ngOnInit(): void {
         this.dataSource.observable.next(this.rule.parameters);
@@ -147,7 +156,7 @@ export class ParameterComponent implements OnInit {
 
     openUpdateDialog(parameter: Parameter): void {
         let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
-        dialogConfig.data = { parameter: Object.assign({}, parameter) };
+        dialogConfig.data = {parameter: Object.assign({}, parameter)};
         let createDialog: MdDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, dialogConfig);
         createDialog.afterClosed().subscribe((updatedParameter: Parameter) => {
             // Canceled
@@ -172,6 +181,7 @@ export class ParameterComponent implements OnInit {
     }
 
     getCommonDialogConfig(): MdDialogConfig {
-        return { disableClose: true };
-    };
+        return {disableClose: true};
+    }
+
 }

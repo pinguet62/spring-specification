@@ -1,6 +1,6 @@
-import {Component} from "@angular/core";
-import {RuleService} from "./rule.service";
-import {Rule} from "./rule";
+import {Component} from '@angular/core';
+import {RuleService} from './rule.service';
+import {Rule} from './rule';
 
 @Component({
     selector: 'app-root',
@@ -10,6 +10,7 @@ import {Rule} from "./rule";
         </div>`
 })
 export class RulesComponent {
+
     rules: Rule[];
 
     constructor(private ruleService: RuleService) {
@@ -17,4 +18,5 @@ export class RulesComponent {
             this.rules = rs
         );
     }
+
 }

@@ -14,7 +14,9 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 
-/** {@link RuleFactory} for {@link Rule}s of base API. */
+/**
+ * {@link RuleFactory} for {@link Rule}s of base API.
+ */
 @Component
 public class ApiRuleFactory implements RuleFactory {
 
@@ -23,7 +25,7 @@ public class ApiRuleFactory implements RuleFactory {
 
     @Override
     public Optional<Rule<?>> apply(RuleEntity ruleEntity) {
-        switch(ruleEntity.getKey()) {
+        switch (ruleEntity.getKey()) {
             case "andRule":
                 return of(new AndRule<>(ruleEntity.getComponents().stream().map(c -> compositeRuleFactory.apply(c).get()).collect(toList())));
             case "orRule":

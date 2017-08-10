@@ -8,17 +8,23 @@ public interface Rule<T> extends Predicate<T> {
     @Override
     boolean test(T value);
 
-    /** @see OrRule */
+    /**
+     * @see OrRule
+     */
     default Rule<T> and(Rule<T> other) {
         return new AndRule<>(this, other);
     }
 
-    /** @see OrRule */
+    /**
+     * @see OrRule
+     */
     default Rule<T> or(Rule<T> other) {
         return new OrRule<>(this, other);
     }
 
-    /** @see NotRule */
+    /**
+     * @see NotRule
+     */
     default Rule<T> not() {
         return new NotRule<>(this);
     }

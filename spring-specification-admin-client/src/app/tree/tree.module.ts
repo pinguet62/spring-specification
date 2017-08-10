@@ -1,10 +1,10 @@
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MdButtonModule, MdIconModule} from "@angular/material";
-import {DragulaModule} from "ng2-dragula";
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MdButtonModule, MdIconModule} from '@angular/material';
+import {DragulaModule} from 'ng2-dragula';
 
-import {TreeComponent, TreeNodeComponent} from "./tree.component";
+import {TreeComponent, TreeNodeComponent} from './tree.component';
 
 @NgModule({
     imports: [
@@ -15,4 +15,5 @@ import {TreeComponent, TreeNodeComponent} from "./tree.component";
     declarations: [TreeComponent, TreeNodeComponent],
     exports: [TreeComponent, TreeNodeComponent]
 })
-export class TreeModule {}
+export class TreeModule {
+}

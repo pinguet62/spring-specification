@@ -1,9 +1,9 @@
 package fr.pinguet62.springruleengine.core.api;
 
-import java.util.Collection;
-
 import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
+
+import java.util.Collection;
 
 @RuleName(value = "\"OR\" combinator")
 @RuleDescription("Combination of rules using \"OR\" operator. False if empty.")

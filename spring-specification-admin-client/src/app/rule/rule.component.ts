@@ -1,11 +1,11 @@
-import {Component, Inject, Input, OnInit} from "@angular/core";
-import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from "@angular/material";
-import {NodeMovedEvent, TreeNode} from "../tree/tree-node";
-import {RuleService} from "./rule.service";
-import {convert, RuleDataTreeNode} from "./rule-tree-node";
-import {Rule} from "./rule";
-import {RuleInformation} from "./rule-information";
-import {RuleInformationService} from "./rule-information.service";
+import {Component, Inject, Input, OnInit} from '@angular/core';
+import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from '@angular/material';
+import {NodeMovedEvent, TreeNode} from '../tree/tree-node';
+import {RuleService} from './rule.service';
+import {convert, RuleDataTreeNode} from './rule-tree-node';
+import {Rule} from './rule';
+import {RuleInformation} from './rule-information';
+import {RuleInformationService} from './rule-information.service';
 
 @Component({
     selector: 'p62-rule-update',
@@ -28,17 +28,17 @@ import {RuleInformationService} from "./rule-information.service";
         </md-dialog-actions>`
 })
 export class EditRuleDialog {
+
     rule: Rule;
     availableKeys: RuleInformation[];
 
-    constructor(
-        public dialogRef: MdDialogRef<EditRuleDialog>,
-        @Inject(MD_DIALOG_DATA) public data: any,
-        ruleInformationService: RuleInformationService
-    ) {
+    constructor(public dialogRef: MdDialogRef<EditRuleDialog>,
+                @Inject(MD_DIALOG_DATA) public data: any,
+                ruleInformationService: RuleInformationService) {
         this.rule = <Rule> (data && data.rule || {}); // update or create
         this.availableKeys = ruleInformationService.getAll();
     }
+
 }
 
 @Component({
@@ -54,7 +54,10 @@ export class EditRuleDialog {
         </md-dialog-actions>`
 })
 export class DeleteRuleDialog {
-    constructor(public dialogRef: MdDialogRef<DeleteRuleDialog>) {}
+
+    constructor(public dialogRef: MdDialogRef<DeleteRuleDialog>) {
+    }
+
 }
 
 @Component({
@@ -68,14 +71,14 @@ export class DeleteRuleDialog {
         </md-dialog-content>`
 })
 export class SettingsRuleDialog {
+
     rule: Rule;
 
-    constructor(
-        protected dialogRef: MdDialogRef<EditRuleDialog>,
-        @Inject(MD_DIALOG_DATA) public data: any
-    ) {
+    constructor(protected dialogRef: MdDialogRef<EditRuleDialog>,
+                @Inject(MD_DIALOG_DATA) public data: any) {
         this.rule = <Rule> data.rule;
     }
+
 }
 
 @Component({
@@ -91,18 +94,28 @@ export class SettingsRuleDialog {
                 <div style="display: inline-flex;">
                     <!-- Composite: accept sub-rules -->
                     <div style="width: 40px;">
-                        <ng-template [ngIf]="['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.rule.key)">
-                            <button md-icon-button (click)="openCreateDialog(node.data.rule)"><md-icon>add</md-icon></button>
+                        <ng-template
+                                [ngIf]="['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.rule.key)">
+                            <button md-icon-button (click)="openCreateDialog(node.data.rule)">
+                                <md-icon>add</md-icon>
+                            </button>
                         </ng-template>
                     </div>
-                    <button md-icon-button (click)="openUpdateDialog(node.data.rule)"><md-icon>mode_edit</md-icon></button>
+                    <button md-icon-button (click)="openUpdateDialog(node.data.rule)">
+                        <md-icon>mode_edit</md-icon>
+                    </button>
                     <!-- Custom: accept parameters -->
                     <div style="width: 40px;">
-                        <ng-template [ngIf]="!['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.rule.key)">
-                            <button md-icon-button (click)="openSettingsDialog(node.data.rule)"><md-icon>settings</md-icon></button>
+                        <ng-template
+                                [ngIf]="!['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.rule.key)">
+                            <button md-icon-button (click)="openSettingsDialog(node.data.rule)">
+                                <md-icon>settings</md-icon>
+                            </button>
                         </ng-template>
                     </div>
-                    <button md-icon-button (click)="openDeleteDialog(node.data.rule)"><md-icon>delete</md-icon></button>
+                    <button md-icon-button (click)="openDeleteDialog(node.data.rule)">
+                        <md-icon>delete</md-icon>
+                    </button>
                 </div>
             </ng-template>
         </p62-tree>`,
@@ -113,16 +126,16 @@ export class SettingsRuleDialog {
     ]
 })
 export class RuleComponent implements OnInit {
+
     @Input()
     rule: Rule;
 
     treeNode: TreeNode<RuleDataTreeNode>;
 
-    constructor(
-        private dialog: MdDialog,
-        private ruleService: RuleService,
-        private ruleInformationService: RuleInformationService
-    ) {}
+    constructor(private dialog: MdDialog,
+                private ruleService: RuleService,
+                private ruleInformationService: RuleInformationService) {
+    }
 
     ngOnInit(): void {
         this.refresh();
@@ -140,7 +153,7 @@ export class RuleComponent implements OnInit {
             parent: event.parent.data.rule.id,
             index: event.index
         };
-        this.ruleService.update(rule).subscribe( x =>
+        this.ruleService.update(rule).subscribe(x =>
             this.refresh()
         );
     }
@@ -161,7 +174,7 @@ export class RuleComponent implements OnInit {
 
     openUpdateDialog(rule: Rule): void {
         let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
-        dialogConfig.data = { rule: Object.assign({}, rule) };
+        dialogConfig.data = {rule: Object.assign({}, rule)};
         let updateDialog: MdDialogRef<EditRuleDialog> = this.dialog.open(EditRuleDialog, dialogConfig);
         updateDialog.afterClosed().subscribe((updatedRule: Rule) => {
             // Canceled
@@ -176,7 +189,7 @@ export class RuleComponent implements OnInit {
 
     openSettingsDialog(rule: Rule): void {
         let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
-        dialogConfig.data = { rule: Object.assign({}, rule) };
+        dialogConfig.data = {rule: Object.assign({}, rule)};
         dialogConfig.disableClose = false; // override
         //dialogConfig.width = '800px'; // custom
         let settingsDialog: MdDialogRef<SettingsRuleDialog> = this.dialog.open(SettingsRuleDialog, dialogConfig);
@@ -193,6 +206,7 @@ export class RuleComponent implements OnInit {
     }
 
     getCommonDialogConfig(): MdDialogConfig {
-        return { disableClose: true };
+        return {disableClose: true};
     }
+
 }

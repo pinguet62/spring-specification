@@ -1,11 +1,19 @@
 import {
-    AfterContentInit, Component, ContentChild, ElementRef, EventEmitter, Input, Output, QueryList, TemplateRef,
+    AfterContentInit,
+    Component,
+    ContentChild,
+    ElementRef,
+    EventEmitter,
+    Input,
+    Output,
+    QueryList,
+    TemplateRef,
     ViewChild,
     ViewChildren,
     ViewContainerRef
-} from "@angular/core";
-import {NodeMovedEvent, TreeNode} from "./tree-node";
-import {DragulaService} from "ng2-dragula";
+} from '@angular/core';
+import {NodeMovedEvent, TreeNode} from './tree-node';
+import {DragulaService} from 'ng2-dragula';
 
 @Component({
     selector: 'p62-tree-node',
@@ -17,23 +25,25 @@ import {DragulaService} from "ng2-dragula";
                         <md-icon>{{node.expanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}}</md-icon>
                     </button>
                 </div>
-                
+
                 <ng-container #labelView></ng-container>
-                
+
                 <div style="flex-grow: 1;"></div>
                 <div>
                     <ng-container #optionsView></ng-container>
                 </div>
             </div>
-            
+
             <ul #childrenUl *ngIf="node.expanded" [dragula]="dragulaBagId" [dragulaModel]="node.children">
-                <p62-tree-node *ngFor="let child of node.children" [dragulaBagId]="dragulaBagId" [node]="child" [labelTemplate]="labelTemplate" [optionsTemplate]="optionsTemplate"></p62-tree-node>
+                <p62-tree-node *ngFor="let child of node.children" [dragulaBagId]="dragulaBagId" [node]="child" [labelTemplate]="labelTemplate"
+                               [optionsTemplate]="optionsTemplate"></p62-tree-node>
                 <li *ngIf="showEmptyDropZones" class="tree-empty">-</li><!-- Workaround to drop into empty node -->
             </ul>
         </li>`,
     styleUrls: ['./tree.component.css']
 })
 export class TreeNodeComponent implements AfterContentInit {
+
     /** Used by Dragula to identify a <i>bag</i>, and so to restrict drag/drop only into current {@link TreeComponent}. */
     @Input() dragulaBagId: string;
     showEmptyDropZones: boolean = false;
@@ -63,21 +73,24 @@ export class TreeNodeComponent implements AfterContentInit {
 
     /** Fill each {@link ViewContainerRef} from corresponding {@link TemplateRef}. */
     ngAfterContentInit(): void {
-        this.labelView.createEmbeddedView(this.labelTemplate, { '\$implicit': this.node });
-        this.optionsView.createEmbeddedView(this.optionsTemplate, { '\$implicit': this.node });
+        this.labelView.createEmbeddedView(this.labelTemplate, {'\$implicit': this.node});
+        this.optionsView.createEmbeddedView(this.optionsTemplate, {'\$implicit': this.node});
     }
+
 }
 
 @Component({
     selector: 'p62-tree',
     template: `
         <div class="tree-container">
-            <p62-tree-node *ngIf="value" #chil [dragulaBagId]="dragulaBagId" [node]="value" [labelTemplate]="labelTemplate" [optionsTemplate]="optionsTemplate"></p62-tree-node>
+            <p62-tree-node *ngIf="value" #chil [dragulaBagId]="dragulaBagId" [node]="value" [labelTemplate]="labelTemplate"
+                           [optionsTemplate]="optionsTemplate"></p62-tree-node>
         </div>`,
     styleUrls: ['./tree.component.css'],
     viewProviders: [DragulaService /* fix: multiple-event handling */]
 })
 export class TreeComponent {
+
     dragulaBagId: string = 'dagula-bag-' + new Date().getTime().toString();
 
     @Input() value: TreeNode<any>;
@@ -123,7 +136,9 @@ export class TreeComponent {
                 if (treeNodeComponent.elementRef.nativeElement === movedTreeNodeElement)
                     result.node = treeNodeComponent.node;
             });
-        } catch (e) { if (e !== BreakException) throw e; }
+        } catch (e) {
+            if (e !== BreakException) throw e;
+        }
 
         // find index
         for (let i = 0; i < tgtUlElement.children.length; i++)
@@ -140,6 +155,7 @@ export class TreeComponent {
             this.visitTreeNodesRecursively(x, visitor);
         });
     }
+
     private visitTreeNodesRecursively(treeNodeComponent: TreeNodeComponent, visitor: (x: TreeNodeComponent) => void) {
         visitor(treeNodeComponent);
         treeNodeComponent.childrenTreeNodeComponents.forEach(x => {
@@ -151,4 +167,5 @@ export class TreeComponent {
     canDropInto(el: Element, tgtUlElement: Element, srcUlElement: Element, sibling: Element): boolean {
         return !el.contains(tgtUlElement);
     }
+
 }

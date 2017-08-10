@@ -1,11 +1,10 @@
 package fr.pinguet62.springruleengine.core.builder.database.repository;
 
-import java.util.List;
-
+import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
+import java.util.List;
 
 @Repository
 public interface RuleRepository extends JpaRepository<RuleEntity, Integer> {

@@ -1,4 +1,4 @@
-import {Parameter} from "../parameter/parameter";
+import {Parameter} from '../parameter/parameter';
 
 export interface Rule {
     id?: number;

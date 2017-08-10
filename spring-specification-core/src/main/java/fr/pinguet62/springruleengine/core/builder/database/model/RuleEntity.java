@@ -9,7 +9,9 @@ import java.util.List;
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.FetchType.EAGER;
 
-/** Usage of a {@link Rule}. */
+/**
+ * Usage of a {@link Rule}.
+ */
 @Data
 @Entity
 public class RuleEntity {
@@ -22,14 +24,19 @@ public class RuleEntity {
 
     /**
      * {@link Rule} class.
+     *
      * @see Class#getName()
      */
     private String key;
 
-    /** User's notes. */
+    /**
+     * User's notes.
+     */
     private String description;
 
-    /** {@code null} when root {@link Rule}. */
+    /**
+     * {@code null} when root {@link Rule}.
+     */
     @ManyToOne
     private RuleEntity parent;
 

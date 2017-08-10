@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 // TODO Spring workflow (fix parameter with prototype scope?)
+
 /**
  * Process each {@link Field} and {@link Method setter} annotated with {@link RuleParameter}.
  */

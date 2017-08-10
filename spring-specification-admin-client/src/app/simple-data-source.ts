@@ -1,8 +1,9 @@
-import {CollectionViewer, DataSource} from "@angular/cdk";
-import {Observable} from "rxjs/Observable";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {CollectionViewer, DataSource} from '@angular/cdk';
+import {Observable} from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 export class ObservableDataSource<T> extends DataSource<T> {
+
     constructor(public observable: BehaviorSubject<T[]>) {
         super();
     }
@@ -11,5 +12,7 @@ export class ObservableDataSource<T> extends DataSource<T> {
         return this.observable;
     }
 
-    disconnect(collectionViewer: CollectionViewer): void {}
+    disconnect(collectionViewer: CollectionViewer): void {
+    }
+
 }
