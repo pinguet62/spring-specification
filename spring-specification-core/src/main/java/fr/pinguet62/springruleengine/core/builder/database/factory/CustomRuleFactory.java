@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toMap;
 
@@ -33,12 +32,15 @@ public class CustomRuleFactory implements RuleFactory {
     @Override
     public Optional<Rule<?>> apply(RuleEntity ruleEntity) {
         // Build
-        Rule rule;
+        Rule<?> rule;
         try {
             String className = ruleEntity.getKey();
-            rule = (Rule) factory.getBean(className);
+            Class<?> claz = Class.forName(className);
+            rule = (Rule<?>) factory.getBean(claz);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException(e);
         } catch (NoSuchBeanDefinitionException e) {
-            return empty();
+            throw new IllegalArgumentException(e);
         }
 
         // Parameters

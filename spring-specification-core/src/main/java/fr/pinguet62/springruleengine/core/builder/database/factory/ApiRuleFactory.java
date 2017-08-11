@@ -25,16 +25,14 @@ public class ApiRuleFactory implements RuleFactory {
 
     @Override
     public Optional<Rule<?>> apply(RuleEntity ruleEntity) {
-        switch (ruleEntity.getKey()) {
-            case "andRule":
-                return of(new AndRule<>(ruleEntity.getComponents().stream().map(c -> compositeRuleFactory.apply(c).get()).collect(toList())));
-            case "orRule":
-                return of(new OrRule<>(ruleEntity.getComponents().stream().map(c -> compositeRuleFactory.apply(c).get()).collect(toList())));
-            case "notRule":
-                return of(new NotRule<>(compositeRuleFactory.apply(ruleEntity.getComponents().get(0)).get()));
-            default:
-                return empty();
-        }
+        final String key = ruleEntity.getKey();
+        if (key.equals(AndRule.class.getName()))
+            return of(new AndRule<>(ruleEntity.getComponents().stream().map(c -> compositeRuleFactory.apply(c).get()).collect(toList())));
+        else if (key.equals(OrRule.class.getName()))
+            return of(new OrRule<>(ruleEntity.getComponents().stream().map(c -> compositeRuleFactory.apply(c).get()).collect(toList())));
+        else if (key.equals(NotRule.class.getName()))
+            return of(new NotRule<>(compositeRuleFactory.apply(ruleEntity.getComponents().get(0)).get()));
+        else
+            return empty();
     }
-
 }
