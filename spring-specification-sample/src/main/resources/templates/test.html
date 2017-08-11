@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Test</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+<h1>Test</h1>
+<h2>Parameters</h2>
+<div>
+    <label for="color">Color</label>
+    <input id="color" value="black"/>
+</div>
+<div>
+    <label for="price">Price</label>
+    <input id="price" type="number" value="42"/>
+</div>
+<h2>Execution</h2>
+<div>
+    <label for="rule">Rule</label>
+    <input id="rule" type="number" value="1"/>
+</div>
+<button onclick="submit()">Submit</button>
+<h2>Result</h2>
+<span id="result">?</span>
+
+<script>
+    function submit() {
+        $.ajax({
+            url: 'http://localhost:8080/test/server', //location.href.split('/').reverse().splice(1).reverse().join('/') + '/server',
+            type: 'GET',
+            data: {
+                rule: $('#rule').val(),
+                color: $('#color').val(),
+                price: $('#price').val()
+            },
+            success: function (msg) {
+                $('#result').text(msg);
+            },
+            error: function (msg) {
+                $('#result').text(msg.responseText);
+            }
+        });
+    }
+</script>
+</body>
+</html>

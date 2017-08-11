@@ -2,4 +2,5 @@
 
 ## Sample
 
-https://spring-specification-sample.herokuapp.com
+* Admin UI: https://spring-specification-sample.herokuapp.com
+* Execute rules: https://spring-specification-sample.herokuapp.com/test/client
