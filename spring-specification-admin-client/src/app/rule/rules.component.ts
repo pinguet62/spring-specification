@@ -3,7 +3,7 @@ import {RuleService} from './rule.service';
 import {Rule} from './rule';
 
 @Component({
-    selector: 'app-root',
+    selector: 'p62-rules',
     template: `
         <div *ngFor="let rule of rules" class="mat-elevation-z8" style="width: 800px; margin: 50px;">
             <p62-rule [rule]="rule"></p62-rule>

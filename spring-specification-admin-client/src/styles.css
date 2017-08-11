@@ -11,3 +11,14 @@
 body {
     margin: 0;
 }
+
+/* Permanent toolbar and content scrollable */
+
+app-root > md-toolbar {
+    position: fixed;
+    z-index: 2;
+}
+
+.mat-sidenav-container[fullscreen] {
+    top: 64px !important;
+}
