@@ -22,6 +22,7 @@
         <module>spring-specification-core</module>
         <module>spring-specification-admin-server</module>
         <module>spring-specification-admin-client</module>
+        <module>spring-specification-doc</module>
         <module>spring-specification-sample</module>
     </modules>
 

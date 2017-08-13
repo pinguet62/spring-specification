@@ -1,0 +1,229 @@
+# Spring Specification Reference Guide
+Pinguet62 <https://github.com/pinguet62[GitHub]>
+:revnumber: {project-version}
+:toc: left
+:toclevels: 3
+:sectanchors:
+:sectlinks:
+:sectnums:
+
+## Why this project?
+
+### Specification pattern
+
+[quote, Wikipedia, https://en.wikipedia.org/wiki/Specification_pattern]
+____
+The *specification pattern* is a particular software design pattern, whereby *business rules* can be *recombined* by chaining the business rules together using boolean logic.
+____
+
+Concretely, instead to implement rules using `if`/`else` like with this code:
+[source,java]
+----
+if (!product.isDangerous() && (product.getColor().equals("black") || product.getAmount() > 100))
+    result = true;
+----
+the business rules are implemented *unitary* and *combined* to produce the final rule:
+[source,java]
+----
+Rule isDangerous, isBlack, amountGreaterThan100 = ...;
+Rule combined = isDangerous.not().and( isBlack.or(amountGreaterThan100) );
+result = combined.test(product);
+----
+
+### Need of dynamism
+
+The _specification pattern_ allow to produce readable and maintainable code.
+But the final source code is *static*: you have to update/compile/deploy application to change business rules.
+
+The goal of this project is to define to *manage* and *build* dynamically rules at runtime, without any modification into source code.
+
+## Core API
+
+The `Rule` interface is the base of specification pattern.
+
+### Simple usage
+
+Definition:
+[source,java]
+----
+class RedColorProductRule implements Rule<Product> {
+    @Override
+    public boolean test(Product param) {
+        return param.getColor().equals("red");
+    }
+}
+----
+
+Usage:
+[source,java]
+----
+Rule rule = new RedColorProductRule();
+Product product = new Product("red");
+boolean result = rule.test(product);
+----
+
+### Composition
+
+Example for this composition:
+----
+(NOT first) AND (second OR third)
+----
+with these 3 *basic rules*:
+[source,java]
+----
+Rule first = ...
+Rule second = ...
+Rule third = ...
+----
+
+#### Method chaining
+
+`Rule` interface defines *default methods*, used for _method chaining_.
+
+[source,java]
+----
+Rule composedRule = first.not().and( second.or(third) );
+----
+
+#### Composite pattern
+
+`AndRule`/`OrRule`/`NotRule` are special `Rule` implementations, who work like *composite pattern* by accepting _variable length argument_ into constructor.
+
+[source,java]
+----
+import fr.pinguet62.springruleengine.core.api.*;
+
+Rule composedRule = new AndRule(
+                        new NotRule(
+                            first
+                        ),
+                        new OrRule(
+                            second,
+                            third
+                        )
+                    );
+----
+
+#### Utility methods
+
+`and()`/`or()`/`not()` are *static* methods of `RuleUtils`.
+
+[source,java]
+----
+import static fr.pinguet62.springruleengine.core.api.RuleUtils.*;
+
+Rule composedRule = and(
+                        not(
+                            first
+                        ),
+                        or(
+                            second,
+                            third
+                        )
+                    );
+----
+
+### Parameters
+
+#### Objective
+
+Create *minimal parameterized* rules, instead of _many specific_ rules.
+
+Bad:
+[source,java]
+----
+class RedProductRule {}
+class BlueProductRule {}
+class GreenProductRule {}
+----
+
+Good:
+[source,java]
+----
+class ColorProductRule implements Rule {
+    String color;
+
+    ColorProductRule(String param) {
+        this.color = param;
+    }
+
+    // ...
+}
+
+Rule redProductRule = new ColorProductRule("red");
+Rule bleuProductRule = new ColorProductRule("bleu");
+Rule greenProductRule = new ColorProductRule("green");
+----
+
+#### Usage
+
+* For *manual* usage, the parameter can be set using _constructor_ or _setter_.
+* For *dynamic* engine usage, the property (field or setter) must be annotated with `@RuleParameter(value)`.
+
+[source,java]
+----
+class ColorProductRule implements Rule<Model> {
+
+    @RuleParameter("key") // one or ...
+    String color;
+
+    @RuleParameter("key") // ... the other
+    void setColor(String param) {
+        color = param;
+    }
+
+    @Override
+    boolean test(Model model) {
+        System.out.println(color);
+        // ...
+    }
+}
+----
+
+## Builder
+
+### Key & Factory
+
+All `Rule` are identified by unique **key**.
+
+By default:
+
+* the key is the `Class::getName()`;
+* the factory use `BeanFactory::getBean()` to create an instance of rule.
+
+TIP: Usually the component *scope* is `prototype`, to create distinct objects. +
+It's possible to use other scope like `singleton`, but object must be _stateless_ and without parameter.
+
+### Database
+
+This module require 2 tables:
+* `RULE_ENTITY` for `Rule` combinations;
+* `PARAMETER_ENTITY` for parameters of each `Rule`.
+
+## Admin server
+
+The admin application expose webservices (REST API) to manage rules.
+
+Documentation: see `/swagger-ui.html` page.
+
+## Admin UI
+
+### Spring Boot
+
+The admin application can simply deployed using Spring Boot & embedded Tomcat.
+
+Add _server_ and _client_ dependencies:
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>fr.pinguet62</groupId>
+    <artifactId>spring-specification-admin-server</artifactId>
+    <version>LATEST</version>
+</dependency>
+<dependency>
+    <groupId>fr.pinguet62</groupId>
+    <artifactId>spring-specification-admin-client</artifactId>
+    <version>LATEST</version>
+</dependency>
+----
