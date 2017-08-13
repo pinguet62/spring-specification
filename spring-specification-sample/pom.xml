@@ -55,6 +55,14 @@
                         <web>java $JAVA_OPTS -Dserver.port=$PORT -jar target/${project.artifactId}-${project.version}.${project.packaging}</web>
                     </processTypes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

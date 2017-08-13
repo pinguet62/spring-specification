@@ -67,4 +67,44 @@
             </plugin>
         </plugins>
     </build>
+
+    <licenses>
+        <license>
+            <name>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License</name>
+            <url>http://creativecommons.org/licenses/by-nc-sa/4.0</url>
+            <comments>CC BY-NC-SA 4.0</comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>PINGUET Julien</name>
+            <email>pinguet62@gmail.com</email>
+            <url>https://github.com/pinguet62</url>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/pinguet62/${project.artifactId}</url>
+        <connection>scm:git:git@github.com:pinguet62/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:git@github.com:pinguet62/${project.artifactId}.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
+
 </project>

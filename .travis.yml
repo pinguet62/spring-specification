@@ -12,9 +12,4 @@ after_success:
     
     # Deploy SNAPSHOT
     - echo '<settings><servers><server><id>ossrh</id><username>${env.OSSRH_USER}</username><password>${env.OSSRH_PASS}</password></server></servers></settings>' > deploy-settings.xml
-    - "[[ ${TRAVIS_PULL_REQUEST} == 'false' ]] && [[ ${TRAVIS_TAG} == '' ]] && mvn deploy -DskipTests -Dgpg.skip --settings deploy-settings.xml"
-
-# Deploy
-after_script:
-    # Deploy sample to Heroku
-    - mvn -DskipTests heroku:deploy -pl spring-specification-sample
+    - "[[ ${TRAVIS_PULL_REQUEST} == 'false' ]] && [[ ${TRAVIS_TAG} == '' ]] && mvn deploy -DskipTests --settings deploy-settings.xml"
