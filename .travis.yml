@@ -12,4 +12,4 @@ after_success:
     
     # Deploy SNAPSHOT & doc
     - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" &&
-      mvn deploy -DskipTests --settings deploy-settings.xml"
+      mvn deploy -DskipTests --settings deploy-settings.xml
