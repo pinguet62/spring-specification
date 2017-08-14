@@ -65,8 +65,10 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <!-- ng build &#x002d;&#x002d;prod -->
-                            <arguments>run ng -- build --prod</arguments>
+                            <!-- ng build -->
+                            <!-- &#x002d;&#x002d;environment=embedded -->
+                            <!-- &#x002d;&#x002d;base-href=/spring-specification-admin-client/ -->
+                            <arguments>run ng -- build --environment=embedded --base-href=/spring-specification-admin-client/</arguments>
                         </configuration>
                     </execution>
                 </executions>

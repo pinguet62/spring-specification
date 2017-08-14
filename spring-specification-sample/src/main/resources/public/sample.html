@@ -29,7 +29,7 @@
 <script>
     function submit() {
         $.ajax({
-            url: 'http://localhost:8080/test/server', //location.href.split('/').reverse().splice(1).reverse().join('/') + '/server',
+            url: location.href.split('/').reverse().splice(1).reverse().join('/') + '/execute',
             type: 'GET',
             data: {
                 rule: $('#rule').val(),

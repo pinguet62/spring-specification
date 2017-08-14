@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -21,17 +20,9 @@ public class TestController {
     private RuleBuilder builder;
 
     /**
-     * Load client HTML page.
-     */
-    @RequestMapping("/test/client")
-    public String client() {
-        return "test";
-    }
-
-    /**
      * Server end-point who execute test.
      */
-    @GetMapping("/test/server")
+    @GetMapping("/execute")
     public ResponseEntity<Boolean> server(@RequestParam("rule") Integer ruleId, @RequestParam String color, @RequestParam Double price) {
         try {
             Rule<Product> rule = (Rule<Product>) builder.apply(ruleId);

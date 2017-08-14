@@ -11,6 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
+    private static final String CONTEXT = "/spring-specification-admin-client";
+
     /**
      * Handle resources.
      */
@@ -18,11 +20,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
 
-        registry.addResourceHandler("/**")
+        registry.addResourceHandler(CONTEXT + "/**")
                 .addResourceLocations("classpath:/META-INF/spring-specification-admin-client/")
                 .resourceChain(true);
-
-        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
     }
 
     /**
@@ -32,6 +32,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         super.addViewControllers(registry);
 
-        registry.addViewController("/").setViewName("index.html");
+        registry.addViewController(CONTEXT + "/").setViewName("forward:index.html");
     }
 }
