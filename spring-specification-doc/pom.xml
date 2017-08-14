@@ -39,20 +39,26 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.12</version>
                 <executions>
                     <execution>
                         <phase>deploy</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>site</goal>
                         </goals>
                         <configuration>
-                            <executable>./deploy-to-gh-pages.sh</executable>
+                            <!-- See: deploy-settings.xml -->
+                            <server>github</server>
+                            <!-- org.asciidoctor:asciidoctor-maven-plugin outputDirectory -->
+                            <outputDirectory>${project.build.directory}/generated-docs</outputDirectory>
+                            <message>Update</message>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
+
 </project>

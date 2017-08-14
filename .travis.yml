@@ -5,11 +5,11 @@ jdk: oraclejdk8
 
 after_success:
     # Code coverage
-    # https://coveralls.io/github/pinguet62/spring-specification
+    # * https://coveralls.io/github/pinguet62/spring-specification
     - mvn jacoco:report coveralls:report
-    # https://codecov.io/gh/pinguet62/spring-specification
+    # * https://codecov.io/gh/pinguet62/spring-specification
     - bash <(curl -s https://codecov.io/bash)
     
-    # Deploy SNAPSHOT
-    - echo '<settings><servers><server><id>ossrh</id><username>${env.OSSRH_USER}</username><password>${env.OSSRH_PASS}</password></server></servers></settings>' > deploy-settings.xml
-    - "[[ ${TRAVIS_PULL_REQUEST} == 'false' ]] && [[ ${TRAVIS_TAG} == '' ]] && mvn deploy -DskipTests --settings deploy-settings.xml"
+    # Deploy SNAPSHOT & doc
+    - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" &&
+      mvn deploy -DskipTests --settings deploy-settings.xml"
