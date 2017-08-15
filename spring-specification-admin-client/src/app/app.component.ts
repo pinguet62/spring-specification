@@ -3,7 +3,7 @@ import {Component} from '@angular/core';
 @Component({
     selector: 'app-root',
     template: `
-        <md-toolbar color="primary">
+        <md-toolbar color="primary" class="mat-elevation-z8">
             <button (click)="sidenav.toggle()" md-icon-button>
                 <md-icon>menu</md-icon>
             </button>
@@ -20,14 +20,16 @@ import {Component} from '@angular/core';
         <md-sidenav-container fullscreen>
             <md-sidenav #sidenav mode="side">
                 <md-nav-list>
-                    <md-list-item>
+                    <md-list-item [routerLink]="['/']">
                         <md-icon md-list-icon>settings</md-icon>
                         <span md-line>Rules</span>
                     </md-list-item>
                 </md-nav-list>
             </md-sidenav>
 
-            <router-outlet></router-outlet>
+            <div style="margin: 50px;">
+                <router-outlet></router-outlet>
+            </div>
         </md-sidenav-container>`
 })
 export class AppComponent {

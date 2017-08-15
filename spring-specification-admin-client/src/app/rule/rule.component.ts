@@ -1,4 +1,5 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {ActivatedRoute, Params} from '@angular/router';
 import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from '@angular/material';
 import {NodeMovedEvent, TreeNode} from '../tree/tree-node';
 import {RuleService} from './rule.service';
@@ -87,7 +88,7 @@ export class SettingsRuleDialog {
         <p62-tree [value]="treeNode" (nodeMoved)="ruleMoved($event)">
             <ng-template #label let-node>
                 <code>#{{node.data.rule.id}}</code> - <!--TODO test-->
-                <b>{{ruleInformationService.getFromKey(node.data.rule.key).name}}</b>
+                <b>{{ruleInformationService.getFromKey(node.data.rule.key)?.name}}</b>
                 <small>{{node.data.rule.description}}</small>
             </ng-template>
             <ng-template #options let-node>
@@ -127,14 +128,17 @@ export class SettingsRuleDialog {
 })
 export class RuleComponent implements OnInit {
 
-    @Input()
-    rule: Rule;
-
+    private ruleId: number;
     treeNode: TreeNode<RuleDataTreeNode>;
 
-    constructor(private dialog: MdDialog,
+    constructor(route: ActivatedRoute,
+                private dialog: MdDialog,
                 private ruleService: RuleService,
                 private ruleInformationService: RuleInformationService) {
+        route.params.subscribe((params: Params) => {
+            this.ruleId = +params['id'];
+            this.refresh();
+        });
     }
 
     ngOnInit(): void {
@@ -142,7 +146,7 @@ export class RuleComponent implements OnInit {
     }
 
     refresh(): void {
-        this.ruleService.get(this.rule.id).subscribe(r =>
+        this.ruleService.get(this.ruleId).subscribe(r =>
             this.treeNode = convert(r)
         );
     }

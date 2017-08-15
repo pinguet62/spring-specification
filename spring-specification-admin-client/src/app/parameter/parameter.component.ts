@@ -68,7 +68,7 @@ export class DeleteParameterDialog {
 @Component({
     selector: 'p62-parameter',
     template: `
-        <div class="example-container mat-elevation-z8" style="position: relative;">
+        <div class="mat-elevation-z8" style="position: relative;">
             <md-table [dataSource]="dataSource" style="margin-right: 50px;">
                 <ng-container cdkColumnDef="key">
                     <md-header-cell *cdkHeaderCellDef>Key</md-header-cell>
@@ -105,14 +105,7 @@ export class DeleteParameterDialog {
             </button>
         </div>`,
     styles: [
-            `.example-container {
-            display: flex;
-            flex-direction: column;
-            max-height: 500px;
-            min-width: 300px;
-        }
-
-        .mat-table {
+        `.mat-table {
             overflow: auto;
         }`
     ]

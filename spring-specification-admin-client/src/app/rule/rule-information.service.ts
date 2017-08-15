@@ -32,6 +32,8 @@ export class RuleInformationService {
      * @throws
      */
     getFromKey(key: string): RuleInformation {
+        if (this.CACHE == null)
+            return null;
         let found: RuleInformation[] = this.CACHE.filter(ri => ri.key === key);
         if (found.length === 0)
             return null;
@@ -49,6 +51,9 @@ export class RuleInformationServiceResolver implements Resolve<RuleInformation[]
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<RuleInformation[]> | Promise<RuleInformation[]> | RuleInformation[] {
+        if (this.ruleInformationService.CACHE != null)
+            return this.ruleInformationService.CACHE;
+
         return this.ruleInformationService.load().map(x =>
             this.ruleInformationService.CACHE = x
         );
