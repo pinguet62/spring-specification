@@ -16,7 +16,7 @@ public class ParameterEntity {
     private Integer id;
 
     @ManyToOne(fetch = LAZY)
-    private RuleEntity rule;
+    private RuleComponentEntity rule;
 
     private String key;
 

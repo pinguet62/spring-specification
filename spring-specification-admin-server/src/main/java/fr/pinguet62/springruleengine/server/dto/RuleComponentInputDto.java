@@ -1,16 +1,16 @@
 package fr.pinguet62.springruleengine.server.dto;
 
-import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
+import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEntity;
 import lombok.Data;
 
 @Data
-public class RuleInputDto {
+public class RuleComponentInputDto {
 
     private Integer id;
 
     /**
-     * @see RuleEntity#getId()
-     * @see RuleEntity#getComponents()
+     * @see RuleComponentEntity#getId()
+     * @see RuleComponentEntity#getComponents()
      */
     private Integer parent;
 

@@ -3,9 +3,9 @@ package fr.pinguet62.springruleengine.server;
 import fr.pinguet62.springruleengine.core.builder.database.ParameterConverter;
 import fr.pinguet62.springruleengine.core.builder.database.ParameterConverter.Converter;
 import fr.pinguet62.springruleengine.core.builder.database.model.ParameterEntity;
-import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
+import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEntity;
 import fr.pinguet62.springruleengine.core.builder.database.repository.ParameterRepository;
-import fr.pinguet62.springruleengine.core.builder.database.repository.RuleRepository;
+import fr.pinguet62.springruleengine.core.builder.database.repository.RuleComponentRepository;
 import fr.pinguet62.springruleengine.server.dto.ParameterDto;
 import fr.pinguet62.springruleengine.server.dto.ParameterInputDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class ParameterController {
     private ParameterRepository parameterRepository;
 
     @Autowired
-    private RuleRepository ruleRepository;
+    private RuleComponentRepository ruleRepository;
 
     @GetMapping("/type")
     public ResponseEntity<List<String>> getSupportedTypes() {
@@ -43,9 +43,9 @@ public class ParameterController {
         return ResponseEntity.ok(supportedTypes);
     }
 
-    @GetMapping(params = "rule")
-    public ResponseEntity<List<ParameterDto>> getByRule(@RequestParam("rule") Integer ruleId) {
-        RuleEntity rule = ruleRepository.findOne(ruleId);
+    @GetMapping(params = "ruleComponent")
+    public ResponseEntity<List<ParameterDto>> getByRuleComponent(@RequestParam("ruleComponent") Integer ruleComponentId) {
+        RuleComponentEntity rule = ruleRepository.findOne(ruleComponentId);
         if (rule == null)
             return ResponseEntity.notFound().build();
 

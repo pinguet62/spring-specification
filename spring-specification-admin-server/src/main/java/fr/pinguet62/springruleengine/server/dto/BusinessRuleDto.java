@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RuleDto {
+public class BusinessRuleDto {
 
-    private String key;
+    private String id;
 
-    private String name;
+    private String title;
 
-    private String description;
+    private RuleComponentDto rootRuleComponent;
 
 }

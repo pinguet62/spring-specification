@@ -5,5 +5,5 @@ export interface Parameter {
     type?: string;
 
     // used when client>server
-    rule?: number;
+    ruleComponent?: number;
 }

@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
  *         },
  *         or: {
  *             second,
- *             thrid
+ *             third
  *         }
  *     }
  * </pre>
@@ -85,7 +85,7 @@ public class DatabaseRuleBuilderTest {
 
     @Test
     public void test() {
-        Rule rule = ruleBuilder.apply(1);
+        Rule rule = ruleBuilder.apply("test");
         assertNotNull(rule);
 
         assertEquals(AndRule.class, rule.getClass());

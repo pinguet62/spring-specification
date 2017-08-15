@@ -4,9 +4,9 @@ import fr.pinguet62.springruleengine.core.api.Rule;
 
 import java.util.function.Function;
 
-public interface RuleBuilder extends Function<Integer, Rule<?>> {
+public interface RuleBuilder extends Function<String, Rule<?>> {
 
     @Override
-    Rule<?> apply(Integer key);
+    Rule<?> apply(String key);
 
 }

@@ -4,7 +4,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {ObservableDataSource} from '../simple-data-source';
 import {Parameter} from './parameter';
 import {ParameterService} from './parameter.service';
-import {Rule} from '../rule/rule';
+import {RuleComponent} from '../rule-component/rule-component';
 
 @Component({
     selector: 'p62-parameter-edit',
@@ -113,7 +113,7 @@ export class DeleteParameterDialog {
 export class ParameterComponent implements OnInit {
 
     @Input()
-    rule: Rule;
+    ruleComponent: RuleComponent;
 
     // Table
     displayedColumns = ['key', 'value', 'type', 'options'];
@@ -124,11 +124,11 @@ export class ParameterComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.dataSource.observable.next(this.rule.parameters);
+        this.dataSource.observable.next(this.ruleComponent.parameters);
     }
 
     refresh(): void {
-        this.parameterService.getByRule(this.rule).subscribe(p =>
+        this.parameterService.getByRuleComponent(this.ruleComponent).subscribe(p =>
             this.dataSource.observable.next(p)
         );
     }
@@ -140,7 +140,7 @@ export class ParameterComponent implements OnInit {
             if (createdParameter == null)
                 return;
 
-            createdParameter.rule = this.rule.id;
+            createdParameter.ruleComponent = this.ruleComponent.id;
             this.parameterService.create(createdParameter).subscribe(x =>
                 this.refresh()
             );
@@ -156,7 +156,7 @@ export class ParameterComponent implements OnInit {
             if (updatedParameter == null)
                 return;
 
-            updatedParameter.rule = this.rule.id;
+            updatedParameter.ruleComponent = this.ruleComponent.id;
             this.parameterService.update(updatedParameter).subscribe(x =>
                 this.refresh()
             );

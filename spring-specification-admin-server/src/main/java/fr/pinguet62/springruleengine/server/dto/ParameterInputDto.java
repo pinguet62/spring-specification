@@ -1,6 +1,6 @@
 package fr.pinguet62.springruleengine.server.dto;
 
-import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
+import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEntity;
 import lombok.Data;
 
 @Data
@@ -15,7 +15,7 @@ public class ParameterInputDto {
     private String type;
 
     /**
-     * @see RuleEntity#getId()
+     * @see RuleComponentEntity#getId()
      */
     private Integer rule;
 

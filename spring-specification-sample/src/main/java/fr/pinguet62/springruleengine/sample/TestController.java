@@ -23,9 +23,9 @@ public class TestController {
      * Server end-point who execute test.
      */
     @GetMapping("/execute")
-    public ResponseEntity<Boolean> server(@RequestParam("rule") Integer ruleId, @RequestParam String color, @RequestParam Double price) {
+    public ResponseEntity<Boolean> server(@RequestParam("rule") String businessRuleKey, @RequestParam String color, @RequestParam Double price) {
         try {
-            Rule<Product> rule = (Rule<Product>) builder.apply(ruleId);
+            Rule<Product> rule = (Rule<Product>) builder.apply(businessRuleKey);
             Product product = Product.builder().color(color).price(price).build();
             boolean result = rule.test(product);
             return ResponseEntity.ok(result);

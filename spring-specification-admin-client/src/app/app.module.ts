@@ -21,10 +21,12 @@ import {CdkTableModule} from '@angular/cdk';
 import {appRoutes} from './app.route';
 import {AppComponent} from './app.component';
 import {TreeModule} from './tree/tree.module';
-import {RuleInformationService, RuleInformationServiceResolver} from './rule/rule-information.service';
-import {RuleService} from './rule/rule.service';
-import {RulesComponent} from './rule/rules.component';
-import {DeleteRuleDialog, EditRuleDialog, RuleComponent, SettingsRuleDialog} from './rule/rule.component';
+import {RuleService, RuleServiceResolver} from './rule/rule.service';
+import {BusinessRuleService} from './business-rule/business-rule.service';
+import {RuleComponentService} from './rule-component/rule-component.service';
+import {BusinessRuleListComponent} from './business-rule/business-rules-list.component';
+import {BusinessRuleDetailComponent} from './business-rule/business-rules-detail.component';
+import {DeleteRuleComponentDialog, EditRuleComponentDialog, RuleComponentComponent, SettingsRuleComponentDialog} from './rule-component/rule-component.component';
 import {ParameterService} from './parameter/parameter.service';
 import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './parameter/parameter.component';
 
@@ -35,14 +37,14 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './
         CdkTableModule,
         TreeModule, RouterModule.forRoot(appRoutes)
     ],
-    providers: [RuleInformationService, RuleInformationServiceResolver, RuleService, ParameterService],
+    providers: [RuleService, RuleServiceResolver, BusinessRuleService, RuleComponentService, ParameterService],
     declarations: [
         AppComponent,
-        RulesComponent, RuleComponent, EditRuleDialog, SettingsRuleDialog, DeleteRuleDialog,
+        BusinessRuleListComponent, BusinessRuleDetailComponent, RuleComponentComponent, EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,
         ParameterComponent, EditParameterDialog, DeleteParameterDialog
     ],
     entryComponents: [
-        EditRuleDialog, SettingsRuleDialog, DeleteRuleDialog,
+        EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,
         EditParameterDialog, DeleteParameterDialog
     ],
     bootstrap: [AppComponent]

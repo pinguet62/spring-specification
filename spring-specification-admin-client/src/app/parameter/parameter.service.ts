@@ -3,7 +3,7 @@ import {Headers, Http, RequestOptionsArgs} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {environment} from '../../environments/environment';
-import {Rule} from '../rule/rule';
+import {RuleComponent} from '../rule-component/rule-component';
 import {Parameter} from './parameter';
 
 @Injectable()
@@ -21,8 +21,8 @@ export class ParameterService {
         return this.http.get(url, this.options).map(res => res.json());
     }
 
-    getByRule(rule: Rule): Observable<Parameter[]> {
-        let url: string = ParameterService.resourceUrl + '?rule=' + rule.id;
+    getByRuleComponent(ruleComponent: RuleComponent): Observable<Parameter[]> {
+        let url: string = ParameterService.resourceUrl + '?ruleComponent=' + ruleComponent.id;
         return this.http.get(url, this.options).map(res => res.json());
     }
 

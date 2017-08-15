@@ -1,7 +1,7 @@
 package fr.pinguet62.springruleengine.core.builder.database.factory;
 
 import fr.pinguet62.springruleengine.core.api.Rule;
-import fr.pinguet62.springruleengine.core.builder.database.model.RuleEntity;
+import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +17,12 @@ public class CompositeRuleFactory implements RuleFactory {
     private CustomRuleFactory customRuleFactory;
 
     @Override
-    public Optional<Rule<?>> apply(RuleEntity ruleEntity) {
-        Optional<Rule<?>> apiRule = apiRuleFactory.apply(ruleEntity);
+    public Optional<Rule<?>> apply(RuleComponentEntity ruleComponentEntity) {
+        Optional<Rule<?>> apiRule = apiRuleFactory.apply(ruleComponentEntity);
         if (apiRule.isPresent())
             return apiRule;
         else
-            return customRuleFactory.apply(ruleEntity);
+            return customRuleFactory.apply(ruleComponentEntity);
     }
 
 }

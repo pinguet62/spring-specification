@@ -14,7 +14,7 @@ import static javax.persistence.FetchType.EAGER;
  */
 @Data
 @Entity
-public class RuleEntity {
+public class RuleComponentEntity {
 
     @Id
     @GeneratedValue
@@ -38,11 +38,11 @@ public class RuleEntity {
      * {@code null} when root {@link Rule}.
      */
     @ManyToOne
-    private RuleEntity parent;
+    private RuleComponentEntity parent;
 
     @OneToMany(mappedBy = "parent", cascade = REMOVE)
     @OrderBy("index")
-    private List<RuleEntity> components = new ArrayList<>();
+    private List<RuleComponentEntity> components = new ArrayList<>();
 
     @OneToMany(mappedBy = "rule", fetch = EAGER, cascade = REMOVE)
     private List<ParameterEntity> parameters = new ArrayList<>();

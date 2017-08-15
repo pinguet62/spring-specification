@@ -1,17 +1,17 @@
 import {Routes} from '@angular/router';
 
-import {RulesComponent} from './rule/rules.component';
-import {RuleInformationServiceResolver} from './rule/rule-information.service';
-import {RuleComponent} from './rule/rule.component';
+import {BusinessRuleListComponent} from './business-rule/business-rules-list.component';
+import {RuleServiceResolver} from './rule/rule.service';
+import {BusinessRuleDetailComponent} from './business-rule/business-rules-detail.component';
 
 export const appRoutes: Routes = [
     {
         path: '',
-        component: RulesComponent,
-        resolve: [RuleInformationServiceResolver]
+        component: BusinessRuleListComponent,
+        resolve: [RuleServiceResolver]
     },
     {
         path: ':id',
-        component: RuleComponent
+        component: BusinessRuleDetailComponent
     }
 ];
