@@ -20,14 +20,14 @@ public class BusinessRuleEntity {
     private String id;
 
     /**
-     * User's notes.
-     */
-    private String title;
-
-    /**
      * Root element of {@link Rule} tree.
      */
     @OneToOne
     private RuleComponentEntity rootRuleComponent;
+
+    /**
+     * User's notes.
+     */
+    private String title;
 
 }

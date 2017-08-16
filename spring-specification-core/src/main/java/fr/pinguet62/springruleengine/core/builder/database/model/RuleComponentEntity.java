@@ -20,6 +20,15 @@ public class RuleComponentEntity {
     @GeneratedValue
     private Integer id;
 
+    /**
+     * {@code null} when root {@link Rule}.
+     */
+    @ManyToOne
+    private RuleComponentEntity parent;
+
+    /**
+     * For ordering.
+     */
     private Integer index;
 
     /**
@@ -33,12 +42,6 @@ public class RuleComponentEntity {
      * User's notes.
      */
     private String description;
-
-    /**
-     * {@code null} when root {@link Rule}.
-     */
-    @ManyToOne
-    private RuleComponentEntity parent;
 
     @OneToMany(mappedBy = "parent", cascade = REMOVE)
     @OrderBy("index")
