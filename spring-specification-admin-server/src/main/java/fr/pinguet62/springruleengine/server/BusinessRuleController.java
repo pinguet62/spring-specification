@@ -1,15 +1,17 @@
 package fr.pinguet62.springruleengine.server;
 
+import fr.pinguet62.springruleengine.core.api.FailingRule;
+import fr.pinguet62.springruleengine.core.api.Rule;
 import fr.pinguet62.springruleengine.core.builder.database.model.BusinessRuleEntity;
+import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEntity;
 import fr.pinguet62.springruleengine.core.builder.database.repository.BusinessRuleRepository;
+import fr.pinguet62.springruleengine.core.builder.database.repository.RuleComponentRepository;
 import fr.pinguet62.springruleengine.server.dto.BusinessRuleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 import static fr.pinguet62.springruleengine.server.BusinessRuleController.PATH;
@@ -25,6 +27,12 @@ public class BusinessRuleController {
     @Autowired
     private BusinessRuleRepository businessRuleRepository;
 
+    @Autowired
+    private RuleComponentRepository ruleComponentRepository;
+
+    @Autowired
+    private RuleService ruleService;
+
     @GetMapping
     public List<BusinessRuleDto> getAll() {
         return businessRuleRepository.findAll().stream().map(this::convert).collect(toList());
@@ -37,6 +45,37 @@ public class BusinessRuleController {
             return ResponseEntity.status(NOT_FOUND).build();
 
         return ResponseEntity.ok(convert(entity));
+    }
+
+    @PutMapping
+    public ResponseEntity<BusinessRuleDto> create(@RequestBody BusinessRuleDto dto) {
+        RuleComponentEntity rootRuleComponent = new RuleComponentEntity();
+        rootRuleComponent.setParent(null /*root*/);
+        rootRuleComponent.setIndex(0);
+        rootRuleComponent.setKey(ruleService.getKey((Class<Rule<?>>) (Class<?>) FailingRule.class)); // TODO fix generic
+        rootRuleComponent.setDescription(null);
+        rootRuleComponent = ruleComponentRepository.save(rootRuleComponent);
+
+        BusinessRuleEntity entity = new BusinessRuleEntity();
+        entity.setId(dto.getId());
+        entity.setTitle(dto.getTitle());
+        entity.setRootRuleComponent(rootRuleComponent);
+        entity = businessRuleRepository.save(entity);
+
+        return ResponseEntity.created(URI.create(PATH + "/" + entity.getId())).body(convert(entity));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BusinessRuleDto> delete(@PathVariable String id) {
+        BusinessRuleEntity entity = businessRuleRepository.findOne(id);
+        if (entity == null)
+            return ResponseEntity.notFound().build();
+
+        BusinessRuleDto dto = convert(entity);
+
+        businessRuleRepository.delete(id);
+
+        return ResponseEntity.ok(dto);
     }
 
     private BusinessRuleDto convert(BusinessRuleEntity entity) {

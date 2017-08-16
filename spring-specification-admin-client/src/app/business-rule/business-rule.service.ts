@@ -26,4 +26,15 @@ export class BusinessRuleService {
         return this.http.get(url, this.options).map(res => res.json());
     }
 
+    create(businessRule: BusinessRule): Observable<BusinessRule> {
+        let url: string = BusinessRuleService.resourceUrl;
+        let body: string = JSON.stringify(businessRule);
+        return this.http.put(url, body, this.options).map(res => res.json());
+    }
+
+    delete(businessRule: BusinessRule): Observable<BusinessRule> {
+        let url: string = BusinessRuleService.resourceUrl + '/' + businessRule.id;
+        return this.http.delete(url, this.options).map(res => res.json());
+    }
+
 }

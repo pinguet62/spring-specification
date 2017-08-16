@@ -24,7 +24,7 @@ import {TreeModule} from './tree/tree.module';
 import {RuleService, RuleServiceResolver} from './rule/rule.service';
 import {BusinessRuleService} from './business-rule/business-rule.service';
 import {RuleComponentService} from './rule-component/rule-component.service';
-import {BusinessRuleListComponent} from './business-rule/business-rules-list.component';
+import {BusinessRuleListComponent, CreateBusinessRuleDialog, DeleteBusinessRuleDialog} from './business-rule/business-rules-list.component';
 import {BusinessRuleDetailComponent} from './business-rule/business-rules-detail.component';
 import {DeleteRuleComponentDialog, EditRuleComponentDialog, RuleComponentComponent, SettingsRuleComponentDialog} from './rule-component/rule-component.component';
 import {ParameterService} from './parameter/parameter.service';
@@ -40,10 +40,11 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './
     providers: [RuleService, RuleServiceResolver, BusinessRuleService, RuleComponentService, ParameterService],
     declarations: [
         AppComponent,
-        BusinessRuleListComponent, BusinessRuleDetailComponent, RuleComponentComponent, EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,
+        BusinessRuleListComponent, CreateBusinessRuleDialog, DeleteBusinessRuleDialog, BusinessRuleDetailComponent, RuleComponentComponent, EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,
         ParameterComponent, EditParameterDialog, DeleteParameterDialog
     ],
     entryComponents: [
+        CreateBusinessRuleDialog, DeleteBusinessRuleDialog,
         EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,
         EditParameterDialog, DeleteParameterDialog
     ],
