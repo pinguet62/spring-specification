@@ -5,7 +5,7 @@ import fr.pinguet62.springruleengine.core.RuleName;
 
 import java.util.Collection;
 
-@RuleName(value = "\"AND\" combinator")
+@RuleName(value = "\"AND\"")
 @RuleDescription("Combination of rules using \"AND\" operator. True if empty.")
 public class AndRule<T> extends AbstractCompositeRule<T> {
 

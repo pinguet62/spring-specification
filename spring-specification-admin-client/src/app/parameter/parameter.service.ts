@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Headers, Http, RequestOptionsArgs} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+
 import {environment} from '../../environments/environment';
 import {RuleComponent} from '../rule-component/rule-component';
 import {Parameter} from './parameter';

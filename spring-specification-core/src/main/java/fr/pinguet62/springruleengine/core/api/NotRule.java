@@ -4,7 +4,7 @@ import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
 import lombok.Getter;
 
-@RuleName(value = "\"NOT\" combinator")
+@RuleName(value = "\"NOT\"")
 @RuleDescription("Combination of rule using \"NOT\" operator.")
 public class NotRule<T> implements Rule<T> {
 

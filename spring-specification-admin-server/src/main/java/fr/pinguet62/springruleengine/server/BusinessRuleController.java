@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static fr.pinguet62.springruleengine.server.BusinessRuleController.PATH;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
-@RequestMapping("/businessRule")
+@RequestMapping(PATH)
 public class BusinessRuleController {
+
+    public static final String PATH = "/businessRule";
 
     @Autowired
     private BusinessRuleRepository businessRuleRepository;

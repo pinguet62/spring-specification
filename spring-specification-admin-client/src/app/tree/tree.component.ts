@@ -12,8 +12,9 @@ import {
     ViewChildren,
     ViewContainerRef
 } from '@angular/core';
-import {NodeMovedEvent, TreeNode} from './tree-node';
 import {DragulaService} from 'ng2-dragula';
+
+import {NodeMovedEvent, TreeNode} from './tree-node';
 
 @Component({
     selector: 'p62-tree-node',

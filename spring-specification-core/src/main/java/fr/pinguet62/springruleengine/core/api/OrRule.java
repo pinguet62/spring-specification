@@ -5,7 +5,7 @@ import fr.pinguet62.springruleengine.core.RuleName;
 
 import java.util.Collection;
 
-@RuleName(value = "\"OR\" combinator")
+@RuleName(value = "\"OR\"")
 @RuleDescription("Combination of rules using \"OR\" operator. False if empty.")
 public class OrRule<T> extends AbstractCompositeRule<T> {
 

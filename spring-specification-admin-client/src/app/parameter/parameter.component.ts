@@ -1,6 +1,7 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from '@angular/material';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+
 import {ObservableDataSource} from '../simple-data-source';
 import {Parameter} from './parameter';
 import {ParameterService} from './parameter.service';
@@ -82,14 +83,14 @@ export class DeleteParameterDialog {
                     <md-header-cell *cdkHeaderCellDef>Type</md-header-cell>
                     <md-cell *cdkCellDef="let parameter">{{parameter.type}}</md-cell>
                 </ng-container>
-                <ng-container cdkColumnDef="options">
+                <ng-container cdkColumnDef="actions">
                     <md-header-cell *cdkHeaderCellDef></md-header-cell>
                     <md-cell *cdkCellDef="let parameter">
                         <div style="display: flex;"><!--flex: no line break-->
                             <button md-icon-button (click)="openUpdateDialog(parameter)">
                                 <md-icon>mode_edit</md-icon>
                             </button>
-                            <button md-icon-button (click)="openDeleteParameter(parameter)">
+                            <button md-icon-button (click)="openDeleteDialog(parameter)">
                                 <md-icon>delete</md-icon>
                             </button>
                         </div>
@@ -116,7 +117,7 @@ export class ParameterComponent implements OnInit {
     ruleComponent: RuleComponent;
 
     // Table
-    displayedColumns = ['key', 'value', 'type', 'options'];
+    displayedColumns = ['key', 'value', 'type', 'actions'];
     dataSource: ObservableDataSource<Parameter> = new ObservableDataSource<Parameter>(new BehaviorSubject<Parameter[]>([]));
 
     constructor(private dialog: MdDialog,
@@ -163,7 +164,7 @@ export class ParameterComponent implements OnInit {
         });
     }
 
-    openDeleteParameter(parameter: Parameter): void {
+    openDeleteDialog(parameter: Parameter): void {
         let deleteDialog: MdDialogRef<DeleteParameterDialog> = this.dialog.open(DeleteParameterDialog, this.getCommonDialogConfig());
         deleteDialog.afterClosed().subscribe((confirm: boolean) => {
             if (confirm)

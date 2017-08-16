@@ -3,6 +3,7 @@ import {Headers, Http, RequestOptionsArgs} from '@angular/http';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+
 import {environment} from '../../environments/environment';
 import {Rule} from './rule';
 

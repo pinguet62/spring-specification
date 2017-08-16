@@ -17,17 +17,18 @@ The *specification pattern* is a particular software design pattern, whereby *bu
 ____
 
 Concretely, instead to implement rules using `if`/`else` like with this code:
-[source,java]
+[source, java]
 ----
-if (!product.isDangerous() && (product.getColor().equals("black") || product.getAmount() > 100))
-    result = true;
+boolean canSellToMinor;
+if (!product.isDangerous() && (product.getType().equals("toy") || product.getAmount() < 10))
+    canSellToMinor = true;
 ----
 the business rules are implemented *unitary* and *combined* to produce the final rule:
-[source,java]
+[source, java]
 ----
-Rule isDangerous, isBlack, amountGreaterThan100 = ...;
-Rule combined = isDangerous.not().and( isBlack.or(amountGreaterThan100) );
-result = combined.test(product);
+Rule isDangerous, isToy, amountLessThan10 = ...;
+Rule combined = isDangerous.not().and( isToy.or(amountLessThan10) );
+boolean canSellToMinor = combined.test(product);
 ----
 
 ### Need of dynamism
@@ -44,22 +45,22 @@ The `Rule` interface is the base of specification pattern.
 ### Simple usage
 
 Definition:
-[source,java]
+[source, java]
 ----
-class RedColorProductRule implements Rule<Product> {
+class DangerousProductRule implements Rule<Product> {
     @Override
     public boolean test(Product param) {
-        return param.getColor().equals("red");
+        return param.isDangerous();
     }
 }
 ----
 
 Usage:
-[source,java]
+[source, java]
 ----
-Rule rule = new RedColorProductRule();
-Product product = new Product("red");
-boolean result = rule.test(product);
+Rule rule = new DangerousProductRule();
+Product product = new Product(...);
+boolean isDangerousProduct = rule.test(product);
 ----
 
 ### Composition
@@ -68,8 +69,8 @@ Example for this composition:
 ----
 (NOT first) AND (second OR third)
 ----
-with these 3 *basic rules*:
-[source,java]
+based on these 3 *basic rules*:
+[source, java]
 ----
 Rule first = ...
 Rule second = ...
@@ -80,7 +81,7 @@ Rule third = ...
 
 `Rule` interface defines *default methods*, used for _method chaining_.
 
-[source,java]
+[source, java]
 ----
 Rule composedRule = first.not().and( second.or(third) );
 ----
@@ -89,7 +90,7 @@ Rule composedRule = first.not().and( second.or(third) );
 
 `AndRule`/`OrRule`/`NotRule` are special `Rule` implementations, who work like *composite pattern* by accepting _variable length argument_ into constructor.
 
-[source,java]
+[source, java]
 ----
 import fr.pinguet62.springruleengine.core.api.*;
 
@@ -108,7 +109,7 @@ Rule composedRule = new AndRule(
 
 `and()`/`or()`/`not()` are *static* methods of `RuleUtils`.
 
-[source,java]
+[source, java]
 ----
 import static fr.pinguet62.springruleengine.core.api.RuleUtils.*;
 
@@ -125,59 +126,32 @@ Rule composedRule = and(
 
 ### Parameters
 
-#### Objective
-
 Create *minimal parameterized* rules, instead of _many specific_ rules.
 
-Bad:
-[source,java]
+Don't:
+[source, java]
 ----
-class RedProductRule {}
-class BlueProductRule {}
-class GreenProductRule {}
+class ToyProductRule {}
+class FoodProductRule {}
+...
 ----
 
-Good:
-[source,java]
+Do:
+[source, java]
 ----
-class ColorProductRule implements Rule {
-    String color;
+class TypeProductRule implements Rule<Product> {
+    String type;
 
-    ColorProductRule(String param) {
+    TypeProductRule(String param) {
         this.color = param;
     }
 
     // ...
 }
 
-Rule redProductRule = new ColorProductRule("red");
-Rule bleuProductRule = new ColorProductRule("bleu");
-Rule greenProductRule = new ColorProductRule("green");
-----
-
-#### Usage
-
-* For *manual* usage, the parameter can be set using _constructor_ or _setter_.
-* For *dynamic* engine usage, the property (field or setter) must be annotated with `@RuleParameter(value)`.
-
-[source,java]
-----
-class ColorProductRule implements Rule<Model> {
-
-    @RuleParameter("key") // one or ...
-    String color;
-
-    @RuleParameter("key") // ... the other
-    void setColor(String param) {
-        color = param;
-    }
-
-    @Override
-    boolean test(Model model) {
-        System.out.println(color);
-        // ...
-    }
-}
+Rule toyProductRule = new TypeProductRule("toy");
+Rule foodProductRule = new TypeProductRule("food");
+...
 ----
 
 ## Builder
@@ -194,11 +168,38 @@ By default:
 TIP: Usually the component *scope* is `prototype`, to create distinct objects. +
 It's possible to use other scope like `singleton`, but object must be _stateless_ and without parameter.
 
+### Parameters
+
+Parameters are *dynamically injected*.
+
+Property (_field_ or _setter_) must be annotated with `@RuleParameter()` defining the key used into database.
+
+[source, java]
+----
+class TypeProductRule implements Rule<Product> {
+    @RuleParameter("key")
+    String type;
+
+    // ...
+}
+----
+[source, java]
+----
+class TypeProductRule implements Rule<Product> {
+    String type;
+
+    @RuleParameter("key")
+    public void setType(String param) {
+        type = param;
+    };
+
+    // ...
+}
+----
+
 ### Database
 
-This module require 2 tables:
-* `RULE_ENTITY` for `Rule` combinations;
-* `PARAMETER_ENTITY` for parameters of each `Rule`.
+TODO
 
 ## Admin server
 
@@ -210,10 +211,11 @@ Documentation: see `/swagger-ui.html` page.
 
 ### Spring Boot
 
-The admin application can simply deployed using Spring Boot & embedded Tomcat.
+The admin application can simply deployed using *Spring Boot & embedded Tomcat*.
 
-Add _server_ and _client_ dependencies:
-[source,xml]
+1. Add _server_ and _client_ dependencies:
+
+[source, xml]
 .pom.xml
 ----
 <dependency>
@@ -226,4 +228,19 @@ Add _server_ and _client_ dependencies:
     <artifactId>spring-specification-admin-client</artifactId>
     <version>LATEST</version>
 </dependency>
+----
+
+2. Enable _core_ & _server_ modules imporing `SpringSpecificationServerApplication` bean:
+
+[source, java]
+----
+import fr.pinguet62.springruleengine.server.SpringSpecificationServerApplication;
+
+@Import(SpringSpecificationServerApplication.class)
+@SpringBootApplication
+public class SampleApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootAdminApplication.class, args);
+    }
+}
 ----

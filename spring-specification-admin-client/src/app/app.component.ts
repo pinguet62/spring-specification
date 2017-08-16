@@ -18,7 +18,7 @@ import {Component} from '@angular/core';
         </md-toolbar>
 
         <md-sidenav-container fullscreen>
-            <md-sidenav #sidenav mode="side">
+            <md-sidenav #sidenav mode="side" opened="true">
                 <md-nav-list>
                     <md-list-item [routerLink]="['/']">
                         <md-icon md-list-icon>settings</md-icon>

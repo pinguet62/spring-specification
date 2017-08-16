@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+import static fr.pinguet62.springruleengine.server.ParameterController.PATH;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Transactional
 @RestController
-@RequestMapping("/parameter")
+@RequestMapping(PATH)
 public class ParameterController {
+
+    public static final String PATH = "/parameter";
 
     @Autowired
     private ParameterConverter parameterConverter;
@@ -63,7 +66,7 @@ public class ParameterController {
         entity.setRule(ruleRepository.findOne(dto.getRule()));
         entity = parameterRepository.save(entity);
 
-        return ResponseEntity.created(URI.create("/parameter/" + entity.getId())).body(convert(entity));
+        return ResponseEntity.created(URI.create(PATH + "/" + entity.getId())).body(convert(entity));
     }
 
     @PostMapping("/{id}")
