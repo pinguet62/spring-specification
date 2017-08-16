@@ -446,18 +446,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_utility_methods">2.2.3. Utility methods</a></li>
 </ul>
 </li>
-<li><a href="#_parameters">2.3. Parameters</a>
-<ul class="sectlevel3">
-<li><a href="#_objective">2.3.1. Objective</a></li>
-<li><a href="#_usage">2.3.2. Usage</a></li>
-</ul>
-</li>
+<li><a href="#_parameters">2.3. Parameters</a></li>
 </ul>
 </li>
 <li><a href="#_builder">3. Builder</a>
 <ul class="sectlevel2">
 <li><a href="#_key_factory">3.1. Key &amp; Factory</a></li>
-<li><a href="#_database">3.2. Database</a></li>
+<li><a href="#_parameters_2">3.2. Parameters</a></li>
+<li><a href="#_database">3.3. Database</a></li>
 </ul>
 </li>
 <li><a href="#_admin_server">4. Admin server</a></li>
@@ -491,8 +487,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">if (!product.isDangerous() &amp;&amp; (product.getColor().equals("black") || product.getAmount() &gt; 100))
-    result = true;</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">boolean canSellToMinor;
+if (!product.isDangerous() &amp;&amp; (product.getType().equals("toy") || product.getAmount() &lt; 10))
+    canSellToMinor = true;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -500,9 +497,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Rule isDangerous, isBlack, amountGreaterThan100 = ...;
-Rule combined = isDangerous.not().and( isBlack.or(amountGreaterThan100) );
-result = combined.test(product);</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Rule isDangerous, isToy, amountLessThan10 = ...;
+Rule combined = isDangerous.not().and( isToy.or(amountLessThan10) );
+boolean canSellToMinor = combined.test(product);</code></pre>
 </div>
 </div>
 </div>
@@ -531,10 +528,10 @@ But the final source code is <strong>static</strong>: you have to update/compile
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class RedColorProductRule implements Rule&lt;Product&gt; {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class DangerousProductRule implements Rule&lt;Product&gt; {
     @Override
     public boolean test(Product param) {
-        return param.getColor().equals("red");
+        return param.isDangerous();
     }
 }</code></pre>
 </div>
@@ -544,9 +541,9 @@ But the final source code is <strong>static</strong>: you have to update/compile
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Rule rule = new RedColorProductRule();
-Product product = new Product("red");
-boolean result = rule.test(product);</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Rule rule = new DangerousProductRule();
+Product product = new Product(...);
+boolean isDangerousProduct = rule.test(product);</code></pre>
 </div>
 </div>
 </div>
@@ -561,7 +558,7 @@ boolean result = rule.test(product);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>with these 3 <strong>basic rules</strong>:</p>
+<p>based on these 3 <strong>basic rules</strong>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -626,73 +623,37 @@ Rule composedRule = and(
 </div>
 <div class="sect2">
 <h3 id="_parameters"><a class="anchor" href="#_parameters"></a><a class="link" href="#_parameters">2.3. Parameters</a></h3>
-<div class="sect3">
-<h4 id="_objective"><a class="anchor" href="#_objective"></a><a class="link" href="#_objective">2.3.1. Objective</a></h4>
 <div class="paragraph">
 <p>Create <strong>minimal parameterized</strong> rules, instead of <em>many specific</em> rules.</p>
 </div>
 <div class="paragraph">
-<p>Bad:</p>
+<p>Don&#8217;t:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class RedProductRule {}
-class BlueProductRule {}
-class GreenProductRule {}</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class ToyProductRule {}
+class FoodProductRule {}
+...</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Good:</p>
+<p>Do:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class ColorProductRule implements Rule {
-    String color;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class TypeProductRule implements Rule&lt;Product&gt; {
+    String type;
 
-    ColorProductRule(String param) {
+    TypeProductRule(String param) {
         this.color = param;
     }
 
     // ...
 }
 
-Rule redProductRule = new ColorProductRule("red");
-Rule bleuProductRule = new ColorProductRule("bleu");
-Rule greenProductRule = new ColorProductRule("green");</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_usage"><a class="anchor" href="#_usage"></a><a class="link" href="#_usage">2.3.2. Usage</a></h4>
-<div class="ulist">
-<ul>
-<li>
-<p>For <strong>manual</strong> usage, the parameter can be set using <em>constructor</em> or <em>setter</em>.</p>
-</li>
-<li>
-<p>For <strong>dynamic</strong> engine usage, the property (field or setter) must be annotated with <code>@RuleParameter(value)</code>.</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class ColorProductRule implements Rule&lt;Model&gt; {
-
-    @RuleParameter("key") // one or ...
-    String color;
-
-    @RuleParameter("key") // ... the other
-    void setColor(String param) {
-        color = param;
-    }
-
-    @Override
-    boolean test(Model model) {
-        System.out.println(color);
-        // ...
-    }
-}</code></pre>
-</div>
+Rule toyProductRule = new TypeProductRule("toy");
+Rule foodProductRule = new TypeProductRule("food");
+...</code></pre>
 </div>
 </div>
 </div>
@@ -734,11 +695,42 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 </div>
 </div>
 <div class="sect2">
-<h3 id="_database"><a class="anchor" href="#_database"></a><a class="link" href="#_database">3.2. Database</a></h3>
+<h3 id="_parameters_2"><a class="anchor" href="#_parameters_2"></a><a class="link" href="#_parameters_2">3.2. Parameters</a></h3>
 <div class="paragraph">
-<p>This module require 2 tables:
-* <code>RULE_ENTITY</code> for <code>Rule</code> combinations;
-* <code>PARAMETER_ENTITY</code> for parameters of each <code>Rule</code>.</p>
+<p>Parameters are <strong>dynamically injected</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Property (<em>field</em> or <em>setter</em>) must be annotated with <code>@RuleParameter()</code> defining the key used into database.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class TypeProductRule implements Rule&lt;Product&gt; {
+    @RuleParameter("key")
+    String type;
+
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class TypeProductRule implements Rule&lt;Product&gt; {
+    String type;
+
+    @RuleParameter("key")
+    public void setType(String param) {
+        type = param;
+    };
+
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_database"><a class="anchor" href="#_database"></a><a class="link" href="#_database">3.3. Database</a></h3>
+<div class="paragraph">
+<p>TODO</p>
 </div>
 </div>
 </div>
@@ -760,10 +752,14 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 <div class="sect2">
 <h3 id="_spring_boot"><a class="anchor" href="#_spring_boot"></a><a class="link" href="#_spring_boot">5.1. Spring Boot</a></h3>
 <div class="paragraph">
-<p>The admin application can simply deployed using Spring Boot &amp; embedded Tomcat.</p>
+<p>The admin application can simply deployed using <strong>Spring Boot &amp; embedded Tomcat</strong>.</p>
 </div>
-<div class="paragraph">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
 <p>Add <em>server</em> and <em>client</em> dependencies:</p>
+</li>
+</ol>
 </div>
 <div class="listingblock">
 <div class="title">pom.xml</div>
@@ -780,6 +776,26 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Enable <em>core</em> &amp; <em>server</em> modules imporing <code>SpringSpecificationServerApplication</code> bean:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import fr.pinguet62.springruleengine.server.SpringSpecificationServerApplication;
+
+@Import(SpringSpecificationServerApplication.class)
+@SpringBootApplication
+public class SampleApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootAdminApplication.class, args);
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -787,7 +803,7 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 <div id="footer">
 <div id="footer-text">
 Version 1.0-SNAPSHOT<br>
-Last updated 2017-08-16 07:27:17 UTC
+Last updated 2017-08-16 22:52:36 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
