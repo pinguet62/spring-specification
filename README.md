@@ -6,3 +6,8 @@
 [![codecov.io](https://codecov.io/github/pinguet62/spring-specification/coverage.svg?branch=master)](https://codecov.io/github/pinguet62/spring-specification?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/pinguet62/spring-specification/badge.svg?branch=master)](https://coveralls.io/github/pinguet62/spring-specification?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/fr.pinguet62.xjc/spring-specification.svg)](https://maven-badges.herokuapp.com/maven-central/fr.pinguet62.xjc/spring-specification)
+
+## Try sample!
+
+* Admin UI: https://spring-specification-sample.herokuapp.com/spring-specification-admin-client/
+* Client: https://spring-specification-sample.herokuapp.com/sample.html

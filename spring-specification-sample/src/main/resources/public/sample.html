@@ -10,37 +10,60 @@
 <h1>Test</h1>
 <h2>Parameters</h2>
 <div>
-    <label for="color">Color</label>
-    <input id="color" value="black"/>
+    <label for="type">Type</label>
+    <select id="type">
+        <option value="???">???</option>
+        <!-- see Rule samples -->
+        <option value="toy">toy</option>
+        <option value="food">food</option>
+    </select>
 </div>
 <div>
     <label for="price">Price</label>
-    <input id="price" type="number" value="42"/>
+    <input id="price" type="number" value="15"/>
+</div>
+<div>
+    <label for="dangerous">Dangerous</label>
+    <input id="dangerous" type="checkbox"/>
 </div>
 <h2>Execution</h2>
 <div>
     <label for="rule">Rule</label>
-    <input id="rule" type="number" value="1"/>
+    <select id="rule"></select>
 </div>
 <button onclick="submit()">Submit</button>
 <h2>Result</h2>
 <span id="result">?</span>
 
 <script>
+    $.ajax({
+        url: location.href.split('/').reverse().splice(1).reverse().join('/') + '/businessRule',
+        type: 'GET',
+        success: function (businessRules) {
+            businessRules.forEach(function (businessRule) {
+                $('#rule').append($('<option>', {
+                    value: businessRule.id,
+                    text: businessRule.id
+                }));
+            });
+        }
+    });
+
     function submit() {
         $.ajax({
-            url: location.href.split('/').reverse().splice(1).reverse().join('/') + '/execute',
-            type: 'GET',
-            data: {
-                rule: $('#rule').val(),
-                color: $('#color').val(),
-                price: $('#price').val()
-            },
+            url: location.href.split('/').reverse().splice(1).reverse().join('/') + '/sample/' + $('#rule').val(),
+            type: 'POST',
+            data: JSON.stringify({
+                type: $('#type').val(),
+                price: $('#price').val(),
+                dangerous: $('#dangerous').is(':checked')
+            }),
+            contentType: 'application/json',
             success: function (msg) {
                 $('#result').text(msg);
             },
-            error: function (msg) {
-                $('#result').text(msg.responseText);
+            error: function (xhr) {
+                $('#result').text(xhr.responseText);
             }
         });
     }

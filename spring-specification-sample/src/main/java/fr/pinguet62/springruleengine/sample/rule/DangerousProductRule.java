@@ -7,17 +7,17 @@ import fr.pinguet62.springruleengine.sample.model.Product;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 @Component
-@Scope("prototype")
-@RuleName("Only weekend")
-@RuleDescription("Test if input date is Saturday or Sunday")
-public class OnlyWeekendRule implements Rule<Product> {
+@Scope(SCOPE_PROTOTYPE)
+@RuleName("Dangerous product")
+@RuleDescription("Test \"$product.dangerous==true\"")
+public class DangerousProductRule implements Rule<Product> {
 
     @Override
     public boolean test(Product product) {
-        // Date date = context.get("date", Date.class);
-        // boolean result = date.getDay() == 6 || date.getDay() == 7;
-        return false;// test
+        return product.getDangerous();
     }
 
 }

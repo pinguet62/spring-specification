@@ -1,21 +1,16 @@
-    insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (1, 0, 'fr.pinguet62.springruleengine.core.api.AndRule', null, null);
-        insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (11, 0, 'fr.pinguet62.springruleengine.sample.rule.HasColorRule', null, 1);
-               insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (111, 11, 'color', 'black', 'java.lang.String');
-               insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (112, 11, 'a_key', 'a_value', 'java.lang.Integer');
-               insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (113, 11, 'b_key', 'b_value', 'java.lang.Integer');
-               insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (114, 11, 'c_key', 'c_value', 'java.lang.Integer');
-        insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (12, 1, 'fr.pinguet62.springruleengine.core.api.OrRule', '', 1);
-            insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (121, 0, 'fr.pinguet62.springruleengine.sample.rule.OnlyWeekendRule', '.', 12);
-            insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (122, 1, 'fr.pinguet62.springruleengine.sample.rule.PriceGreaterThanRule', '.', 12);
-            insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (123, 2, 'fr.pinguet62.springruleengine.core.api.AndRule', null, 12);
-            insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (124, 3, 'fr.pinguet62.springruleengine.sample.rule.OnlyWeekendRule', 'The product can only be proposed the weekend.', 12);
-            insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (125, 4, 'fr.pinguet62.springruleengine.sample.rule.PriceGreaterThanRule', 'It''s necessary to have good profict.', 12);
-                    insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (1221, 125, 'amount', '100.00', 'java.lang.Double');
-insert into BUSINESS_RULE_ENTITY (id, title, ROOT_RULE_COMPONENT_ID) values ('first', 'The best sample', 1);
+    insert into RULE_COMPONENT_ENTITY (ID, PARENT_ID, INDEX, KEY, DESCRIPTION) values (1, null, 0, 'fr.pinguet62.springruleengine.core.api.AndRule', null);
+        insert into RULE_COMPONENT_ENTITY (ID, PARENT_ID, INDEX, KEY, DESCRIPTION) values (11, 1, 0, 'fr.pinguet62.springruleengine.core.api.NotRule', 'must not be injured');
+            insert into RULE_COMPONENT_ENTITY (ID, PARENT_ID, INDEX, KEY, DESCRIPTION) values (111, 11, 0, 'fr.pinguet62.springruleengine.sample.rule.DangerousProductRule', null);
+        insert into RULE_COMPONENT_ENTITY (ID, PARENT_ID, INDEX, KEY, DESCRIPTION) values (12, 1, 1, 'fr.pinguet62.springruleengine.core.api.OrRule', null);
+            insert into RULE_COMPONENT_ENTITY (ID, PARENT_ID, INDEX, KEY, DESCRIPTION) values (121, 12, 0, 'fr.pinguet62.springruleengine.sample.rule.TypeProductRule', null);
+                    insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (1211, 121, 'type', 'toy', 'java.lang.String');
+            insert into RULE_COMPONENT_ENTITY (ID, PARENT_ID, INDEX, KEY, DESCRIPTION) values (122, 12, 1, 'fr.pinguet62.springruleengine.sample.rule.LessThanPriceProductRule', 'pocket money');
+                    insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (1221, 122, 'amount', '10.00', 'java.lang.Double');
+insert into BUSINESS_RULE_ENTITY (ID, ROOT_RULE_COMPONENT_ID, TITLE) values ('CanSellToMinor', 1, 'Rule to test if the "Product" can be sold to a minor.');
 
-    insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (2, 0, 'fr.pinguet62.springruleengine.core.api.NotRule', null, null);
-        insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (21, 0, 'fr.pinguet62.springruleengine.sample.rule.OnlyWeekendRule', null, 2);
-insert into BUSINESS_RULE_ENTITY (id, title, ROOT_RULE_COMPONENT_ID) values ('second', 'Another sample', 2);
-
-    insert into RULE_COMPONENT_ENTITY (ID, INDEX, KEY, DESCRIPTION, PARENT_ID) values (3, 0, 'fr.pinguet62.springruleengine.sample.rule.OnlyWeekendRule', null, null);
-insert into BUSINESS_RULE_ENTITY (id, title, ROOT_RULE_COMPONENT_ID) values ('third', 'The last sample', 3);
+    insert into RULE_COMPONENT_ENTITY (ID, PARENT_ID, INDEX, KEY, DESCRIPTION) values (2, null, 0, 'fr.pinguet62.springruleengine.core.api.AndRule', null);
+        insert into RULE_COMPONENT_ENTITY (ID, PARENT_ID, INDEX, KEY, DESCRIPTION) values (21, 2, 0, 'fr.pinguet62.springruleengine.sample.rule.LessThanPriceProductRule', null);
+                insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (211, 21, 'amount', '19.00', 'java.lang.Double');
+        insert into RULE_COMPONENT_ENTITY (ID, PARENT_ID, INDEX, KEY, DESCRIPTION) values (22, 2, 1, 'fr.pinguet62.springruleengine.sample.rule.TypeProductRule', null);
+                insert into PARAMETER_ENTITY (ID, RULE_ID, KEY, VALUE, TYPE) values (221, 22, 'type', 'food', 'java.lang.String');
+insert into BUSINESS_RULE_ENTITY (ID, ROOT_RULE_COMPONENT_ID, TITLE) values ('CanUseLuncheonVoucher', 2, 'Rule to test if the "Product" can be paid using "luncheon voucher".');

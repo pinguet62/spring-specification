@@ -7,10 +7,10 @@ import lombok.Data;
 @Builder
 public class Product {
 
-    private String name;
+    private String type;
 
     private Double price;
 
-    private String color;
+    private Boolean dangerous;
 
 }

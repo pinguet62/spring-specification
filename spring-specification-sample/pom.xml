@@ -17,7 +17,6 @@
     </properties>
 
     <dependencies>
-        <!-- Webservice + UI -->
         <dependency>
             <groupId>fr.pinguet62</groupId>
             <artifactId>spring-specification-admin-server</artifactId>

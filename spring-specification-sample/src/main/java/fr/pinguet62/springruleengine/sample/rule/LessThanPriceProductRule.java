@@ -9,19 +9,21 @@ import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 @Component
-@Scope("prototype")
-@RuleName("Price greater than")
-@RuleDescription("Test \"$context.product.color>$params.amount\"")
-public class PriceGreaterThanRule implements Rule<Product> {
+@Scope(SCOPE_PROTOTYPE)
+@RuleName("Price less than")
+@RuleDescription("Test \"$product.amount<$params.amount\"")
+public class LessThanPriceProductRule implements Rule<Product> {
 
     @Setter
     @RuleParameter("amount")
-    private Double minimalAmount;
+    private Double maximalAmount;
 
     @Override
     public boolean test(Product product) {
-        return product.getPrice() > minimalAmount;
+        return product.getPrice() < maximalAmount;
     }
 
 }

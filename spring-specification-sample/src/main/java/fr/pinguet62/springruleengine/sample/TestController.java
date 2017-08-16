@@ -7,8 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -22,11 +23,10 @@ public class TestController {
     /**
      * Server end-point who execute test.
      */
-    @GetMapping("/execute")
-    public ResponseEntity<Boolean> server(@RequestParam("rule") String businessRuleKey, @RequestParam String color, @RequestParam Double price) {
+    @PostMapping("/sample/{rule}")
+    public ResponseEntity<Boolean> server(@RequestBody Product product, @PathVariable("rule") String businessRuleKey) {
         try {
             Rule<Product> rule = (Rule<Product>) builder.apply(businessRuleKey);
-            Product product = Product.builder().color(color).price(price).build();
             boolean result = rule.test(product);
             return ResponseEntity.ok(result);
         } catch (RuntimeException e) {

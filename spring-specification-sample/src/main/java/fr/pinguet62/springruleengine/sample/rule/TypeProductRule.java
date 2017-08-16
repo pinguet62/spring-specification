@@ -9,19 +9,21 @@ import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+
 @Component
-@Scope("prototype")
-@RuleName("Has color")
-@RuleDescription("Test \"$context.product.color=$params.color\"")
-public class HasColorRule implements Rule<Product> {
+@Scope(SCOPE_PROTOTYPE)
+@RuleName("Product type")
+@RuleDescription("Test \"$product.type==$params.type\"")
+public class TypeProductRule implements Rule<Product> {
 
     @Setter
-    @RuleParameter("color")
-    private String expectedColor;
+    @RuleParameter("type")
+    private String expectedType;
 
     @Override
     public boolean test(Product product) {
-        return product.getColor().equals(expectedColor);
+        return product.getType().equals(expectedType);
     }
 
 }
