@@ -1,4 +1,4 @@
-# Spring Specification Reference Guide
+= Spring Specification Reference Guide
 Pinguet62 <https://github.com/pinguet62[GitHub]>
 :revnumber: {project-version}
 :toc: left
@@ -7,9 +7,9 @@ Pinguet62 <https://github.com/pinguet62[GitHub]>
 :sectlinks:
 :sectnums:
 
-## Why this project?
+== Why this project?
 
-### Specification pattern
+=== Specification pattern
 
 [quote, Wikipedia, https://en.wikipedia.org/wiki/Specification_pattern]
 ____
@@ -31,18 +31,43 @@ Rule combined = isDangerous.not().and( isToy.or(amountLessThan10) );
 boolean canSellToMinor = combined.test(product);
 ----
 
-### Need of dynamism
+=== Need of dynamism
 
 The _specification pattern_ allow to produce readable and maintainable code.
 But the final source code is *static*: you have to update/compile/deploy application to change business rules.
 
 The goal of this project is to define to *manage* and *build* dynamically rules at runtime, without any modification into source code.
 
-## Core API
+== General
+
+=== Architecture
+
+[ditaa]
+----
+              +=------------------------+
+              |         +-----------+   |
+              |         |{s}        |   |
+              |         |@Repository|   |
+              |         +-----------+   |
+              |                         |
+              |               ^         |
+              |               |         |
+              |               |         |
++------+    +-------+    +-----------+  |  +--------+    +-----+
+|      |    |       |    |           |  |  | Admin  |    |Admin|
+|Client|--->|Builder|--->|@Repository|<----|REST API|<---| UI  |
+|      |    |       |    |           |  |  |        |    |     |
++------+    +-------+    +-----------+  |  +--------+    +-----+
+              |                         |
+              |                         |
+              +=------------------------+
+----
+
+== Core API
 
 The `Rule` interface is the base of specification pattern.
 
-### Simple usage
+=== Simple usage
 
 Definition:
 [source, java]
@@ -63,7 +88,7 @@ Product product = new Product(...);
 boolean isDangerousProduct = rule.test(product);
 ----
 
-### Composition
+=== Composition
 
 Example for this composition:
 ----
@@ -77,7 +102,7 @@ Rule second = ...
 Rule third = ...
 ----
 
-#### Method chaining
+==== Method chaining
 
 `Rule` interface defines *default methods*, used for _method chaining_.
 
@@ -86,7 +111,7 @@ Rule third = ...
 Rule composedRule = first.not().and( second.or(third) );
 ----
 
-#### Composite pattern
+==== Composite pattern
 
 `AndRule`/`OrRule`/`NotRule` are special `Rule` implementations, who work like *composite pattern* by accepting _variable length argument_ into constructor.
 
@@ -105,7 +130,7 @@ Rule composedRule = new AndRule(
                     );
 ----
 
-#### Utility methods
+==== Utility methods
 
 `and()`/`or()`/`not()` are *static* methods of `RuleUtils`.
 
@@ -124,7 +149,7 @@ Rule composedRule = and(
                     );
 ----
 
-### Parameters
+=== Parameters
 
 Create *minimal parameterized* rules, instead of _many specific_ rules.
 
@@ -154,9 +179,9 @@ Rule foodProductRule = new TypeProductRule("food");
 ...
 ----
 
-## Builder
+== Builder
 
-### Key & Factory
+=== Key & Factory
 
 All `Rule` are identified by unique **key**.
 
@@ -168,7 +193,7 @@ By default:
 TIP: Usually the component *scope* is `prototype`, to create distinct objects. +
 It's possible to use other scope like `singleton`, but object must be _stateless_ and without parameter.
 
-### Parameters
+=== Parameters
 
 Parameters are *dynamically injected*.
 
@@ -197,19 +222,19 @@ class TypeProductRule implements Rule<Product> {
 }
 ----
 
-### Database
+=== Database
 
 TODO
 
-## Admin server
+== Admin server
 
 The admin application expose webservices (REST API) to manage rules.
 
 Documentation: see `/swagger-ui.html` page.
 
-## Admin UI
+== Admin UI
 
-### Spring Boot
+=== Spring Boot
 
 The admin application can simply deployed using *Spring Boot & embedded Tomcat*.
 
