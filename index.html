@@ -436,30 +436,35 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_need_of_dynamism">1.2. Need of dynamism</a></li>
 </ul>
 </li>
-<li><a href="#_core_api">2. Core API</a>
+<li><a href="#_general">2. General</a>
 <ul class="sectlevel2">
-<li><a href="#_simple_usage">2.1. Simple usage</a></li>
-<li><a href="#_composition">2.2. Composition</a>
+<li><a href="#_architecture">2.1. Architecture</a></li>
+</ul>
+</li>
+<li><a href="#_core_api">3. Core API</a>
+<ul class="sectlevel2">
+<li><a href="#_simple_usage">3.1. Simple usage</a></li>
+<li><a href="#_composition">3.2. Composition</a>
 <ul class="sectlevel3">
-<li><a href="#_method_chaining">2.2.1. Method chaining</a></li>
-<li><a href="#_composite_pattern">2.2.2. Composite pattern</a></li>
-<li><a href="#_utility_methods">2.2.3. Utility methods</a></li>
+<li><a href="#_method_chaining">3.2.1. Method chaining</a></li>
+<li><a href="#_composite_pattern">3.2.2. Composite pattern</a></li>
+<li><a href="#_utility_methods">3.2.3. Utility methods</a></li>
 </ul>
 </li>
-<li><a href="#_parameters">2.3. Parameters</a></li>
+<li><a href="#_parameters">3.3. Parameters</a></li>
 </ul>
 </li>
-<li><a href="#_builder">3. Builder</a>
+<li><a href="#_builder">4. Builder</a>
 <ul class="sectlevel2">
-<li><a href="#_key_factory">3.1. Key &amp; Factory</a></li>
-<li><a href="#_parameters_2">3.2. Parameters</a></li>
-<li><a href="#_database">3.3. Database</a></li>
+<li><a href="#_key_factory">4.1. Key &amp; Factory</a></li>
+<li><a href="#_parameters_2">4.2. Parameters</a></li>
+<li><a href="#_database">4.3. Database</a></li>
 </ul>
 </li>
-<li><a href="#_admin_server">4. Admin server</a></li>
-<li><a href="#_admin_ui">5. Admin UI</a>
+<li><a href="#_admin_server">5. Admin server</a></li>
+<li><a href="#_admin_ui">6. Admin UI</a>
 <ul class="sectlevel2">
-<li><a href="#_spring_boot">5.1. Spring Boot</a></li>
+<li><a href="#_spring_boot">6.1. Spring Boot</a></li>
 </ul>
 </li>
 </ul>
@@ -516,13 +521,42 @@ But the final source code is <strong>static</strong>: you have to update/compile
 </div>
 </div>
 <div class="sect1">
-<h2 id="_core_api"><a class="anchor" href="#_core_api"></a><a class="link" href="#_core_api">2. Core API</a></h2>
+<h2 id="_general"><a class="anchor" href="#_general"></a><a class="link" href="#_general">2. General</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_architecture"><a class="anchor" href="#_architecture"></a><a class="link" href="#_architecture">2.1. Architecture</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre>              +=------------------------+
+              |         +-----------+   |
+              |         |{s}        |   |
+              |         |@Repository|   |
+              |         +-----------+   |
+              |                         |
+              |               ^         |
+              |               |         |
+              |               |         |
++------+    +-------+    +-----------+  |  +--------+    +-----+
+|      |    |       |    |           |  |  | Admin  |    |Admin|
+|Client|---&gt;|Builder|---&gt;|@Repository|&lt;----|REST API|&lt;---| UI  |
+|      |    |       |    |           |  |  |        |    |     |
++------+    +-------+    +-----------+  |  +--------+    +-----+
+              |                         |
+              |                         |
+              +=------------------------+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_core_api"><a class="anchor" href="#_core_api"></a><a class="link" href="#_core_api">3. Core API</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The <code>Rule</code> interface is the base of specification pattern.</p>
 </div>
 <div class="sect2">
-<h3 id="_simple_usage"><a class="anchor" href="#_simple_usage"></a><a class="link" href="#_simple_usage">2.1. Simple usage</a></h3>
+<h3 id="_simple_usage"><a class="anchor" href="#_simple_usage"></a><a class="link" href="#_simple_usage">3.1. Simple usage</a></h3>
 <div class="paragraph">
 <p>Definition:</p>
 </div>
@@ -548,7 +582,7 @@ boolean isDangerousProduct = rule.test(product);</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_composition"><a class="anchor" href="#_composition"></a><a class="link" href="#_composition">2.2. Composition</a></h3>
+<h3 id="_composition"><a class="anchor" href="#_composition"></a><a class="link" href="#_composition">3.2. Composition</a></h3>
 <div class="paragraph">
 <p>Example for this composition:</p>
 </div>
@@ -568,7 +602,7 @@ Rule third = ...</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_method_chaining"><a class="anchor" href="#_method_chaining"></a><a class="link" href="#_method_chaining">2.2.1. Method chaining</a></h4>
+<h4 id="_method_chaining"><a class="anchor" href="#_method_chaining"></a><a class="link" href="#_method_chaining">3.2.1. Method chaining</a></h4>
 <div class="paragraph">
 <p><code>Rule</code> interface defines <strong>default methods</strong>, used for <em>method chaining</em>.</p>
 </div>
@@ -579,7 +613,7 @@ Rule third = ...</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_composite_pattern"><a class="anchor" href="#_composite_pattern"></a><a class="link" href="#_composite_pattern">2.2.2. Composite pattern</a></h4>
+<h4 id="_composite_pattern"><a class="anchor" href="#_composite_pattern"></a><a class="link" href="#_composite_pattern">3.2.2. Composite pattern</a></h4>
 <div class="paragraph">
 <p><code>AndRule</code>/<code>OrRule</code>/<code>NotRule</code> are special <code>Rule</code> implementations, who work like <strong>composite pattern</strong> by accepting <em>variable length argument</em> into constructor.</p>
 </div>
@@ -600,7 +634,7 @@ Rule composedRule = new AndRule(
 </div>
 </div>
 <div class="sect3">
-<h4 id="_utility_methods"><a class="anchor" href="#_utility_methods"></a><a class="link" href="#_utility_methods">2.2.3. Utility methods</a></h4>
+<h4 id="_utility_methods"><a class="anchor" href="#_utility_methods"></a><a class="link" href="#_utility_methods">3.2.3. Utility methods</a></h4>
 <div class="paragraph">
 <p><code>and()</code>/<code>or()</code>/<code>not()</code> are <strong>static</strong> methods of <code>RuleUtils</code>.</p>
 </div>
@@ -622,7 +656,7 @@ Rule composedRule = and(
 </div>
 </div>
 <div class="sect2">
-<h3 id="_parameters"><a class="anchor" href="#_parameters"></a><a class="link" href="#_parameters">2.3. Parameters</a></h3>
+<h3 id="_parameters"><a class="anchor" href="#_parameters"></a><a class="link" href="#_parameters">3.3. Parameters</a></h3>
 <div class="paragraph">
 <p>Create <strong>minimal parameterized</strong> rules, instead of <em>many specific</em> rules.</p>
 </div>
@@ -660,10 +694,10 @@ Rule foodProductRule = new TypeProductRule("food");
 </div>
 </div>
 <div class="sect1">
-<h2 id="_builder"><a class="anchor" href="#_builder"></a><a class="link" href="#_builder">3. Builder</a></h2>
+<h2 id="_builder"><a class="anchor" href="#_builder"></a><a class="link" href="#_builder">4. Builder</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_key_factory"><a class="anchor" href="#_key_factory"></a><a class="link" href="#_key_factory">3.1. Key &amp; Factory</a></h3>
+<h3 id="_key_factory"><a class="anchor" href="#_key_factory"></a><a class="link" href="#_key_factory">4.1. Key &amp; Factory</a></h3>
 <div class="paragraph">
 <p>All <code>Rule</code> are identified by unique <strong>key</strong>.</p>
 </div>
@@ -695,7 +729,7 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 </div>
 </div>
 <div class="sect2">
-<h3 id="_parameters_2"><a class="anchor" href="#_parameters_2"></a><a class="link" href="#_parameters_2">3.2. Parameters</a></h3>
+<h3 id="_parameters_2"><a class="anchor" href="#_parameters_2"></a><a class="link" href="#_parameters_2">4.2. Parameters</a></h3>
 <div class="paragraph">
 <p>Parameters are <strong>dynamically injected</strong>.</p>
 </div>
@@ -728,7 +762,7 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 </div>
 </div>
 <div class="sect2">
-<h3 id="_database"><a class="anchor" href="#_database"></a><a class="link" href="#_database">3.3. Database</a></h3>
+<h3 id="_database"><a class="anchor" href="#_database"></a><a class="link" href="#_database">4.3. Database</a></h3>
 <div class="paragraph">
 <p>TODO</p>
 </div>
@@ -736,7 +770,7 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 </div>
 </div>
 <div class="sect1">
-<h2 id="_admin_server"><a class="anchor" href="#_admin_server"></a><a class="link" href="#_admin_server">4. Admin server</a></h2>
+<h2 id="_admin_server"><a class="anchor" href="#_admin_server"></a><a class="link" href="#_admin_server">5. Admin server</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The admin application expose webservices (REST API) to manage rules.</p>
@@ -747,10 +781,10 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 </div>
 </div>
 <div class="sect1">
-<h2 id="_admin_ui"><a class="anchor" href="#_admin_ui"></a><a class="link" href="#_admin_ui">5. Admin UI</a></h2>
+<h2 id="_admin_ui"><a class="anchor" href="#_admin_ui"></a><a class="link" href="#_admin_ui">6. Admin UI</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_spring_boot"><a class="anchor" href="#_spring_boot"></a><a class="link" href="#_spring_boot">5.1. Spring Boot</a></h3>
+<h3 id="_spring_boot"><a class="anchor" href="#_spring_boot"></a><a class="link" href="#_spring_boot">6.1. Spring Boot</a></h3>
 <div class="paragraph">
 <p>The admin application can simply deployed using <strong>Spring Boot &amp; embedded Tomcat</strong>.</p>
 </div>
@@ -803,7 +837,7 @@ public class SampleApplication {
 <div id="footer">
 <div id="footer-text">
 Version 1.0-SNAPSHOT<br>
-Last updated 2017-08-16 22:52:36 UTC
+Last updated 2017-08-20 20:32:53 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
