@@ -3,9 +3,11 @@ package fr.pinguet62.springruleengine.core.builder.database.parameter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 // TODO Spring workflow (fix parameter with prototype scope?)
 
@@ -32,27 +34,30 @@ public class RuleParameterBeanPostProcessor implements BeanPostProcessor {
     }
 
     public void processRuleParameterAnnotations(Object rule) {
+        processRuleParameterAnnotations(rule, (a, p) -> p.get(a.value()), RuleParameter.class);
+        processRuleParameterAnnotations(rule, (a, p) -> p, RuleParameterMap.class);
+    }
+
+    public <A extends Annotation> void processRuleParameterAnnotations(Object rule, BiFunction<A, Map<String, Object>, Object> paramConverter, Class<A> annotationType) {
         try {
             Class<?> type = rule.getClass();
 
             // process fields
             for (Field field : type.getDeclaredFields()) {
-                RuleParameter annotation = field.getDeclaredAnnotation(RuleParameter.class);
+                A annotation = field.getDeclaredAnnotation(annotationType);
                 if (annotation == null)
                     continue;
-                String key = annotation.value();
-                Object value = parameters.get(key);
+                Object value = paramConverter.apply(annotation, parameters);
                 field.setAccessible(true);
                 field.set(rule, value);
             }
 
             // process setters
             for (Method method : type.getDeclaredMethods()) {
-                RuleParameter annotation = method.getDeclaredAnnotation(RuleParameter.class);
+                A annotation = method.getDeclaredAnnotation(annotationType);
                 if (annotation == null)
                     continue;
-                String key = annotation.value();
-                Object value = parameters.get(key);
+                Object value = paramConverter.apply(annotation, parameters);
                 method.setAccessible(true);
                 method.invoke(rule, value);
             }
