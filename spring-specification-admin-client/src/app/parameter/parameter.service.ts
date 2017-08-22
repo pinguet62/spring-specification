@@ -27,6 +27,11 @@ export class ParameterService {
         return this.http.get(url, this.options).map(res => res.json());
     }
 
+    getKeyByRule(ruleKey: string): Observable<string[]> {
+        let url: string = ParameterService.resourceUrl + '/key/' + ruleKey;
+        return this.http.get(url, this.options).map(res => res.json());
+    }
+
     create(parameter: Parameter): Observable<Parameter> {
         let url: string = ParameterService.resourceUrl;
         let body: string = JSON.stringify(parameter);

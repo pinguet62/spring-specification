@@ -1,4 +1,5 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from '@angular/material';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
@@ -14,8 +15,11 @@ import {RuleComponent} from '../rule-component/rule-component';
         <md-dialog-content>
             <form #form="ngForm">
                 <md-input-container>
-                    <input mdInput placeholder="Key" [(ngModel)]="parameter.key" name="key" required>
+                    <input mdInput placeholder="Key" [(ngModel)]="parameter.key" name="key" required [mdAutocomplete]="keys">
                 </md-input-container>
+                <md-autocomplete #keys="mdAutocomplete">
+                    <md-option *ngFor="let key of requiredKeys" [value]="key">{{key}}</md-option>
+                </md-autocomplete>
                 <br>
                 <md-input-container>
                     <input mdInput placeholder="Value" [(ngModel)]="parameter.value" name="value" required>
@@ -33,13 +37,22 @@ import {RuleComponent} from '../rule-component/rule-component';
 })
 export class EditParameterDialog {
 
+    ruleComponent: RuleComponent;
     parameter: Parameter;
+
+    requiredKeys: string[];
     availableTypes: string[];
 
     constructor(public dialogRef: MdDialogRef<EditParameterDialog>,
                 @Inject(MD_DIALOG_DATA) public data: any,
                 parameterService: ParameterService) {
+        this.ruleComponent = data.ruleComponent;
         this.parameter = <Parameter> (data && data.parameter || {}); // update or create
+
+        parameterService.getKeyByRule(this.ruleComponent.key).subscribe(keys => {
+            let alreadyAssociatedKey: string[] = this.ruleComponent.parameters.map(p => p.key);
+            this.requiredKeys = keys.filter(k => !alreadyAssociatedKey.includes(k));
+        });
         parameterService.getSupportedTypes().subscribe(types =>
             this.availableTypes = types
         );
@@ -106,7 +119,7 @@ export class DeleteParameterDialog {
             </button>
         </div>`,
     styles: [
-        `.mat-table {
+            `.mat-table {
             overflow: auto;
         }`
     ]
@@ -135,7 +148,9 @@ export class ParameterComponent implements OnInit {
     }
 
     openCreateDialog(): void {
-        let createDialog: MdDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, this.getCommonDialogConfig());
+        let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
+        dialogConfig.data = {ruleComponent: this.ruleComponent};
+        let createDialog: MdDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, dialogConfig);
         createDialog.afterClosed().subscribe((createdParameter: Parameter) => {
             // Canceled
             if (createdParameter == null)
@@ -150,7 +165,10 @@ export class ParameterComponent implements OnInit {
 
     openUpdateDialog(parameter: Parameter): void {
         let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
-        dialogConfig.data = {parameter: Object.assign({}, parameter)};
+        dialogConfig.data = {
+            ruleComponent: this.ruleComponent,
+            parameter: Object.assign({}, parameter)
+        };
         let createDialog: MdDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, dialogConfig);
         createDialog.afterClosed().subscribe((updatedParameter: Parameter) => {
             // Canceled

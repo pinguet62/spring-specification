@@ -1,9 +1,11 @@
 package fr.pinguet62.springruleengine.server;
 
+import fr.pinguet62.springruleengine.core.api.Rule;
 import fr.pinguet62.springruleengine.core.builder.database.ParameterConverter;
 import fr.pinguet62.springruleengine.core.builder.database.ParameterConverter.Converter;
 import fr.pinguet62.springruleengine.core.builder.database.model.ParameterEntity;
 import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEntity;
+import fr.pinguet62.springruleengine.core.builder.database.parameter.ParameterService;
 import fr.pinguet62.springruleengine.core.builder.database.repository.ParameterRepository;
 import fr.pinguet62.springruleengine.core.builder.database.repository.RuleComponentRepository;
 import fr.pinguet62.springruleengine.server.dto.ParameterDto;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static fr.pinguet62.springruleengine.server.ParameterController.PATH;
 import static java.util.stream.Collectors.toList;
@@ -30,6 +34,12 @@ public class ParameterController {
 
     @Autowired
     private ParameterConverter parameterConverter;
+
+    @Autowired
+    private ParameterService parameterService;
+
+    @Autowired
+    private RuleService ruleService;
 
     @Autowired
     private ParameterRepository parameterRepository;
@@ -54,6 +64,17 @@ public class ParameterController {
 
         List<ParameterDto> dtos = rule.getParameters().stream().map(this::convert).collect(toList());
         return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/key/{rule:.+}")
+    public ResponseEntity<Set<String>> getKeyByRule(@PathVariable("rule") String ruleKey) {
+        Optional<Class<Rule<?>>> ruleOp = ruleService.getFromKey(ruleKey);
+        if (!ruleOp.isPresent())
+            return ResponseEntity.notFound().build();
+
+        Class<Rule<?>> rule = ruleOp.get();
+        Set<String> keys = parameterService.getDeclaratedKeys(rule);
+        return ResponseEntity.ok(keys);
     }
 
     @PutMapping

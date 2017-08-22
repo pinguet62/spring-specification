@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
+    MdAutocompleteModule,
     MdButtonModule,
     MdCheckboxModule,
     MdDialogModule,
@@ -33,7 +34,7 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './
 @NgModule({
     imports: [
         BrowserModule, FormsModule, ReactiveFormsModule, HttpModule, BrowserAnimationsModule,
-        MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule, MdListModule, MdSelectModule, MdSidenavModule, MdTableModule, MdToolbarModule,
+        MdAutocompleteModule, MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule, MdListModule, MdSelectModule, MdSidenavModule, MdTableModule, MdToolbarModule,
         CdkTableModule,
         TreeModule, RouterModule.forRoot(appRoutes)
     ],

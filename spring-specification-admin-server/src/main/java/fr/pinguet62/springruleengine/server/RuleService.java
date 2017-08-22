@@ -61,7 +61,7 @@ public class RuleService {
     Optional<Class<Rule<?>>> getFromKey(@NotBlank String key) {
         try {
             return of((Class<Rule<?>>) Class.forName(key));
-        } catch (ClassCastException e) {
+        } catch (ClassCastException e) { // TODO fix
             throw new IllegalArgumentException(e);
         } catch (ClassNotFoundException e) {
             return empty();
