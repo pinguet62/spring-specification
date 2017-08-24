@@ -195,6 +195,8 @@ It's possible to use other scope like `singleton`, but object must be _stateless
 
 === Parameters
 
+==== Injection
+
 Parameters are *dynamically injected*.
 
 Property (_field_ or _setter_) must be annotated with `@RuleParameter()` defining the key used into database.
@@ -220,6 +222,33 @@ class TypeProductRule implements Rule<Product> {
 
     // ...
 }
+----
+
+==== Conversion
+
+The supported types is limited.
+You can extend this list registering custom `Converter`:
+
+[source, java]
+----
+Converter<BigDecimal> customParameterConverter = new Converter<BigDecimal>() {
+        @Override
+        public Class<BigDecimal> getTargetType() {
+            return BigDecimal.class;
+        }
+
+        @Override
+        public BigDecimal convert(String value) {
+            return new BigDecimal(value);
+        }
+    };
+----
+[source, java]
+----
+@Autowired
+ParameterConverter parameterConverter;
+
+parameterConverter.getConverters().add(customParameterConverter);
 ----
 
 === Database
