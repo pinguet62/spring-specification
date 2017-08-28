@@ -15,6 +15,6 @@ public class ParameterInputDto {
     /**
      * @see RuleComponentEntity#getId()
      */
-    private Integer rule;
+    private Integer ruleComponent;
 
 }

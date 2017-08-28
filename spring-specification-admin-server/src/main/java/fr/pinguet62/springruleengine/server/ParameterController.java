@@ -69,7 +69,7 @@ public class ParameterController {
         // entity.setId();
         entity.setKey(dto.getKey());
         entity.setValue(dto.getValue());
-        entity.setRule(ruleRepository.findOne(dto.getRule()));
+        entity.setRule(ruleRepository.findOne(dto.getRuleComponent()));
         entity = parameterRepository.save(entity);
 
         return ResponseEntity.created(URI.create(PATH + "/" + entity.getId())).body(convert(entity));
