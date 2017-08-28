@@ -14,8 +14,6 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -26,7 +24,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Component
 @Scope(SCOPE_PROTOTYPE)
 @RuleName(value = "Spring Expression Language")
-@RuleDescription("SpEL variables: \"#value\" the input test() parameter, \"#params\" rule parameters (Map)")
+@RuleDescription("SpEL variables \"#value\" is the input test() parameter")
 public class SpelRule implements Rule<Object> {
 
     @Autowired
@@ -35,10 +33,6 @@ public class SpelRule implements Rule<Object> {
     @Setter
     @RuleParameter("expression")
     private String spel;
-
-    @Setter
-    @RuleParameter("TODO")
-    private Map<String, Object> params;
 
     @Override
     public boolean test(Object value) {
@@ -49,7 +43,6 @@ public class SpelRule implements Rule<Object> {
         if (beanFactory != null) // manual instantiation
             context.setBeanResolver(new BeanFactoryResolver(beanFactory));
         context.setVariable("value", value);
-        context.setVariable("params", params);
 
         // execute
         Expression exp = parser.parseExpression(spel);

@@ -195,60 +195,67 @@ It's possible to use other scope like `singleton`, but object must be _stateless
 
 === Parameters
 
-==== Injection
-
 Parameters are *dynamically injected*.
 
-Property (_field_ or _setter_) must be annotated with `@RuleParameter()` defining the key used into database.
+==== Annotation & injection
+
+Use `@RuleParameter()` _field_ or _setter_ or _constructor argument_ to define the _injection point_ and the `key` of parameter (used into database).
 
 [source, java]
 ----
-class TypeProductRule implements Rule<Product> {
+class SampleRule implements Rule<T> {
     @RuleParameter("key")
-    String type;
+    String param;
 
     // ...
 }
 ----
 [source, java]
 ----
-class TypeProductRule implements Rule<Product> {
-    String type;
+class SampleRule implements Rule<T> {
+    String param;
 
     @RuleParameter("key")
-    public void setType(String param) {
-        type = param;
+    void setType(String param) {
+        this.param = param;
+    };
+
+    // ...
+}
+----
+[source, java]
+----
+class SampleRule implements Rule<T> {
+    final String param;
+
+    TypeProductRule(@RuleParameter("key") String param) {
+        this.param = param;
     };
 
     // ...
 }
 ----
 
-==== Conversion
+=== Behavior
 
-The supported types is limited.
-You can extend this list registering custom `Converter`:
+The injection works like https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html[`@Value`] specification.
+So injection support:
+
+- conversion
+- https://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#expressions[Spring Expression Language]
 
 [source, java]
 ----
-Converter<BigDecimal> customParameterConverter = new Converter<BigDecimal>() {
-        @Override
-        public Class<BigDecimal> getTargetType() {
-            return BigDecimal.class;
-        }
+class SampleRule implements Rule<T> {
+    @RuleParameter("rand")
+    Integer param;
 
-        @Override
-        public BigDecimal convert(String value) {
-            return new BigDecimal(value);
-        }
-    };
-----
-[source, java]
-----
-@Autowired
-ParameterConverter parameterConverter;
+    // ...
+}
 
-parameterConverter.getConverters().add(customParameterConverter);
+TypeProductRule rule = ...;
+// database parameter context = { "rand": "#{ T(java.lang.Math).ramdom() * 100 }" }
+assertTrue(0 <= rule.param && rule.param <= 100);
 ----
 
 === Database

@@ -17,11 +17,6 @@ export class ParameterService {
     constructor(private http: Http) {
     }
 
-    getSupportedTypes(): Observable<string[]> {
-        let url: string = ParameterService.resourceUrl + '/type';
-        return this.http.get(url, this.options).map(res => res.json());
-    }
-
     getByRuleComponent(ruleComponent: RuleComponent): Observable<Parameter[]> {
         let url: string = ParameterService.resourceUrl + '?ruleComponent=' + ruleComponent.id;
         return this.http.get(url, this.options).map(res => res.json());

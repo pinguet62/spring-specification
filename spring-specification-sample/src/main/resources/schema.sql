@@ -10,7 +10,6 @@ create table PARAMETER_ENTITY (
     RULE_ID integer not null references RULE_COMPONENT_ENTITY(ID),
     KEY varchar(99),
     VALUE varchar(99),
-    TYPE varchar(99),
     unique(RULE_ID, KEY)
 );
 create table BUSINESS_RULE_ENTITY (

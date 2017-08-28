@@ -22,10 +22,4 @@ public class ParameterEntity {
 
     private String value;
 
-    /**
-     * Value: Class#getName()<br>
-     * Doesn't support primitive type ({@code Class.forName("int")} throws an {@link ClassNotFoundException}).
-     */
-    private String type;
-
 }

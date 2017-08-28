@@ -121,7 +121,6 @@ public class RuleComponentController {
                                                 .id(p.getId())
                                                 .key(p.getKey())
                                                 .value(p.getValue())
-                                                .type(p.getType())
                                                 .build())
                                 .collect(toList()))
                 .build();

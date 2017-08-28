@@ -1,8 +1,6 @@
 package fr.pinguet62.springruleengine.server;
 
 import fr.pinguet62.springruleengine.core.api.Rule;
-import fr.pinguet62.springruleengine.core.builder.database.ParameterConverter;
-import fr.pinguet62.springruleengine.core.builder.database.ParameterConverter.Converter;
 import fr.pinguet62.springruleengine.core.builder.database.model.ParameterEntity;
 import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEntity;
 import fr.pinguet62.springruleengine.core.builder.database.parameter.ParameterService;
@@ -33,9 +31,6 @@ public class ParameterController {
     public static final String PATH = "/parameter";
 
     @Autowired
-    private ParameterConverter parameterConverter;
-
-    @Autowired
     private ParameterService parameterService;
 
     @Autowired
@@ -46,15 +41,6 @@ public class ParameterController {
 
     @Autowired
     private RuleComponentRepository ruleRepository;
-
-    @GetMapping("/type")
-    public ResponseEntity<List<String>> getSupportedTypes() {
-        List<String> supportedTypes = parameterConverter.getConverters().stream().map(Converter::getTargetType)
-                .map(Class::getName).collect(toList());
-        if (supportedTypes.isEmpty())
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(supportedTypes);
-        return ResponseEntity.ok(supportedTypes);
-    }
 
     @GetMapping(params = "ruleComponent")
     public ResponseEntity<List<ParameterDto>> getByRuleComponent(@RequestParam("ruleComponent") Integer ruleComponentId) {
@@ -83,7 +69,6 @@ public class ParameterController {
         // entity.setId();
         entity.setKey(dto.getKey());
         entity.setValue(dto.getValue());
-        entity.setType(dto.getType());
         entity.setRule(ruleRepository.findOne(dto.getRule()));
         entity = parameterRepository.save(entity);
 
@@ -100,8 +85,6 @@ public class ParameterController {
             entity.setKey(dto.getKey());
         if (dto.getValue() != null)
             entity.setValue(dto.getValue());
-        if (dto.getType() != null)
-            entity.setType(dto.getType());
 
         entity = parameterRepository.save(entity);
 
@@ -128,7 +111,6 @@ public class ParameterController {
                 .id(entity.getId())
                 .key(entity.getKey())
                 .value(entity.getValue())
-                .type(entity.getType())
                 .build();
         // @formatter:on
     }

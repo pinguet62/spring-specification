@@ -17,6 +17,4 @@ public class ParameterDto {
 
     private String value;
 
-    private String type;
-
 }

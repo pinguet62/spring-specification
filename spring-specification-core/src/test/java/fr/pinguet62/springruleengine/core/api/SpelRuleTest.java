@@ -7,15 +7,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static fr.pinguet62.springruleengine.core.api.SpelRuleTest.BeanSample;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * @see SpelRule
@@ -25,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 public class SpelRuleTest {
 
     @Component("foo")
+    @Scope(SCOPE_PROTOTYPE)
     public static class BeanSample {
         @Getter
         public String attr = "ok";
@@ -39,13 +39,7 @@ public class SpelRuleTest {
     @Test
     public void test() {
         SpelRule rule = new SpelRule();
-
-        rule.setSpel("#params['min'] <= #value && #value <= #params['max']");
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("min", 0);
-        params.put("max", 18);
-        rule.setParams(params);
+        rule.setSpel("0 <= #value && #value <= 18");
 
         assertFalse(rule.test(-1));
         assertTrue(rule.test(1));

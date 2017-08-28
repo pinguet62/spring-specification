@@ -24,10 +24,6 @@ import {RuleComponent} from '../rule-component/rule-component';
                 <md-input-container>
                     <input mdInput placeholder="Value" [(ngModel)]="parameter.value" name="value" required>
                 </md-input-container>
-                <br>
-                <md-select placeholder="Type" [(ngModel)]="parameter.type" name="type" required style="width: 100%;">
-                    <md-option *ngFor="let type of availableTypes" [value]="type">{{type}}</md-option>
-                </md-select>
             </form>
         </md-dialog-content>
         <md-dialog-actions>
@@ -41,7 +37,6 @@ export class EditParameterDialog {
     parameter: Parameter;
 
     requiredKeys: string[];
-    availableTypes: string[];
 
     constructor(public dialogRef: MdDialogRef<EditParameterDialog>,
                 @Inject(MD_DIALOG_DATA) public data: any,
@@ -53,9 +48,6 @@ export class EditParameterDialog {
             let alreadyAssociatedKey: string[] = this.ruleComponent.parameters.map(p => p.key);
             this.requiredKeys = keys.filter(k => !alreadyAssociatedKey.includes(k));
         });
-        parameterService.getSupportedTypes().subscribe(types =>
-            this.availableTypes = types
-        );
     }
 
 }
@@ -92,10 +84,6 @@ export class DeleteParameterDialog {
                     <md-header-cell *cdkHeaderCellDef>Value</md-header-cell>
                     <md-cell *cdkCellDef="let parameter">{{parameter.value}}</md-cell>
                 </ng-container>
-                <ng-container cdkColumnDef="type">
-                    <md-header-cell *cdkHeaderCellDef>Type</md-header-cell>
-                    <md-cell *cdkCellDef="let parameter">{{parameter.type}}</md-cell>
-                </ng-container>
                 <ng-container cdkColumnDef="actions">
                     <md-header-cell *cdkHeaderCellDef></md-header-cell>
                     <md-cell *cdkCellDef="let parameter">
@@ -130,7 +118,7 @@ export class ParameterComponent implements OnInit {
     ruleComponent: RuleComponent;
 
     // Table
-    displayedColumns = ['key', 'value', 'type', 'actions'];
+    displayedColumns = ['key', 'value', 'actions'];
     dataSource: ObservableDataSource<Parameter> = new ObservableDataSource<Parameter>(new BehaviorSubject<Parameter[]>([]));
 
     constructor(private dialog: MdDialog,

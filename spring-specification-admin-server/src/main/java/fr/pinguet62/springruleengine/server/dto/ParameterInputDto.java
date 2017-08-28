@@ -12,8 +12,6 @@ public class ParameterInputDto {
 
     private String value;
 
-    private String type;
-
     /**
      * @see RuleComponentEntity#getId()
      */
