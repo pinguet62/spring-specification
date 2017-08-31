@@ -457,12 +457,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_builder">4. Builder</a>
 <ul class="sectlevel2">
 <li><a href="#_key_factory">4.1. Key &amp; Factory</a></li>
-<li><a href="#_parameters_2">4.2. Parameters</a>
+<li><a href="#_composite_rule">4.2. Composite rule</a>
 <ul class="sectlevel3">
 <li><a href="#_annotation_injection">4.2.1. Annotation &amp; injection</a></li>
+<li><a href="#_behavior">4.2.2. Behavior</a></li>
 </ul>
 </li>
-<li><a href="#_behavior">4.3. Behavior</a></li>
+<li><a href="#_parameters_2">4.3. Parameters</a>
+<ul class="sectlevel3">
+<li><a href="#_annotation_injection_2">4.3.1. Annotation &amp; injection</a></li>
+<li><a href="#_behavior_2">4.3.2. Behavior</a></li>
+</ul>
+</li>
 <li><a href="#_database">4.4. Database</a></li>
 </ul>
 </li>
@@ -734,14 +740,77 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 </div>
 </div>
 <div class="sect2">
-<h3 id="_parameters_2"><a class="anchor" href="#_parameters_2"></a><a class="link" href="#_parameters_2">4.2. Parameters</a></h3>
+<h3 id="_composite_rule"><a class="anchor" href="#_composite_rule"></a><a class="link" href="#_composite_rule">4.2. Composite rule</a></h3>
 <div class="paragraph">
-<p>Parameters are <strong>dynamically injected</strong>.</p>
+<p>Sub-rules are <strong>dynamically injected</strong>.</p>
 </div>
 <div class="sect3">
 <h4 id="_annotation_injection"><a class="anchor" href="#_annotation_injection"></a><a class="link" href="#_annotation_injection">4.2.1. Annotation &amp; injection</a></h4>
 <div class="paragraph">
-<p>Use <code>@RuleParameter()</code> <em>field</em> or <em>setter</em> or <em>constructor argument</em> to define the <em>injection point</em> and the <code>key</code> of parameter (used into database).</p>
+<p>Use <code>@RuleChild</code> or <code>@RuleChildren</code> on <em>field</em> or <em>setter</em> or <em>constructor argument</em> to define the <em>injection point</em> of sub-rules (used into database).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class ComposedRule&lt;T&gt; implements Rule&lt;T&gt; {
+    @RuleChildren(
+    List&lt;Rule&lt;T&gt;&gt; subRules;
+
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class ComposedRule&lt;T&gt; implements Rule&lt;T&gt; {
+    List&lt;Rule&lt;T&gt;&gt; subRules;
+
+    @RuleChildren
+    void setType(List&lt;Rule&lt;T&gt;&gt; subRules) {
+        this.subRules = subRules;
+    };
+
+    // ...
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">class ComposedRule&lt;T&gt; implements Rule&lt;T&gt; {
+    final List&lt;Rule&lt;T&gt;&gt; subRules;
+
+    ComposedRule(@RuleChildren List&lt;Rule&lt;T&gt;&gt; subRules) {
+        this.subRules = subRules;
+    };
+
+    // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_behavior"><a class="anchor" href="#_behavior"></a><a class="link" href="#_behavior">4.2.2. Behavior</a></h4>
+<div class="paragraph">
+<p>The injection works like <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html"><code>@Autowired</code></a> specification.
+So injection support:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>conversion: <code>Collection</code>, <code>array</code>, <em>varargs</em></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_parameters_2"><a class="anchor" href="#_parameters_2"></a><a class="link" href="#_parameters_2">4.3. Parameters</a></h3>
+<div class="paragraph">
+<p>Parameters are <strong>dynamically injected</strong>.</p>
+</div>
+<div class="sect3">
+<h4 id="_annotation_injection_2"><a class="anchor" href="#_annotation_injection_2"></a><a class="link" href="#_annotation_injection_2">4.3.1. Annotation &amp; injection</a></h4>
+<div class="paragraph">
+<p>Use <code>@RuleParameter()</code> on <em>field</em> or <em>setter</em> or <em>constructor argument</em> to define the <em>injection point</em> and the <code>key</code> of parameter (used into database).</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -772,7 +841,7 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 <pre class="highlightjs highlight"><code class="language-java" data-lang="java">class SampleRule implements Rule&lt;T&gt; {
     final String param;
 
-    TypeProductRule(@RuleParameter("key") String param) {
+    SampleRule(@RuleParameter("key") String param) {
         this.param = param;
     };
 
@@ -781,9 +850,8 @@ It&#8217;s possible to use other scope like <code>singleton</code>, but object m
 </div>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_behavior"><a class="anchor" href="#_behavior"></a><a class="link" href="#_behavior">4.3. Behavior</a></h3>
+<div class="sect3">
+<h4 id="_behavior_2"><a class="anchor" href="#_behavior_2"></a><a class="link" href="#_behavior_2">4.3.2. Behavior</a></h4>
 <div class="paragraph">
 <p>The injection works like <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html"><code>@Value</code></a> specification.
 So injection support:</p>
@@ -810,6 +878,7 @@ So injection support:</p>
 TypeProductRule rule = ...;
 // database parameter context = { "rand": "#{ T(java.lang.Math).ramdom() * 100 }" }
 assertTrue(0 &lt;= rule.param &amp;&amp; rule.param &lt;= 100);</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -889,7 +958,7 @@ public class SampleApplication {
 <div id="footer">
 <div id="footer-text">
 Version 1.0-SNAPSHOT<br>
-Last updated 2017-08-28 22:17:41 UTC
+Last updated 2017-08-31 22:02:32 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
