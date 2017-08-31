@@ -8,6 +8,36 @@
 [![Coverage Status](https://coveralls.io/repos/github/pinguet62/spring-specification/badge.svg?branch=master)](https://coveralls.io/github/pinguet62/spring-specification?branch=master)
 [![Maven Central](https://img.shields.io/maven-central/v/fr.pinguet62.xjc/spring-specification.svg)](https://maven-badges.herokuapp.com/maven-central/fr.pinguet62.xjc/spring-specification)
 
+This project provides:
+* **specification pattern** basic API
+* **Spring** support, to be integrated simply into any Spring application
+* **database storage** and corresponding builder, for dynamic build
+* **admin interface** for dynamic update of rules
+
+## Sample
+
+```java
+@AutowiredRuleBuilder builder;
+
+Product product = ...
+Rule<Product> rule = (Rule<Product>) builder.apply("CanSellToMinor");
+boolean result = rule.test(product);
+```
+
+## Admin console
+
+* create/delete **business rules**
+* manage **tree** of rules
+* manage rule **parameters**
+
+![](./spring-specification-doc/src/main/asciidoc/img/screenshot/rules.png?raw=true)
+
+![](./spring-specification-doc/src/main/asciidoc/img/screenshot/details.png?raw=true)
+
+![](./spring-specification-doc/src/main/asciidoc/img/screenshot/rule_edit.png?raw=true)
+
+![](./spring-specification-doc/src/main/asciidoc/img/screenshot/parameters_edit.png?raw=true)
+
 ## Try sample!
 
 * Admin UI: https://spring-specification-sample.herokuapp.com/spring-specification-admin-client/
