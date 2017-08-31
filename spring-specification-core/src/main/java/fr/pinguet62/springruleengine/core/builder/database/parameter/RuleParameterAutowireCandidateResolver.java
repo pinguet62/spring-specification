@@ -2,7 +2,7 @@ package fr.pinguet62.springruleengine.core.builder.database.parameter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.DependencyDescriptor;
-import org.springframework.context.annotation.ContextAnnotationAutowireCandidateResolver;
+import org.springframework.beans.factory.support.SimpleAutowireCandidateResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationAttributes;
@@ -10,15 +10,11 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import java.util.Map;
 
-/**
- * Extends default Spring Boot {@link ContextAnnotationAutowireCandidateResolver}
- */
 @Slf4j
-public class RuleParameterAutowireCandidateResolver extends ContextAnnotationAutowireCandidateResolver {
+public class RuleParameterAutowireCandidateResolver extends SimpleAutowireCandidateResolver {
 
     /**
-     * If {@link RuleParameter}: process {@link RuleParameter#value()}.<br>
-     * Otherwise: call {@code super}.
+     * If {@link RuleParameter}: process {@link RuleParameter#value()}.
      */
     @Override
     public Object getSuggestedValue(DependencyDescriptor descriptor) {
@@ -42,7 +38,7 @@ public class RuleParameterAutowireCandidateResolver extends ContextAnnotationAut
             }
         }
 
-        // default Spring Boot behavior
+        // default
         return super.getSuggestedValue(descriptor);
     }
 

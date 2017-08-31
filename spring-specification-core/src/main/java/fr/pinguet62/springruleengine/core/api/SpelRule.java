@@ -21,10 +21,10 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
  *
  * @see ExpressionParser
  */
-@Component
-@Scope(SCOPE_PROTOTYPE)
 @RuleName(value = "Spring Expression Language")
 @RuleDescription("SpEL variables \"#value\" is the input test() parameter")
+@Component
+@Scope(SCOPE_PROTOTYPE)
 public class SpelRule implements Rule<Object> {
 
     @Autowired

@@ -2,8 +2,7 @@ package fr.pinguet62.springruleengine.core.builder.database;
 
 import fr.pinguet62.springruleengine.core.api.Rule;
 import fr.pinguet62.springruleengine.core.builder.RuleBuilder;
-import fr.pinguet62.springruleengine.core.builder.database.factory.CompositeRuleFactory;
-import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEntity;
+import fr.pinguet62.springruleengine.core.builder.database.factory.RuleFactory;
 import fr.pinguet62.springruleengine.core.builder.database.repository.BusinessRuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,15 +14,11 @@ public class DatabaseRuleBuilder implements RuleBuilder {
     private BusinessRuleRepository businessRuleRepository;
 
     @Autowired
-    private CompositeRuleFactory compositeRuleFactory;
+    private RuleFactory ruleFactory;
 
     @Override
     public Rule<?> apply(String key) {
-        return convert(businessRuleRepository.findOne(key).getRootRuleComponent());
-    }
-
-    private Rule<?> convert(RuleComponentEntity ruleComponentEntity) {
-        return compositeRuleFactory.apply(ruleComponentEntity).orElseThrow(IllegalArgumentException::new);
+        return ruleFactory.apply(businessRuleRepository.findOne(key).getRootRuleComponent()).orElseThrow(IllegalArgumentException::new);
     }
 
 }

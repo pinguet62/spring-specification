@@ -193,13 +193,63 @@ By default:
 TIP: Usually the component *scope* is `prototype`, to create distinct objects. +
 It's possible to use other scope like `singleton`, but object must be _stateless_ and without parameter.
 
+=== Composite rule
+
+Sub-rules are *dynamically injected*.
+
+==== Annotation & injection
+
+Use `@RuleChild` or `@RuleChildren` on _field_ or _setter_ or _constructor argument_ to define the _injection point_ of sub-rules (used into database).
+
+[source, java]
+----
+class ComposedRule<T> implements Rule<T> {
+    @RuleChildren(
+    List<Rule<T>> subRules;
+
+    // ...
+}
+----
+[source, java]
+----
+class ComposedRule<T> implements Rule<T> {
+    List<Rule<T>> subRules;
+
+    @RuleChildren
+    void setType(List<Rule<T>> subRules) {
+        this.subRules = subRules;
+    };
+
+    // ...
+}
+----
+[source, java]
+----
+class ComposedRule<T> implements Rule<T> {
+    final List<Rule<T>> subRules;
+
+    ComposedRule(@RuleChildren List<Rule<T>> subRules) {
+        this.subRules = subRules;
+    };
+
+    // ...
+}
+----
+
+==== Behavior
+
+The injection works like https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html[`@Autowired`] specification.
+So injection support:
+
+- conversion: `Collection`, `array`, _varargs_
+
 === Parameters
 
 Parameters are *dynamically injected*.
 
 ==== Annotation & injection
 
-Use `@RuleParameter()` _field_ or _setter_ or _constructor argument_ to define the _injection point_ and the `key` of parameter (used into database).
+Use `@RuleParameter()` on _field_ or _setter_ or _constructor argument_ to define the _injection point_ and the `key` of parameter (used into database).
 
 [source, java]
 ----
@@ -228,7 +278,7 @@ class SampleRule implements Rule<T> {
 class SampleRule implements Rule<T> {
     final String param;
 
-    TypeProductRule(@RuleParameter("key") String param) {
+    SampleRule(@RuleParameter("key") String param) {
         this.param = param;
     };
 
@@ -236,7 +286,7 @@ class SampleRule implements Rule<T> {
 }
 ----
 
-=== Behavior
+==== Behavior
 
 The injection works like https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Value.html[`@Value`] specification.
 So injection support:
