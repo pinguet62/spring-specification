@@ -1,16 +1,16 @@
 package fr.pinguet62.springruleengine.core.builder.database.factory;
 
+import fr.pinguet62.springruleengine.core.config.AutowireCandidateResolverAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.DependencyDescriptor;
-import org.springframework.beans.factory.support.SimpleAutowireCandidateResolver;
 
 import java.lang.annotation.Annotation;
 
 @Slf4j
-public class RuleAutowireCandidateResolver extends SimpleAutowireCandidateResolver {
+public class RuleAutowireCandidateResolver extends AutowireCandidateResolverAdapter {
 
     /**
-     * If {@link RuleChild} or {@link RuleChildren}: inject.<br>
+     * If {@link RuleChild} or {@link RuleChildren}: inject.
      */
     @Override
     public Object getSuggestedValue(DependencyDescriptor descriptor) {
@@ -21,8 +21,7 @@ public class RuleAutowireCandidateResolver extends SimpleAutowireCandidateResolv
             if (annotation.annotationType() == RuleChild.class)
                 return RuleInjector.CONTEXT.get().get(0); // TODO check unique
 
-        // default
-        return super.getSuggestedValue(descriptor);
+        return super.getSuggestedValue(descriptor); // default
     }
 
 }

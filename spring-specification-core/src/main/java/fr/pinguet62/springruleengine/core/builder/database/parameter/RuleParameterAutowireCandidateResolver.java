@@ -1,8 +1,8 @@
 package fr.pinguet62.springruleengine.core.builder.database.parameter;
 
+import fr.pinguet62.springruleengine.core.config.AutowireCandidateResolverAdapter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.DependencyDescriptor;
-import org.springframework.beans.factory.support.SimpleAutowireCandidateResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationAttributes;
@@ -11,7 +11,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import java.util.Map;
 
 @Slf4j
-public class RuleParameterAutowireCandidateResolver extends SimpleAutowireCandidateResolver {
+public class RuleParameterAutowireCandidateResolver extends AutowireCandidateResolverAdapter {
 
     /**
      * If {@link RuleParameter}: process {@link RuleParameter#value()}.
@@ -38,8 +38,7 @@ public class RuleParameterAutowireCandidateResolver extends SimpleAutowireCandid
             }
         }
 
-        // default
-        return super.getSuggestedValue(descriptor);
+        return super.getSuggestedValue(descriptor); // default
     }
 
 }
