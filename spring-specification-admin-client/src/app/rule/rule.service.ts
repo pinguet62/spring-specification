@@ -42,6 +42,12 @@ export class RuleService {
             throw new Error('More than 1 value found for key: ' + key);
         return found[0];
     }
+
+    getAssociableRules(argumentType: string): Observable<Rule[]> {
+        let url: string = RuleService.resourceUrl + '?argumentType=' + argumentType;
+        return this.http.get(url, this.options).map(res => res.json());
+    }
+
 }
 
 /** {@link Resolve} used to load {@link RuleService#CACHE} on startup. */

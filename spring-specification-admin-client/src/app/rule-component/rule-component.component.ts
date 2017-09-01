@@ -5,6 +5,7 @@ import {NodeMovedEvent, TreeNode} from '../tree/tree-node';
 import {RuleComponentService} from './rule-component.service';
 import {convert, RuleComponentDataTreeNode} from './rule-component-tree-node';
 import {RuleComponent} from './rule-component';
+import {BusinessRule} from '../business-rule/business-rule';
 import {Rule} from '../rule/rule';
 import {RuleService} from '../rule/rule.service';
 
@@ -36,8 +37,13 @@ export class EditRuleComponentDialog {
     constructor(public dialogRef: MdDialogRef<EditRuleComponentDialog>,
                 @Inject(MD_DIALOG_DATA) public data: any,
                 ruleService: RuleService) {
+        // Dialog data
+        let businessRuleArgumentType: string = data.businessRuleArgumentType;
         this.ruleComponent = <RuleComponent> (data && data.ruleComponent || {}); // update or create
-        this.availableKeys = ruleService.getAll();
+
+        ruleService.getAssociableRules(businessRuleArgumentType).subscribe(rs =>
+            this.availableKeys = rs
+        );
     }
 
 }
@@ -75,9 +81,9 @@ export class SettingsRuleComponentDialog {
 
     ruleComponent: RuleComponent;
 
-    constructor(protected dialogRef: MdDialogRef<EditRuleComponentDialog>,
+    constructor(protected dialogRef: MdDialogRef<SettingsRuleComponentDialog>,
                 @Inject(MD_DIALOG_DATA) public data: any) {
-        this.ruleComponent = <RuleComponent> data.ruleComponent;
+        this.ruleComponent = <RuleComponent> data;
     }
 
 }
@@ -129,6 +135,9 @@ export class SettingsRuleComponentDialog {
 export class RuleComponentComponent implements OnInit {
 
     @Input()
+    businessRule: BusinessRule;
+
+    @Input()
     ruleComponent: RuleComponent;
 
     treeNode: TreeNode<RuleComponentDataTreeNode>;
@@ -160,7 +169,12 @@ export class RuleComponentComponent implements OnInit {
     }
 
     openCreateDialog(parentRuleComponent: RuleComponent): void {
-        let createDialog: MdDialogRef<EditRuleComponentDialog> = this.dialog.open(EditRuleComponentDialog, this.getCommonDialogConfig());
+        let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
+        dialogConfig.data = {
+            businessRuleArgumentType: this.businessRule.argumentType,
+            ruleComponent: null
+        };
+        let createDialog: MdDialogRef<EditRuleComponentDialog> = this.dialog.open(EditRuleComponentDialog, dialogConfig);
         createDialog.afterClosed().subscribe((createdRuleComponent: RuleComponent) => {
             // Canceled
             if (createdRuleComponent == null)
@@ -175,7 +189,10 @@ export class RuleComponentComponent implements OnInit {
 
     openUpdateDialog(ruleComponent: RuleComponent): void {
         let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
-        dialogConfig.data = {rule: Object.assign({}, ruleComponent)};
+        dialogConfig.data = {
+            businessRuleArgumentType: this.businessRule.argumentType,
+            ruleComponent: Object.assign({}, ruleComponent)
+        };
         let updateDialog: MdDialogRef<EditRuleComponentDialog> = this.dialog.open(EditRuleComponentDialog, dialogConfig);
         updateDialog.afterClosed().subscribe((updatedRule: RuleComponent) => {
             // Canceled
@@ -190,7 +207,7 @@ export class RuleComponentComponent implements OnInit {
 
     openSettingsDialog(ruleComponent: RuleComponent): void {
         let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
-        dialogConfig.data = {ruleComponent: Object.assign({}, ruleComponent)};
+        dialogConfig.data = Object.assign({}, ruleComponent);
         dialogConfig.disableClose = false; // override
         //dialogConfig.width = '800px'; // custom
         let settingsDialog: MdDialogRef<SettingsRuleComponentDialog> = this.dialog.open(SettingsRuleComponentDialog, dialogConfig);

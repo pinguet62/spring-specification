@@ -14,6 +14,7 @@ create table PARAMETER_ENTITY (
 );
 create table BUSINESS_RULE_ENTITY (
     ID varchar(99) primary key,
+    ARGUMENT_TYPE varchar(99),
     ROOT_RULE_COMPONENT_ID integer references RULE_COMPONENT_ENTITY(ID),
     TITLE varchar(99)
 );

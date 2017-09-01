@@ -18,6 +18,10 @@ import {BusinessRule} from './business-rule';
                 </md-input-container>
                 <br>
                 <md-input-container>
+                    <input mdInput placeholder="Argument type" [(ngModel)]="businessRule.argumentType" name="argumentType">
+                </md-input-container>
+                <br>
+                <md-input-container>
                     <input mdInput placeholder="Title" [(ngModel)]="businessRule.title" name="title">
                 </md-input-container>
             </form>
@@ -64,6 +68,10 @@ export class DeleteBusinessRuleDialog {
                     <md-header-cell *cdkHeaderCellDef>Id</md-header-cell>
                     <md-cell *cdkCellDef="let businessRule">{{businessRule.id}}</md-cell>
                 </ng-container>
+                <ng-container cdkColumnDef="argumentType">
+                    <md-header-cell *cdkHeaderCellDef>Argument type</md-header-cell>
+                    <md-cell *cdkCellDef="let businessRule">{{businessRule.argumentType}}</md-cell>
+                </ng-container>
                 <ng-container cdkColumnDef="title">
                     <md-header-cell *cdkHeaderCellDef>Title</md-header-cell>
                     <md-cell *cdkCellDef="let businessRule">{{businessRule.title}}</md-cell>
@@ -98,11 +106,15 @@ export class DeleteBusinessRuleDialog {
         }
 
         .mat-column-id {
-            width: 30%;
+            width: 15%;
+        }
+
+        .mat-column-argumentType {
+            width: 25%;
         }
 
         .mat-column-title {
-            width: 60%;
+            width: 50%;
         }
 
         .mat-column-actions {
@@ -114,7 +126,7 @@ export class DeleteBusinessRuleDialog {
 export class BusinessRuleListComponent {
 
     // Table
-    displayedColumns = ['id', 'title', 'actions'];
+    displayedColumns = ['id', 'argumentType', 'title', 'actions'];
     dataSource: ObservableDataSource<BusinessRule> = new ObservableDataSource<BusinessRule>(new BehaviorSubject<BusinessRule[]>([]));
 
     constructor(public router: Router,

@@ -58,8 +58,9 @@ public class BusinessRuleController {
 
         BusinessRuleEntity entity = new BusinessRuleEntity();
         entity.setId(dto.getId());
-        entity.setTitle(dto.getTitle());
+        entity.setArgumentType(dto.getArgumentType());
         entity.setRootRuleComponent(rootRuleComponent);
+        entity.setTitle(dto.getTitle());
         entity = businessRuleRepository.save(entity);
 
         return ResponseEntity.created(URI.create(PATH + "/" + entity.getId())).body(convert(entity));
@@ -83,8 +84,9 @@ public class BusinessRuleController {
         return BusinessRuleDto
                 .builder()
                 .id(entity.getId())
-                .title(entity.getTitle())
+                .argumentType(entity.getArgumentType())
                 .rootRuleComponent(RuleComponentController.convert(entity.getRootRuleComponent()))
+                .title(entity.getTitle())
                 .build();
         // @formatter:on
     }

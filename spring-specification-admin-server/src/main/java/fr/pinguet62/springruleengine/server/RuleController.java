@@ -1,13 +1,16 @@
 package fr.pinguet62.springruleengine.server;
 
+import fr.pinguet62.springruleengine.core.RuleTypeFilter;
 import fr.pinguet62.springruleengine.core.api.Rule;
 import fr.pinguet62.springruleengine.server.dto.RuleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -19,8 +22,16 @@ public class RuleController {
     private RuleService ruleService;
 
     @GetMapping
-    public List<RuleDto> getAvailable() {
+    public List<RuleDto> getAll() {
         return ruleService.getAllRules().stream().map(this::convert).collect(toList());
+    }
+
+    // TODO merge with getAll()
+    @GetMapping(params = "argumentType")
+    public List<RuleDto> getAvailable(@RequestParam("argumentType") String argumentTypeName) throws ClassNotFoundException {
+        Class<Rule<?>> argumentType = (Class<Rule<?>>) Class.forName(argumentTypeName);
+        Predicate<Class<Rule<?>>> ruleTypeFilter = new RuleTypeFilter(argumentType);
+        return ruleService.getAllRules().stream().filter(ruleTypeFilter).map(this::convert).collect(toList());
     }
 
     private RuleDto convert(Class<Rule<?>> ruleType) {

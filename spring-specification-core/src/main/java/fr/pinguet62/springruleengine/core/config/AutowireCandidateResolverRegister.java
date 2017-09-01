@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * Register all custom {@link AutowireCandidateResolver}s.
  */
 @Component
-public class RuleParameterBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+public class AutowireCandidateResolverRegister implements BeanFactoryPostProcessor {
 
     /**
      * Append custom {@link AutowireCandidateResolver}s to beginning of default.

@@ -7,4 +7,4 @@
             insert into RULE_COMPONENT_ENTITY (id, key, parent_id) values (121, 'fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest$TestRules$SecondCustomRule', 12);
             insert into RULE_COMPONENT_ENTITY (id, key, parent_id) values (122, 'fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest$TestRules$ThirdCustomRule', 12);
                     insert into PARAMETER_ENTITY (id, rule_id, key, value) values (1221, 122, '122_k1', '122_v1');
-insert into BUSINESS_RULE_ENTITY (id, title, ROOT_RULE_COMPONENT_ID) values ('test', null, 1);
+insert into BUSINESS_RULE_ENTITY (id, argument_type, root_rule_component_id, title) values ('test', 'fr.pinguet62.springruleengine.sample.model.Product', 1, null);

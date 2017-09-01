@@ -13,8 +13,10 @@ public class BusinessRuleDto {
 
     private String id;
 
-    private String title;
+    private String argumentType;
 
     private RuleComponentDto rootRuleComponent;
+
+    private String title;
 
 }
