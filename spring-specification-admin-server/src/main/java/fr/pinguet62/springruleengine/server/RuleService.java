@@ -5,32 +5,43 @@ import fr.pinguet62.springruleengine.core.RuleName;
 import fr.pinguet62.springruleengine.core.api.Rule;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AssignableTypeFilter;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class RuleService {
 
+    private final List<Class<Rule<?>>> ruleTypes = new ArrayList<>(); // cached
+
+    /**
+     * List all {@link BeanDefinition} of type {@link Rule}, and register.
+     *
+     * @throws ClassNotFoundException
+     */
+    public RuleService(DefaultListableBeanFactory beanFactory) throws ClassNotFoundException {
+        for (String beanDefinitionName : beanFactory.getBeanDefinitionNames()) {
+            BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
+            String className = beanDefinition.getBeanClassName();
+            if (className == null)
+                continue;
+            Class<?> beanType = Class.forName(beanDefinition.getBeanClassName());
+            if (!Rule.class.isAssignableFrom(beanType))
+                continue;
+            ruleTypes.add((Class<Rule<?>>) beanType);
+        }
+    }
+
     public @NotNull
     List<Class<Rule<?>>> getAllRules() {
-        String packag = "fr/pinguet62/springruleengine" /* TODO */;
-
-        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
-        provider.addIncludeFilter(new AssignableTypeFilter(Rule.class));
-        Set<BeanDefinition> components = provider.findCandidateComponents(packag);
-        return components.stream().map(component -> (Class<Rule<?>>) ClassUtils.resolveClassName(component.getBeanClassName(),
-                provider.getResourceLoader().getClassLoader())).collect(toList());
+        return ruleTypes;
     }
 
     /**
