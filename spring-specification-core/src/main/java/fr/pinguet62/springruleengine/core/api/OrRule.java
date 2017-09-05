@@ -17,11 +17,17 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Scope(SCOPE_PROTOTYPE)
 public class OrRule<T> extends AbstractCompositeRule<T> {
 
+    /**
+     * @throws IllegalArgumentException Empty value.
+     */
     @Autowired
     public OrRule(@RuleChildren Rule<T>... rules) {
         super(rules);
     }
 
+    /**
+     * @throws IllegalArgumentException Empty value.
+     */
     public OrRule(Collection<Rule<T>> rules) {
         super(rules.toArray(new Rule[rules.size()]));
     }

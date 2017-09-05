@@ -2,6 +2,9 @@ package fr.pinguet62.springruleengine.core.api;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Utilities for {@link Rule} testing.
+ */
 @UtilityClass
 public class TestRules {
 

@@ -13,10 +13,13 @@ import static org.junit.Assert.assertTrue;
 public class RuleUtilsTest {
 
     /**
-     * @see RuleUtils#and(Rule[])
+     * @see RuleUtils#and(Rule, Rule[])
      */
     @Test
     public void test_and() {
+        assertTrue(RuleUtils.and(TRUE_RULE).test(null));
+        assertFalse(RuleUtils.and(FALSE_RULE).test(null));
+
         assertTrue(RuleUtils.and(TRUE_RULE, TRUE_RULE).test(null));
         assertFalse(RuleUtils.and(TRUE_RULE, FALSE_RULE).test(null));
         assertFalse(RuleUtils.and(FALSE_RULE, TRUE_RULE).test(null));
@@ -24,10 +27,13 @@ public class RuleUtilsTest {
     }
 
     /**
-     * @see RuleUtils#or(Rule[])
+     * @see RuleUtils#or(Rule, Rule[])
      */
     @Test
     public void test_or() {
+        assertTrue(RuleUtils.or(TRUE_RULE).test(null));
+        assertFalse(RuleUtils.or(FALSE_RULE).test(null));
+
         assertTrue(RuleUtils.or(TRUE_RULE, TRUE_RULE).test(null));
         assertTrue(RuleUtils.or(TRUE_RULE, FALSE_RULE).test(null));
         assertTrue(RuleUtils.or(FALSE_RULE, TRUE_RULE).test(null));

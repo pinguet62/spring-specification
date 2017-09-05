@@ -8,6 +8,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
+ * Check {@code default} {@link Rule} interface methods.
+ *
  * @see Rule
  */
 public class RuleTest {

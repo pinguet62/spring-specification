@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.HashMap;
 import java.util.Map;
 
+import static fr.pinguet62.springruleengine.core.builder.database.parameter.RuleParameterAutowireCandidateResolverTest.TestModel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
@@ -22,7 +23,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
  * @see RuleParameterAutowireCandidateResolver
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {TestApplication.class, RuleParameterAutowireCandidateResolverTest.TestModel.class})
+@SpringBootTest(classes = {TestApplication.class, TestModel.class})
 public class RuleParameterAutowireCandidateResolverTest {
 
     @Component

@@ -50,7 +50,7 @@ public class RuleFactory implements Function<RuleComponentEntity, Optional<Rule<
             } catch (NoSuchBeanDefinitionException e) {
                 throw new IllegalArgumentException(e);
             } finally {
-                //RuleInjector.CONTEXT.remove();
+                RuleInjector.CONTEXT.remove();
             }
 
             return of(rule);

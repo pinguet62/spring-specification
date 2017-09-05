@@ -3,21 +3,34 @@ package fr.pinguet62.springruleengine.core.builder.database.parameter;
 import fr.pinguet62.springruleengine.core.api.Rule;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.HashSet;
 import java.util.Set;
 
-// TODO factorize with RuleParameterBeanPostProcessor
+import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
+
 @Service
 public class ParameterService {
 
-    // TODO factorize with RuleParameterBeanPostProcessor methods
     public Set<String> getDeclaratedKeys(Class<Rule<?>> ruleType) {
         Set<String> keys = new HashSet<>();
 
+        // TODO SmartInstantiationAwareBeanPostProcessor#determineCandidateConstructors(Class<?> beanClass, String beanName)
+        for (Constructor constructor : ruleType.getDeclaredConstructors()) {
+            for (Parameter parameter : constructor.getParameters()) {
+                RuleParameter annotation = findAnnotation(parameter, RuleParameter.class);
+                if (annotation == null)
+                    continue;
+                keys.add(annotation.value());
+            }
+        }
+
+        // TODO DependencyDescriptor & InjectedElement in accordance with AutowireCandidateResolverAdapter#getSuggestedValue(DependencyDescriptor)
         for (Field field : ruleType.getDeclaredFields()) {
-            RuleParameter annotation = field.getDeclaredAnnotation(RuleParameter.class);
+            RuleParameter annotation = findAnnotation(field, RuleParameter.class);
             if (annotation == null)
                 continue;
             keys.add(annotation.value());
@@ -25,7 +38,7 @@ public class ParameterService {
 
         // process setters
         for (Method method : ruleType.getDeclaredMethods()) {
-            RuleParameter annotation = method.getDeclaredAnnotation(RuleParameter.class);
+            RuleParameter annotation = findAnnotation(method, RuleParameter.class);
             if (annotation == null)
                 continue;
             keys.add(annotation.value());

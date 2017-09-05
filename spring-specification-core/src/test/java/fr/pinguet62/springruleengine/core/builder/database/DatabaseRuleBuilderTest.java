@@ -48,6 +48,9 @@ public class DatabaseRuleBuilderTest {
         @Component("firstCustomRule")
         @Scope(SCOPE_PROTOTYPE)
         public static class FirstCustomRule implements Rule<Void> {
+            public FirstCustomRule(@RuleParameter("") String param1) {
+
+            }
             @Getter
             @RuleParameter("111_k1")
             private String param1;

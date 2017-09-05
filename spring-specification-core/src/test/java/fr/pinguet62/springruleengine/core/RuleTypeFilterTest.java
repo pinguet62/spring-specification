@@ -64,6 +64,10 @@ public class RuleTypeFilterTest {
     @Test
     public void test() {
         Predicate<Class<Rule<?>>> filter = new RuleTypeFilter(Model.class);
+
+        // bad type (compiler bypassed)
+        assertFalse(filter.test((Class<Rule<?>>) (Class<?>) String.class));
+
         // simple
         assertTrue(filter.test((Class<Rule<?>>) (Class<?>) ModelRule.class));
         assertFalse(filter.test((Class<Rule<?>>) (Class<?>) OtherRule.class));
