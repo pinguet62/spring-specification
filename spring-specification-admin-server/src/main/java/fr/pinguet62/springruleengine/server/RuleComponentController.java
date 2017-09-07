@@ -28,7 +28,7 @@ public class RuleComponentController {
     private RuleComponentRepository ruleComponentRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RuleComponentDto> getById(@PathVariable("id") Integer id) {
+    public ResponseEntity<RuleComponentDto> getById(@PathVariable Integer id) {
         RuleComponentEntity entity = ruleComponentRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.status(NOT_FOUND).build();
@@ -52,7 +52,7 @@ public class RuleComponentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<RuleComponentDto> update(@PathVariable("id") Integer id, @RequestBody RuleComponentInputDto dto) {
+    public ResponseEntity<RuleComponentDto> update(@PathVariable Integer id, @RequestBody RuleComponentInputDto dto) {
         RuleComponentEntity entity = ruleComponentRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.status(NOT_FOUND).build();
@@ -88,7 +88,7 @@ public class RuleComponentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RuleComponentDto> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<RuleComponentDto> delete(@PathVariable Integer id) {
         RuleComponentEntity entity = ruleComponentRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.status(NOT_FOUND).build();

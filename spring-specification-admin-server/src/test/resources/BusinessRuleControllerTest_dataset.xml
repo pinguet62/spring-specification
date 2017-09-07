@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+        <RULE_COMPONENT_ENTITY id="1" key="any"/>
+                <PARAMETER_ENTITY id="11" rule_id="1" key="key11" value="value11"/>
+            <RULE_COMPONENT_ENTITY id="11" key="any" parent_id="1"/>
+                    <PARAMETER_ENTITY id="111" rule_id="11" key="key111" value="value111"/>
+    <BUSINESS_RULE_ENTITY id="test" argument_type="fr.pinguet62.springruleengine.sample.model.Product" root_rule_component_id="1"/>
+
+        <RULE_COMPONENT_ENTITY id="2" key="any"/>
+                <PARAMETER_ENTITY id="21" rule_id="2" key="key21" value="value21"/>
+    <BUSINESS_RULE_ENTITY id="other" argument_type="java.lang.String" root_rule_component_id="2"/>
+</dataset>

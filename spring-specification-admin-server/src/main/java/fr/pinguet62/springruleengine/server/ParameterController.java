@@ -76,10 +76,10 @@ public class ParameterController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<ParameterDto> update(@PathVariable("id") Integer id, @RequestBody ParameterInputDto dto) {
+    public ResponseEntity<ParameterDto> update(@PathVariable Integer id, @RequestBody ParameterInputDto dto) {
         ParameterEntity entity = parameterRepository.findOne(id);
         if (entity == null)
-            return ResponseEntity.status(NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
 
         if (dto.getKey() != null)
             entity.setKey(dto.getKey());

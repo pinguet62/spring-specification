@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static fr.pinguet62.springruleengine.server.RuleController.PATH;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-@RequestMapping("/rule")
+@RequestMapping(PATH)
 public class RuleController {
+
+    public static final String PATH = "/rule";
 
     @Autowired
     private RuleService ruleService;

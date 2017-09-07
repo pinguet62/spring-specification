@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import static javax.persistence.CascadeType.REMOVE;
+
 /**
  * Define a business {@link Rule}, used into application.
  */
@@ -31,7 +33,7 @@ public class BusinessRuleEntity {
     /**
      * Root element of {@link Rule} tree.
      */
-    @OneToOne
+    @OneToOne(cascade = REMOVE)
     private RuleComponentEntity rootRuleComponent;
 
     /**

@@ -11,12 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
 
 import static fr.pinguet62.springruleengine.server.BusinessRuleController.PATH;
+import static java.nio.charset.Charset.defaultCharset;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.web.util.UriUtils.encode;
 
 @RestController
 @RequestMapping(PATH)
@@ -38,8 +41,8 @@ public class BusinessRuleController {
         return businessRuleRepository.findAll().stream().map(this::convert).collect(toList());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BusinessRuleDto> getById(@PathVariable("id") String id) {
+    @GetMapping("/{id:.+}")
+    public ResponseEntity<BusinessRuleDto> getById(@PathVariable String id) {
         BusinessRuleEntity entity = businessRuleRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.status(NOT_FOUND).build();
@@ -48,7 +51,7 @@ public class BusinessRuleController {
     }
 
     @PutMapping
-    public ResponseEntity<BusinessRuleDto> create(@RequestBody BusinessRuleDto dto) {
+    public ResponseEntity<BusinessRuleDto> create(@RequestBody BusinessRuleDto dto) throws UnsupportedEncodingException {
         RuleComponentEntity rootRuleComponent = new RuleComponentEntity();
         rootRuleComponent.setParent(null /*root*/);
         rootRuleComponent.setIndex(0);
@@ -63,10 +66,12 @@ public class BusinessRuleController {
         entity.setTitle(dto.getTitle());
         entity = businessRuleRepository.save(entity);
 
-        return ResponseEntity.created(URI.create(PATH + "/" + entity.getId())).body(convert(entity));
+        return ResponseEntity
+                .created(URI.create(encode(PATH + "/" + entity.getId(), defaultCharset().name())))
+                .body(convert(entity));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:.+}")
     public ResponseEntity<BusinessRuleDto> delete(@PathVariable String id) {
         BusinessRuleEntity entity = businessRuleRepository.findOne(id);
         if (entity == null)
