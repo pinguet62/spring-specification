@@ -21,7 +21,9 @@ import {CdkTableModule} from '@angular/cdk';
 
 import {appRoutes} from './app.route';
 import {AppComponent} from './app.component';
+import {ContentPageComponent, EmptyPageComponent} from './generic-pages.component';
 import {TreeModule} from './tree/tree.module';
+import {RuleListComponent} from './rule/rule-list.component';
 import {RuleService, RuleServiceResolver} from './rule/rule.service';
 import {BusinessRuleService} from './business-rule/business-rule.service';
 import {RuleComponentService} from './rule-component/rule-component.service';
@@ -40,8 +42,8 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './
     ],
     providers: [RuleService, RuleServiceResolver, BusinessRuleService, RuleComponentService, ParameterService],
     declarations: [
-        AppComponent,
-        BusinessRuleListComponent, CreateBusinessRuleDialog, DeleteBusinessRuleDialog, BusinessRuleDetailComponent, RuleComponentComponent, EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,
+        AppComponent, ContentPageComponent, EmptyPageComponent,
+        RuleListComponent, BusinessRuleListComponent, CreateBusinessRuleDialog, DeleteBusinessRuleDialog, BusinessRuleDetailComponent, RuleComponentComponent, EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,
         ParameterComponent, EditParameterDialog, DeleteParameterDialog
     ],
     entryComponents: [

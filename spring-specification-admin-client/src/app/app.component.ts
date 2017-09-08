@@ -20,9 +20,13 @@ import {Component} from '@angular/core';
         <md-sidenav-container fullscreen>
             <md-sidenav #sidenav mode="side" opened="true">
                 <md-nav-list>
-                    <md-list-item [routerLink]="['/']">
-                        <md-icon md-list-icon>settings</md-icon>
+                    <md-list-item [routerLink]="['/rule']">
+                        <md-icon md-list-icon>book</md-icon>
                         <span md-line>Rules</span>
+                    </md-list-item>
+                    <md-list-item [routerLink]="['/businessRule']">
+                        <md-icon md-list-icon>settings</md-icon>
+                        <span md-line>Business rules</span>
                     </md-list-item>
                 </md-nav-list>
             </md-sidenav>

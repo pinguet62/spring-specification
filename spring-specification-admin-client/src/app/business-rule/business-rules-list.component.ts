@@ -87,7 +87,7 @@ export class DeleteBusinessRuleDialog {
                 </ng-container>
 
                 <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-                <md-row *cdkRowDef="let businessRule; columns: displayedColumns;" (click)="router.navigate([businessRule.id])"></md-row>
+                <md-row *cdkRowDef="let businessRule; columns: displayedColumns;" (click)="router.navigate(['businessRule', businessRule.id])"></md-row>
             </md-table>
 
             <button md-mini-fab (click)="openCreateDialog()" style="position: absolute; bottom: 0; margin-bottom: 5px; right: 0; margin-right: 5px;">
