@@ -22,11 +22,11 @@ import {Component} from '@angular/core';
                 <md-nav-list>
                     <md-list-item [routerLink]="['/rule']">
                         <md-icon md-list-icon>book</md-icon>
-                        <span md-line>Rules</span>
+                        <span mdLine>Rules</span>
                     </md-list-item>
                     <md-list-item [routerLink]="['/businessRule']">
                         <md-icon md-list-icon>settings</md-icon>
-                        <span md-line>Business rules</span>
+                        <span mdLine>Business rules</span>
                     </md-list-item>
                 </md-nav-list>
             </md-sidenav>

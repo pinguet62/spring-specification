@@ -19,9 +19,9 @@ import {RuleService} from '../rule/rule.service';
                     <md-option *ngFor="let rule of availableKeys" [value]="rule.key">{{rule.name}}</md-option>
                 </md-select>
                 <br>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput placeholder="Description" [(ngModel)]="ruleComponent.description" name="description">
-                </md-input-container>
+                </md-form-field>
             </form>
         </md-dialog-content>
         <md-dialog-actions>

@@ -13,17 +13,17 @@ import {BusinessRule} from './business-rule';
         <h2 md-dialog-title>Rule</h2>
         <md-dialog-content>
             <form #form="ngForm">
-                <md-input-container>
+                <md-form-field>
                     <input mdInput placeholder="Id" [(ngModel)]="businessRule.id" name="id" required>
-                </md-input-container>
+                </md-form-field>
                 <br>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput placeholder="Argument type" [(ngModel)]="businessRule.argumentType" name="argumentType">
-                </md-input-container>
+                </md-form-field>
                 <br>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput placeholder="Title" [(ngModel)]="businessRule.title" name="title">
-                </md-input-container>
+                </md-form-field>
             </form>
         </md-dialog-content>
         <md-dialog-actions>

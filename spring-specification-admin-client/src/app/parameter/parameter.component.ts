@@ -14,16 +14,16 @@ import {RuleComponent} from '../rule-component/rule-component';
         <h2 md-dialog-title>Parameter</h2>
         <md-dialog-content>
             <form #form="ngForm">
-                <md-input-container>
+                <md-form-field>
                     <input mdInput placeholder="Key" [(ngModel)]="parameter.key" name="key" required [mdAutocomplete]="keys">
-                </md-input-container>
+                </md-form-field>
                 <md-autocomplete #keys="mdAutocomplete">
                     <md-option *ngFor="let key of requiredKeys" [value]="key">{{key}}</md-option>
                 </md-autocomplete>
                 <br>
-                <md-input-container>
+                <md-form-field>
                     <input mdInput placeholder="Value" [(ngModel)]="parameter.value" name="value" required>
-                </md-input-container>
+                </md-form-field>
             </form>
         </md-dialog-content>
         <md-dialog-actions>

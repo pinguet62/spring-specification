@@ -17,7 +17,7 @@ import {
     MdTableModule,
     MdToolbarModule
 } from '@angular/material';
-import {CdkTableModule} from '@angular/cdk';
+import {CdkTableModule} from '@angular/cdk/table';
 
 import {appRoutes} from './app.route';
 import {AppComponent} from './app.component';
