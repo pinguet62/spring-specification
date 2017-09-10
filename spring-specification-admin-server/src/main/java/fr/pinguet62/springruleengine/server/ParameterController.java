@@ -9,7 +9,6 @@ import fr.pinguet62.springruleengine.core.builder.database.repository.RuleCompon
 import fr.pinguet62.springruleengine.server.dto.ParameterDto;
 import fr.pinguet62.springruleengine.server.dto.ParameterInputDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,6 @@ import java.util.Set;
 
 import static fr.pinguet62.springruleengine.server.ParameterController.PATH;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Transactional
 @RestController

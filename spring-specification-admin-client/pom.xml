@@ -28,6 +28,7 @@
                 </configuration>
             </plugin>
 
+            <!-- NodeJS & NPM -->
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
@@ -69,6 +70,30 @@
                             <!-- &#x002d;&#x002d;environment=embedded -->
                             <!-- &#x002d;&#x002d;base-href=/spring-specification-admin-client/ -->
                             <arguments>run ng -- build --environment=embedded --base-href=/spring-specification-admin-client/</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Configuration files placed into root project -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>..</directory>
+                                    <includes>
+                                        <include>tslint.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                            <outputDirectory>.</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
