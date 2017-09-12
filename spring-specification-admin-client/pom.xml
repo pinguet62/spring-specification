@@ -72,6 +72,18 @@
                             <arguments>run ng -- build --environment=embedded --base-href=/spring-specification-admin-client/</arguments>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <!-- &#x002d;&#x002d;browser : Travis CI config -->
+                            <!-- &#x002d;&#x002d;single-run : disable watch -->
+                            <arguments>run ng -- test --code-coverage=true --single-run</arguments>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
