@@ -9,10 +9,14 @@ before_install:
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
 
+script: # override default "mvn test -B"
+    - mvn clean install -B
+
 after_success:
-    # Code coverage: report (CodeCov)
-    - bash <(curl -s https://codecov.io/bash)
-    
-    # Deploy SNAPSHOT & doc
-    - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" &&
+    # Code coverage: report
+    - bash <(curl -s https://codecov.io/bash) # CodeCov
+
+    # Deploy: SNAPSHOT + AsciiDoc (to GitHub pages) + preview (to Heroku)
+    - test $TRAVIS_BRANCH = "master" &&
+      test $TRAVIS_PULL_REQUEST = "false" &&
       mvn deploy -DskipTests --settings deploy-settings.xml
