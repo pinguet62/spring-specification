@@ -10,10 +10,7 @@ before_install:
     - sh -e /etc/init.d/xvfb start
 
 after_success:
-    # Code coverage
-    # * https://coveralls.io/github/pinguet62/spring-specification
-    - mvn jacoco:report coveralls:report
-    # * https://codecov.io/gh/pinguet62/spring-specification
+    # Code coverage: report (CodeCov)
     - bash <(curl -s https://codecov.io/bash)
     
     # Deploy SNAPSHOT & doc

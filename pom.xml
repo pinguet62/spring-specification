@@ -76,9 +76,8 @@
 
     <build>
         <plugins>
-            <!-- Code coverage -->
             <plugin>
-                <!-- Agent -->
+                <!-- Code coverage: agent (JaCoCo) -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.7.9</version>
@@ -96,12 +95,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <!-- Report: Coveralls.io -->
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>4.3.0</version>
             </plugin>
         </plugins>
     </build>
