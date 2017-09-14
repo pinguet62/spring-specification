@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static fr.pinguet62.springruleengine.core.builder.database.parameter.RuleParameterAutowireCandidateResolverTest.TestModel;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -70,10 +70,10 @@ public class RuleParameterAutowireCandidateResolverTest {
         TestModel rule = beanFactory.getBean(TestModel.class);
 
         // check
-        assertEquals("v_attribute", rule.getAttribute());
-        assertEquals("v_setter", rule.getSetter());
-        assertEquals("v_constructor", rule.getConstructor());
-        assertTrue(0 <= rule.getSpel() && rule.getSpel() <= 100);
+        assertThat(rule.getAttribute(), is(equalTo("v_attribute")));
+        assertThat(rule.getSetter(), is(equalTo("v_setter")));
+        assertThat(rule.getConstructor(), is(equalTo("v_constructor")));
+        assertThat(rule.getSpel(), allOf(greaterThanOrEqualTo(0), lessThanOrEqualTo(100)));
     }
 
 }

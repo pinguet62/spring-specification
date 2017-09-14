@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest.TestRules;
 import static fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest.TestRules.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -49,8 +49,8 @@ public class DatabaseRuleBuilderTest {
         @Scope(SCOPE_PROTOTYPE)
         public static class FirstCustomRule implements Rule<Void> {
             public FirstCustomRule(@RuleParameter("") String param1) {
-
             }
+
             @Getter
             @RuleParameter("111_k1")
             private String param1;
@@ -94,34 +94,34 @@ public class DatabaseRuleBuilderTest {
     @Test
     public void test() {
         Rule rule = ruleBuilder.apply("test");
-        assertNotNull(rule);
+        assertThat(rule, is(not(nullValue())));
 
-        assertEquals(AndRule.class, rule.getClass());
+        assertThat(rule, is(instanceOf(AndRule.class)));
         AndRule andRule = (AndRule) rule;
         Rule[] subAndRules = andRule.getRules();
         {
-            assertEquals(NotRule.class, subAndRules[0].getClass());
+            assertThat(subAndRules[0], is(instanceOf(NotRule.class)));
             NotRule notRule = (NotRule) subAndRules[0];
             Rule subNotRules = notRule.getRule();
             {
-                assertEquals(FirstCustomRule.class, subNotRules.getClass());
+                assertThat(subNotRules, is(instanceOf(FirstCustomRule.class)));
                 FirstCustomRule firstCustomRule = (FirstCustomRule) subNotRules;
-                assertEquals("111_v1", firstCustomRule.param1);
-                assertEquals("111_v2", firstCustomRule.param2);
+                assertThat(firstCustomRule.param1, is("111_v1"));
+                assertThat(firstCustomRule.param2, is("111_v2"));
             }
         }
         {
-            assertEquals(OrRule.class, subAndRules[1].getClass());
+            assertThat(subAndRules[1], is(instanceOf(OrRule.class)));
             OrRule notRule = (OrRule) subAndRules[1];
             Rule[] subOrRules = notRule.getRules();
             {
-                assertEquals(SecondCustomRule.class, subOrRules[0].getClass());
+                assertThat(subOrRules[0], is(instanceOf(SecondCustomRule.class)));
                 SecondCustomRule secondCustomRule = (SecondCustomRule) subOrRules[0];
             }
             {
-                assertEquals(ThirdCustomRule.class, subOrRules[1].getClass());
+                assertThat(subOrRules[1], is(instanceOf(ThirdCustomRule.class)));
                 ThirdCustomRule thirdCustomRule = (ThirdCustomRule) subOrRules[1];
-                assertEquals("122_v1", thirdCustomRule.param);
+                assertThat(thirdCustomRule.param, is("122_v1"));
             }
         }
     }

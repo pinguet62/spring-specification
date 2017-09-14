@@ -9,8 +9,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @see ParameterService
@@ -51,10 +51,10 @@ public class ParameterServiceTest {
     public void test() {
         Set<String> keys = parameterService.getDeclaratedKeys((Class<Rule<?>>) (Class<?>) ParameterizedModel.class);
 
-        assertEquals(3, keys.size());
-        assertTrue(keys.contains("attribute"));
-        assertTrue(keys.contains("constructor"));
-        assertTrue(keys.contains("setter"));
+        assertThat(keys, hasSize(equalTo(3)));
+        assertThat(keys, hasItem("attribute"));
+        assertThat(keys, hasItem("constructor"));
+        assertThat(keys, hasItem("setter"));
     }
 
 }

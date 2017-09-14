@@ -8,8 +8,8 @@ import java.util.function.Predicate;
 import static fr.pinguet62.springruleengine.core.RuleTypeFilterTest.InputTypes.AbstractModel;
 import static fr.pinguet62.springruleengine.core.RuleTypeFilterTest.InputTypes.Model;
 import static fr.pinguet62.springruleengine.core.RuleTypeFilterTest.RuleTypes.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class RuleTypeFilterTest {
 
@@ -66,17 +66,17 @@ public class RuleTypeFilterTest {
         Predicate<Class<Rule<?>>> filter = new RuleTypeFilter(Model.class);
 
         // bad type (compiler bypassed)
-        assertFalse(filter.test((Class<Rule<?>>) (Class<?>) String.class));
+        assertThat(filter.test((Class<Rule<?>>) (Class<?>) String.class), is(false));
 
         // simple
-        assertTrue(filter.test((Class<Rule<?>>) (Class<?>) ModelRule.class));
-        assertFalse(filter.test((Class<Rule<?>>) (Class<?>) OtherRule.class));
+        assertThat(filter.test((Class<Rule<?>>) (Class<?>) ModelRule.class), is(true));
+        assertThat(filter.test((Class<Rule<?>>) (Class<?>) OtherRule.class), is(false));
         // abstract
-        assertTrue(filter.test((Class<Rule<?>>) (Class<?>) AbstractModelRule.class));
+        assertThat(filter.test((Class<Rule<?>>) (Class<?>) AbstractModelRule.class), is(true));
         // generic
-        assertTrue(filter.test((Class<Rule<?>>) (Class<?>) GenericRule.class));
-        assertTrue(filter.test((Class<Rule<?>>) (Class<?>) AbstractModelGenericRule.class));
-        assertFalse(filter.test((Class<Rule<?>>) (Class<?>) OtherGenericRule.class));
+        assertThat(filter.test((Class<Rule<?>>) (Class<?>) GenericRule.class), is(true));
+        assertThat(filter.test((Class<Rule<?>>) (Class<?>) AbstractModelGenericRule.class), is(true));
+        assertThat(filter.test((Class<Rule<?>>) (Class<?>) OtherGenericRule.class), is(false));
     }
 
 }

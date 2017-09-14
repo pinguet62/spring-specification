@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import static fr.pinguet62.springruleengine.core.api.TestRules.FALSE_RULE;
 import static fr.pinguet62.springruleengine.core.api.TestRules.TRUE_RULE;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * @see NotRule
@@ -17,8 +17,8 @@ public class NotRuleTest {
      */
     @Test
     public void test_test() {
-        assertFalse(new NotRule(TRUE_RULE).test(null));
-        assertTrue(new NotRule(FALSE_RULE).test(null));
+        assertThat(new NotRule(TRUE_RULE).test(null), is(false));
+        assertThat(new NotRule(FALSE_RULE).test(null), is(true));
     }
 
 }

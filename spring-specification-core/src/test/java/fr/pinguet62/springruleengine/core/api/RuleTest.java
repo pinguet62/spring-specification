@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import static fr.pinguet62.springruleengine.core.api.TestRules.FALSE_RULE;
 import static fr.pinguet62.springruleengine.core.api.TestRules.TRUE_RULE;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Check {@code default} {@link Rule} interface methods.
@@ -19,10 +19,10 @@ public class RuleTest {
      */
     @Test
     public void test_and() {
-        assertTrue(TRUE_RULE.and(TRUE_RULE).test(null));
-        assertFalse(TRUE_RULE.and(FALSE_RULE).test(null));
-        assertFalse(FALSE_RULE.and(TRUE_RULE).test(null));
-        assertFalse(FALSE_RULE.and(FALSE_RULE).test(null));
+        assertThat(TRUE_RULE.and(TRUE_RULE).test(null), is(true));
+        assertThat(TRUE_RULE.and(FALSE_RULE).test(null), is(false));
+        assertThat(FALSE_RULE.and(TRUE_RULE).test(null), is(false));
+        assertThat(FALSE_RULE.and(FALSE_RULE).test(null), is(false));
     }
 
     /**
@@ -30,10 +30,10 @@ public class RuleTest {
      */
     @Test
     public void test_or() {
-        assertTrue(TRUE_RULE.or(TRUE_RULE).test(null));
-        assertTrue(TRUE_RULE.or(FALSE_RULE).test(null));
-        assertTrue(FALSE_RULE.or(TRUE_RULE).test(null));
-        assertFalse(FALSE_RULE.or(FALSE_RULE).test(null));
+        assertThat(TRUE_RULE.or(TRUE_RULE).test(null), is(true));
+        assertThat(TRUE_RULE.or(FALSE_RULE).test(null), is(true));
+        assertThat(FALSE_RULE.or(TRUE_RULE).test(null), is(true));
+        assertThat(FALSE_RULE.or(FALSE_RULE).test(null), is(false));
     }
 
     /**
@@ -41,8 +41,8 @@ public class RuleTest {
      */
     @Test
     public void test_not() {
-        assertFalse(TRUE_RULE.not().test(null));
-        assertTrue(FALSE_RULE.not().test(null));
+        assertThat(TRUE_RULE.not().test(null), is(false));
+        assertThat(FALSE_RULE.not().test(null), is(true));
     }
 
 }

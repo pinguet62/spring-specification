@@ -8,7 +8,9 @@ import java.util.Collection;
 import static fr.pinguet62.springruleengine.core.api.TestRules.FALSE_RULE;
 import static fr.pinguet62.springruleengine.core.api.TestRules.TRUE_RULE;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * @see OrRule
@@ -20,13 +22,13 @@ public class OrRuleTest {
      */
     @Test
     public void test_test() {
-        assertTrue(new OrRule(TRUE_RULE).test(null));
-        assertFalse(new OrRule(FALSE_RULE).test(null));
+        assertThat(new OrRule(TRUE_RULE).test(null), is(true));
+        assertThat(new OrRule(FALSE_RULE).test(null), is(false));
 
-        assertTrue(new OrRule(TRUE_RULE, TRUE_RULE).test(null));
-        assertTrue(new OrRule(TRUE_RULE, FALSE_RULE).test(null));
-        assertTrue(new OrRule(FALSE_RULE, TRUE_RULE).test(null));
-        assertFalse(new OrRule(FALSE_RULE, FALSE_RULE).test(null));
+        assertThat(new OrRule(TRUE_RULE, TRUE_RULE).test(null), is(true));
+        assertThat(new OrRule(TRUE_RULE, FALSE_RULE).test(null), is(true));
+        assertThat(new OrRule(FALSE_RULE, TRUE_RULE).test(null), is(true));
+        assertThat(new OrRule(FALSE_RULE, FALSE_RULE).test(null), is(false));
     }
 
     /**

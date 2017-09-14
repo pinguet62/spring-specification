@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static fr.pinguet62.springruleengine.core.api.SpelRuleTest.BeanSample;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
@@ -41,12 +41,12 @@ public class SpelRuleTest {
         SpelRule rule = new SpelRule();
         rule.setSpel("0 <= #value && #value <= 18");
 
-        assertFalse(rule.test(-1));
-        assertTrue(rule.test(1));
-        assertTrue(rule.test(8));
-        assertTrue(rule.test(18));
-        assertFalse(rule.test(19));
-        assertFalse(rule.test(42));
+        assertThat(rule.test(-1), is(false));
+        assertThat(rule.test(1), is(true));
+        assertThat(rule.test(8), is(true));
+        assertThat(rule.test(18), is(true));
+        assertThat(rule.test(19), is(false));
+        assertThat(rule.test(42), is(false));
     }
 
     /**
@@ -58,8 +58,8 @@ public class SpelRuleTest {
 
         rule.setSpel("#value == @foo.attr");
 
-        assertTrue(rule.test("ok"));
-        assertFalse(rule.test("error"));
+        assertThat(rule.test("ok"), is(true));
+        assertThat(rule.test("error"), is(false));
     }
 
 }

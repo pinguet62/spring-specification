@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import static fr.pinguet62.springruleengine.core.api.TestRules.FALSE_RULE;
 import static fr.pinguet62.springruleengine.core.api.TestRules.TRUE_RULE;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * @see RuleUtils
@@ -17,13 +17,13 @@ public class RuleUtilsTest {
      */
     @Test
     public void test_and() {
-        assertTrue(RuleUtils.and(TRUE_RULE).test(null));
-        assertFalse(RuleUtils.and(FALSE_RULE).test(null));
+        assertThat(RuleUtils.and(TRUE_RULE).test(null), is(true));
+        assertThat(RuleUtils.and(FALSE_RULE).test(null), is(false));
 
-        assertTrue(RuleUtils.and(TRUE_RULE, TRUE_RULE).test(null));
-        assertFalse(RuleUtils.and(TRUE_RULE, FALSE_RULE).test(null));
-        assertFalse(RuleUtils.and(FALSE_RULE, TRUE_RULE).test(null));
-        assertFalse(RuleUtils.and(FALSE_RULE, FALSE_RULE).test(null));
+        assertThat(RuleUtils.and(TRUE_RULE, TRUE_RULE).test(null), is(true));
+        assertThat(RuleUtils.and(TRUE_RULE, FALSE_RULE).test(null), is(false));
+        assertThat(RuleUtils.and(FALSE_RULE, TRUE_RULE).test(null), is(false));
+        assertThat(RuleUtils.and(FALSE_RULE, FALSE_RULE).test(null), is(false));
     }
 
     /**
@@ -31,13 +31,13 @@ public class RuleUtilsTest {
      */
     @Test
     public void test_or() {
-        assertTrue(RuleUtils.or(TRUE_RULE).test(null));
-        assertFalse(RuleUtils.or(FALSE_RULE).test(null));
+        assertThat(RuleUtils.or(TRUE_RULE).test(null), is(true));
+        assertThat(RuleUtils.or(FALSE_RULE).test(null), is(false));
 
-        assertTrue(RuleUtils.or(TRUE_RULE, TRUE_RULE).test(null));
-        assertTrue(RuleUtils.or(TRUE_RULE, FALSE_RULE).test(null));
-        assertTrue(RuleUtils.or(FALSE_RULE, TRUE_RULE).test(null));
-        assertFalse(RuleUtils.or(FALSE_RULE, FALSE_RULE).test(null));
+        assertThat(RuleUtils.or(TRUE_RULE, TRUE_RULE).test(null), is(true));
+        assertThat(RuleUtils.or(TRUE_RULE, FALSE_RULE).test(null), is(true));
+        assertThat(RuleUtils.or(FALSE_RULE, TRUE_RULE).test(null), is(true));
+        assertThat(RuleUtils.or(FALSE_RULE, FALSE_RULE).test(null), is(false));
     }
 
     /**
@@ -45,8 +45,8 @@ public class RuleUtilsTest {
      */
     @Test
     public void test_not() {
-        assertFalse(RuleUtils.not(TRUE_RULE).test(null));
-        assertTrue(RuleUtils.not(FALSE_RULE).test(null));
+        assertThat(RuleUtils.not(TRUE_RULE).test(null), is(false));
+        assertThat(RuleUtils.not(FALSE_RULE).test(null), is(true));
     }
 
 }

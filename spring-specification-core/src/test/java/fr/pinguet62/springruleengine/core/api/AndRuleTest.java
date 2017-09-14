@@ -8,7 +8,9 @@ import java.util.Collection;
 import static fr.pinguet62.springruleengine.core.api.TestRules.FALSE_RULE;
 import static fr.pinguet62.springruleengine.core.api.TestRules.TRUE_RULE;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * @see AndRule
@@ -20,13 +22,13 @@ public class AndRuleTest {
      */
     @Test
     public void test_test() {
-        assertTrue(new AndRule(TRUE_RULE).test(null));
-        assertFalse(new AndRule(FALSE_RULE).test(null));
+        assertThat(new AndRule(TRUE_RULE).test(null), is(true));
+        assertThat(new AndRule(FALSE_RULE).test(null), is(false));
 
-        assertTrue(new AndRule(TRUE_RULE, TRUE_RULE).test(null));
-        assertFalse(new AndRule(TRUE_RULE, FALSE_RULE).test(null));
-        assertFalse(new AndRule(FALSE_RULE, TRUE_RULE).test(null));
-        assertFalse(new AndRule(FALSE_RULE, FALSE_RULE).test(null));
+        assertThat(new AndRule(TRUE_RULE, TRUE_RULE).test(null), is(true));
+        assertThat(new AndRule(TRUE_RULE, FALSE_RULE).test(null), is(false));
+        assertThat(new AndRule(FALSE_RULE, TRUE_RULE).test(null), is(false));
+        assertThat(new AndRule(FALSE_RULE, FALSE_RULE).test(null), is(false));
     }
 
     /**

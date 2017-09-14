@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static fr.pinguet62.springruleengine.server.RuleServiceTest.SampleRule;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @RunWith(SpringRunner.class)
@@ -33,8 +33,8 @@ public class RuleServiceTest {
 
     @Test
     public void test() {
-        assertTrue(ruleService.getAllRules().contains(SampleRule.class));
-        assertFalse(ruleService.getAllRules().contains(BeanFactory.class));
+        assertThat(ruleService.getAllRules().contains(SampleRule.class), is(true));
+        assertThat(ruleService.getAllRules().contains(BeanFactory.class), is(false));
     }
 
 }
