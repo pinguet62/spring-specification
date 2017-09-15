@@ -2,29 +2,25 @@ package fr.pinguet62.springruleengine.core.api;
 
 import fr.pinguet62.springruleengine.core.RuleDescription;
 import fr.pinguet62.springruleengine.core.RuleName;
+import fr.pinguet62.springruleengine.core.SpringRule;
 import fr.pinguet62.springruleengine.core.builder.database.parameter.RuleParameter;
 import lombok.Setter;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.stereotype.Component;
-
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * Special {@link Rule} based on <b>Spring Expression Language</b>.
  *
  * @see ExpressionParser
  */
+@SpringRule
 @RuleName(value = "Spring Expression Language")
 @RuleDescription("SpEL variables \"#value\" is the input test() parameter")
-@Component
-@Scope(SCOPE_PROTOTYPE)
 public class SpelRule implements Rule<Object> {
 
     @Autowired

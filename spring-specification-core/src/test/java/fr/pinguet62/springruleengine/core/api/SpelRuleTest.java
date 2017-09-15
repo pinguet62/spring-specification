@@ -7,14 +7,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static fr.pinguet62.springruleengine.core.api.SpelRuleTest.BeanSample;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * @see SpelRule
@@ -24,7 +22,6 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 public class SpelRuleTest {
 
     @Component("foo")
-    @Scope(SCOPE_PROTOTYPE)
     public static class BeanSample {
         @Getter
         public String attr = "ok";

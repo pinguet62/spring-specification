@@ -1,5 +1,6 @@
 package fr.pinguet62.springruleengine.core.builder.database.parameter;
 
+import fr.pinguet62.springruleengine.core.SpringRule;
 import fr.pinguet62.springruleengine.core.TestApplication;
 import lombok.Getter;
 import org.junit.Test;
@@ -7,8 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import java.util.Map;
 import static fr.pinguet62.springruleengine.core.builder.database.parameter.RuleParameterAutowireCandidateResolverTest.TestModel;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 /**
  * @see RuleParameterAutowireCandidateResolver
@@ -26,8 +24,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @SpringBootTest(classes = {TestApplication.class, TestModel.class})
 public class RuleParameterAutowireCandidateResolverTest {
 
-    @Component
-    @Scope(SCOPE_PROTOTYPE)
+    @SpringRule
     public static class TestModel {
         @Getter
         @RuleParameter("k_attribute")

@@ -181,17 +181,29 @@ Rule foodProductRule = new TypeProductRule("food");
 
 == Builder
 
-=== Key & Factory
+=== Rule component
 
-All `Rule` are identified by unique **key**.
+==== Registering
 
-By default:
+To register a `Rule` like *Spring component*, the class must be annotated by `@SpringRule`.
 
-* the key is the `Class::getName()`;
-* the factory use `BeanFactory::getBean()` to create an instance of rule.
+[source, java]
+----
+@SpringRule
+class CustomRule implements Rule<Product> {
+    // ...
+}
+----
 
-TIP: Usually the component *scope* is `prototype`, to create distinct objects. +
-It's possible to use other scope like `singleton`, but object must be _stateless_ and without parameter.
+==== Key & Factory
+
+All `Rule` are identified by unique **key** into database.
+
+Default: the key is the `Class::getName()`.
+
+==== Factory
+
+The factory use `BeanFactory::getBean()` to create an instance of rule.
 
 === Composite rule
 
