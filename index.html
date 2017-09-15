@@ -542,25 +542,9 @@ But the final source code is <strong>static</strong>: you have to update/compile
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_architecture"><a class="anchor" href="#_architecture"></a><a class="link" href="#_architecture">2.1. Architecture</a></h3>
-<div class="listingblock">
+<div class="imageblock">
 <div class="content">
-<pre>              +=------------------------+
-              |         +-----------+   |
-              |         |{s}        |   |
-              |         |@Repository|   |
-              |         +-----------+   |
-              |                         |
-              |               ^         |
-              |               |         |
-              |               |         |
-+------+    +-------+    +-----------+  |  +--------+    +-----+
-|      |    |       |    |           |  |  | Admin  |    |Admin|
-|Client|---&gt;|Builder|---&gt;|@Repository|&lt;----|REST API|&lt;---| UI  |
-|      |    |       |    |           |  |  |        |    |     |
-+------+    +-------+    +-----------+  |  +--------+    +-----+
-              |                         |
-              |                         |
-              +=------------------------+</pre>
+<img src="images/diag-da08fe6ccd5c81b0ecb1e53c63de94d7.png" alt="diag da08fe6ccd5c81b0ecb1e53c63de94d7" width="680" height="294">
 </div>
 </div>
 </div>
@@ -948,7 +932,7 @@ assertTrue(0 &lt;= rule.param &amp;&amp; rule.param &lt;= 100);</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 1.0-SNAPSHOT<br>
-Last updated 2017-09-15 15:05:41 UTC
+Last updated 2017-09-15 15:12:26 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
