@@ -23,6 +23,10 @@
                     <attributes>
                         <project-version>${project.version}</project-version>
                     </attributes>
+                    <requires>
+                        <!-- see: asciidoctorj-diagram -->
+                        <require>asciidoctor-diagram</require>
+                    </requires>
                 </configuration>
                 <executions>
                     <execution>
@@ -36,6 +40,14 @@
                         </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <!-- Support for: ditaa, PlantUML, Graphviz dot -->
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-diagram</artifactId>
+                        <version>1.5.4.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
