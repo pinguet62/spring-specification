@@ -32,9 +32,16 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -46,10 +53,30 @@
             <version>2.5</version>
         </dependency>
 
+        <!-- JSR 303 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.0.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.0.2.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.1-b08</version>
+        </dependency>
+
+        <!-- AspectJ -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.8.10</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -75,7 +102,64 @@
     </dependencies>
 
     <build>
+        <!-- Lombok: fix AspectJ -->
+        <sourceDirectory>${project.build.directory}/generated-sources/delombok</sourceDirectory>
+        <testSourceDirectory>${project.build.directory}/generated-test-sources/delombok</testSourceDirectory>
+
         <plugins>
+            <plugin>
+                <!-- Lombok: fix AspectJ -->
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.16.18.1</version>
+                <executions>
+                    <execution>
+                        <id>delombok-main</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                        <configuration>
+                            <addOutputDirectory>false</addOutputDirectory>
+                            <sourceDirectory>src/main/java</sourceDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>delombok-test</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>testDelombok</goal>
+                        </goals>
+                        <configuration>
+                            <addOutputDirectory>false</addOutputDirectory>
+                            <sourceDirectory>src/test/java</sourceDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <!-- AspectJ -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.10</version>
+                <configuration>
+                    <!-- Version 1.4 -->
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <!-- Version 1.10 -->
+                    <complianceLevel>${java.version}</complianceLevel>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <!-- Code coverage: agent -->
                 <groupId>org.jacoco</groupId>

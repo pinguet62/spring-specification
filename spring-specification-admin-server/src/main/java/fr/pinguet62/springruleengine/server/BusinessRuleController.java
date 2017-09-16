@@ -7,10 +7,14 @@ import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEn
 import fr.pinguet62.springruleengine.core.builder.database.repository.BusinessRuleRepository;
 import fr.pinguet62.springruleengine.core.builder.database.repository.RuleComponentRepository;
 import fr.pinguet62.springruleengine.server.dto.BusinessRuleDto;
+import fr.pinguet62.springruleengine.server.dto.BusinessRuleInputDto;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
@@ -37,12 +41,12 @@ public class BusinessRuleController {
     private RuleService ruleService;
 
     @GetMapping
-    public List<BusinessRuleDto> getAll() {
+    public @NotNull @Valid List<BusinessRuleDto> getAll() {
         return businessRuleRepository.findAll().stream().map(this::convert).collect(toList());
     }
 
     @GetMapping("/{id:.+}")
-    public ResponseEntity<BusinessRuleDto> getById(@PathVariable String id) {
+    public @Valid ResponseEntity<BusinessRuleDto> getById(@NotBlank @PathVariable String id) {
         BusinessRuleEntity entity = businessRuleRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.status(NOT_FOUND).build();
@@ -51,7 +55,7 @@ public class BusinessRuleController {
     }
 
     @PutMapping
-    public ResponseEntity<BusinessRuleDto> create(@RequestBody BusinessRuleDto dto) throws UnsupportedEncodingException {
+    public @Valid ResponseEntity<BusinessRuleDto> create(@Valid @RequestBody BusinessRuleInputDto dto) throws UnsupportedEncodingException {
         RuleComponentEntity rootRuleComponent = new RuleComponentEntity();
         rootRuleComponent.setParent(null /*root*/);
         rootRuleComponent.setIndex(0);
@@ -72,7 +76,7 @@ public class BusinessRuleController {
     }
 
     @DeleteMapping("/{id:.+}")
-    public ResponseEntity<BusinessRuleDto> delete(@PathVariable String id) {
+    public @Valid ResponseEntity<BusinessRuleDto> delete(@NotBlank @PathVariable String id) {
         BusinessRuleEntity entity = businessRuleRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.notFound().build();

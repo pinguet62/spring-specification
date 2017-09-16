@@ -147,11 +147,12 @@ public class ParameterControllerTest {
     @Test
     public void test_update_notFound() throws Exception {
         int parameterId = -1; // not in database
+        String body = IOUtils.toString(getClass().getResourceAsStream("/ParameterControllerTest_update_request.json"), defaultCharset()); // any validating @RequestBody
         mockMvc
                 .perform(
                         post(PATH + "/{id}", Integer.toString(parameterId))
                                 .contentType(APPLICATION_JSON)
-                                .content("{}") /*any*/)
+                                .content(body))
                 .andExpect(status().isNotFound());
     }
 

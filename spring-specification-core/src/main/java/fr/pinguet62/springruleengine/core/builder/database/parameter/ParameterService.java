@@ -3,6 +3,7 @@ package fr.pinguet62.springruleengine.core.builder.database.parameter;
 import fr.pinguet62.springruleengine.core.api.Rule;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,7 +16,7 @@ import static org.springframework.core.annotation.AnnotationUtils.findAnnotation
 @Service
 public class ParameterService {
 
-    public Set<String> getDeclaratedKeys(Class<Rule<?>> ruleType) {
+    public @NotNull Set<String> getDeclaratedKeys(@NotNull Class<Rule<?>> ruleType) {
         Set<String> keys = new HashSet<>();
 
         // TODO SmartInstantiationAwareBeanPostProcessor#determineCandidateConstructors(Class<?> beanClass, String beanName)

@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class RuleComponentController {
     private RuleComponentRepository ruleComponentRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RuleComponentDto> getById(@PathVariable Integer id) {
+    public ResponseEntity<RuleComponentDto> getById(@NotNull @PathVariable Integer id) {
         RuleComponentEntity entity = ruleComponentRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.status(NOT_FOUND).build();
@@ -37,7 +39,7 @@ public class RuleComponentController {
     }
 
     @PutMapping
-    public ResponseEntity<RuleComponentDto> create(@RequestBody RuleComponentInputDto dto) {
+    public ResponseEntity<RuleComponentDto> create(@Valid @RequestBody RuleComponentInputDto dto) {
         RuleComponentEntity entity = new RuleComponentEntity();
         // entity.setId();
         entity.setParent(ruleComponentRepository.findOne(dto.getParent()));
@@ -52,7 +54,7 @@ public class RuleComponentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<RuleComponentDto> update(@PathVariable Integer id, @RequestBody RuleComponentInputDto dto) {
+    public ResponseEntity<RuleComponentDto> update(@NotNull @PathVariable Integer id, @Valid @RequestBody RuleComponentInputDto dto) {
         RuleComponentEntity entity = ruleComponentRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.status(NOT_FOUND).build();
@@ -88,7 +90,7 @@ public class RuleComponentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RuleComponentDto> delete(@PathVariable Integer id) {
+    public ResponseEntity<RuleComponentDto> delete(@NotNull @PathVariable Integer id) {
         RuleComponentEntity entity = ruleComponentRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.status(NOT_FOUND).build();

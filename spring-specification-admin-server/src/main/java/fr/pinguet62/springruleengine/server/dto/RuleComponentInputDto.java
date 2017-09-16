@@ -2,11 +2,10 @@ package fr.pinguet62.springruleengine.server.dto;
 
 import fr.pinguet62.springruleengine.core.builder.database.model.RuleComponentEntity;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Data
 public class RuleComponentInputDto {
-
-    private Integer id;
 
     /**
      * @see RuleComponentEntity#getId()
@@ -14,6 +13,7 @@ public class RuleComponentInputDto {
      */
     private Integer parent;
 
+    @NotBlank
     private String key;
 
     private String description;

@@ -22,9 +22,9 @@ import static org.springframework.http.HttpMethod.values;
 @Order(HIGHEST_PRECEDENCE)
 public class AccessControlAllowOriginFilter implements Filter {
 
-    /** No action. */
     @Override
     public void init(FilterConfig filterConfig) {
+        // No action
     }
 
     @Override
@@ -42,9 +42,9 @@ public class AccessControlAllowOriginFilter implements Filter {
             chain.doFilter(request, response);
     }
 
-    /** No action. */
     @Override
     public void destroy() {
+        // No action
     }
 
 }

@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -13,14 +16,18 @@ import java.util.List;
 @Builder
 public class RuleComponentDto {
 
+    @NotNull
     private Integer id;
 
+    @NotBlank
     private String key;
 
     private String description;
 
-    private List<RuleComponentDto> components;
+    @NotNull
+    private List<@NotNull @Valid RuleComponentDto> components;
 
-    private List<ParameterDto> parameters;
+    @NotNull
+    private List<@NotNull @Valid ParameterDto> parameters;
 
 }

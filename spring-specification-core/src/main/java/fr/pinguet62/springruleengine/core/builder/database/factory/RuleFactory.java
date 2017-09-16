@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -26,6 +27,8 @@ public class RuleFactory implements Function<RuleComponentEntity, Optional<Rule<
 
     @Override
     public Optional<Rule<?>> apply(RuleComponentEntity ruleComponentEntity) {
+        requireNonNull(ruleComponentEntity);
+
         // Parameters
         Map<String, String> parameters = ruleComponentEntity.getParameters().stream().collect(toMap(ParameterEntity::getKey, ParameterEntity::getValue));
         ParameterInjector.CONTEXT.set(parameters);

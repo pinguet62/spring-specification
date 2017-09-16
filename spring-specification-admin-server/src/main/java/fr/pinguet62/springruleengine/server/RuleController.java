@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -31,7 +32,7 @@ public class RuleController {
 
     // TODO merge with getAll()
     @GetMapping(params = "argumentType")
-    public List<RuleDto> getAvailable(@RequestParam("argumentType") String argumentTypeName) throws ClassNotFoundException {
+    public List<RuleDto> getAvailable(@NotNull @RequestParam("argumentType") String argumentTypeName) throws ClassNotFoundException {
         Class<Rule<?>> argumentType = (Class<Rule<?>>) Class.forName(argumentTypeName);
         Predicate<Class<Rule<?>>> ruleTypeFilter = new RuleTypeFilter(argumentType);
         return ruleService.getAllRules().stream().filter(ruleTypeFilter).map(this::convert).collect(toList());

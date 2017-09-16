@@ -6,6 +6,7 @@ import fr.pinguet62.springruleengine.core.SpringRule;
 import fr.pinguet62.springruleengine.core.builder.database.factory.RuleChildren;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @SpringRule
@@ -17,7 +18,7 @@ public class AndRule<T> extends AbstractCompositeRule<T> {
      * @throws IllegalArgumentException Empty value.
      */
     @Autowired
-    public AndRule(@RuleChildren Rule<T>... rules) {
+    public AndRule(@Size(min = 1) @RuleChildren Rule<T>... rules) {
         super(rules);
     }
 

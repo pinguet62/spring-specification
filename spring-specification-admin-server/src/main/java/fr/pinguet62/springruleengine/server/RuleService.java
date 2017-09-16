@@ -26,7 +26,7 @@ public class RuleService {
      *
      * @throws ClassNotFoundException
      */
-    public RuleService(DefaultListableBeanFactory beanFactory) throws ClassNotFoundException {
+    public RuleService(@NotNull DefaultListableBeanFactory beanFactory) throws ClassNotFoundException {
         for (String beanDefinitionName : beanFactory.getBeanDefinitionNames()) {
             BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
             String className = beanDefinition.getBeanClassName();
@@ -39,14 +39,14 @@ public class RuleService {
         }
     }
 
-    public @NotNull
-    List<Class<Rule<?>>> getAllRules() {
+    public List<Class<Rule<?>>> getAllRules() {
         return ruleTypes;
     }
 
     /**
      * @return {@link RuleName} or {@link Class#getName()}
      */
+    @NotBlank
     public String getKey(@NotNull Class<Rule<?>> ruleType) {
         return ruleType.getName();
     }
@@ -54,6 +54,7 @@ public class RuleService {
     /**
      * @return {@link RuleName} or {@link Class#getSimpleName()}
      */
+    @NotBlank
     public String getName(@NotNull Class<Rule<?>> ruleType) {
         return ruleType.isAnnotationPresent(RuleName.class) ? ruleType.getDeclaredAnnotation(RuleName.class).value() : ruleType.getSimpleName();
     }
@@ -68,8 +69,8 @@ public class RuleService {
     /**
      * @throws IllegalArgumentException Target {@link Class} is not of type {@link Rule}.
      */
-    public @NotNull
-    Optional<Class<Rule<?>>> getFromKey(@NotBlank String key) {
+    @NotNull
+    public Optional<Class<Rule<?>>> getFromKey(@NotBlank String key) {
         try {
             return of((Class<Rule<?>>) Class.forName(key));
         } catch (ClassCastException e) { // TODO fix

@@ -8,11 +8,14 @@ import fr.pinguet62.springruleengine.core.builder.database.repository.ParameterR
 import fr.pinguet62.springruleengine.core.builder.database.repository.RuleComponentRepository;
 import fr.pinguet62.springruleengine.server.dto.ParameterDto;
 import fr.pinguet62.springruleengine.server.dto.ParameterInputDto;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +44,7 @@ public class ParameterController {
     private RuleComponentRepository ruleRepository;
 
     @GetMapping(params = "ruleComponent")
-    public ResponseEntity<List<ParameterDto>> getByRuleComponent(@RequestParam("ruleComponent") Integer ruleComponentId) {
+    public ResponseEntity<List<ParameterDto>> getByRuleComponent(@NotNull @RequestParam("ruleComponent") Integer ruleComponentId) {
         RuleComponentEntity rule = ruleRepository.findOne(ruleComponentId);
         if (rule == null)
             return ResponseEntity.notFound().build();
@@ -51,7 +54,7 @@ public class ParameterController {
     }
 
     @GetMapping("/key/{rule:.+}")
-    public ResponseEntity<Set<String>> getKeyByRule(@PathVariable("rule") String ruleKey) {
+    public ResponseEntity<Set<String>> getKeyByRule(@NotBlank @PathVariable("rule") String ruleKey) {
         Optional<Class<Rule<?>>> ruleOp = ruleService.getFromKey(ruleKey);
         if (!ruleOp.isPresent())
             return ResponseEntity.notFound().build();
@@ -62,7 +65,7 @@ public class ParameterController {
     }
 
     @PutMapping
-    public ResponseEntity<ParameterDto> create(@RequestBody ParameterInputDto dto) {
+    public ResponseEntity<ParameterDto> create(@Valid @RequestBody ParameterInputDto dto) {
         ParameterEntity entity = new ParameterEntity();
         // entity.setId();
         entity.setKey(dto.getKey());
@@ -74,7 +77,7 @@ public class ParameterController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<ParameterDto> update(@PathVariable Integer id, @RequestBody ParameterInputDto dto) {
+    public ResponseEntity<ParameterDto> update(@NotNull @PathVariable Integer id, @Valid @RequestBody ParameterInputDto dto) {
         ParameterEntity entity = parameterRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.notFound().build();
@@ -90,7 +93,7 @@ public class ParameterController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ParameterDto> delete(@PathVariable Integer id) {
+    public ResponseEntity<ParameterDto> delete(@NotNull @PathVariable Integer id) {
         ParameterEntity entity = parameterRepository.findOne(id);
         if (entity == null)
             return ResponseEntity.notFound().build();

@@ -1,12 +1,16 @@
 package fr.pinguet62.springruleengine.core.api;
 
+import fr.pinguet62.springruleengine.core.Jsr303ValidationAspect;
+import org.aspectj.lang.annotation.Aspect;
 import org.junit.Test;
 
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static fr.pinguet62.springruleengine.core.api.TestRules.FALSE_RULE;
 import static fr.pinguet62.springruleengine.core.api.TestRules.TRUE_RULE;
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -43,8 +47,8 @@ public class OrRuleTest {
         )))
             try {
                 fct.run();
-                fail();
-            } catch (IllegalArgumentException e) {
+                fail(format("@%s %s not enabled", Aspect.class.getSimpleName(), Jsr303ValidationAspect.class.getSimpleName()));
+            } catch (ConstraintViolationException e) {
                 // ok
             }
     }

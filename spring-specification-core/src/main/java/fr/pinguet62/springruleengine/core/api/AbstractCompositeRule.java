@@ -2,6 +2,8 @@ package fr.pinguet62.springruleengine.core.api;
 
 import lombok.Getter;
 
+import javax.validation.constraints.Size;
+
 public abstract class AbstractCompositeRule<T> implements Rule<T> {
 
     @Getter
@@ -10,9 +12,7 @@ public abstract class AbstractCompositeRule<T> implements Rule<T> {
     /**
      * @throws IllegalArgumentException Empty value.
      */
-    public AbstractCompositeRule(Rule<T>... rules) {
-        if (rules.length == 0)
-            throw new IllegalArgumentException("Require at least 1 " + Rule.class.getSimpleName());
+    public AbstractCompositeRule(@Size(min = 1) Rule<T>... rules) {
         this.rules = rules;
     }
 
