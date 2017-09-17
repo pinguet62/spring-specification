@@ -102,42 +102,7 @@
     </dependencies>
 
     <build>
-        <!-- Lombok: fix AspectJ -->
-        <sourceDirectory>${project.build.directory}/generated-sources/delombok</sourceDirectory>
-        <testSourceDirectory>${project.build.directory}/generated-test-sources/delombok</testSourceDirectory>
-
         <plugins>
-            <plugin>
-                <!-- Lombok: fix AspectJ -->
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok-maven-plugin</artifactId>
-                <version>1.16.18.1</version>
-                <executions>
-                    <execution>
-                        <id>delombok-main</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>delombok</goal>
-                        </goals>
-                        <configuration>
-                            <addOutputDirectory>false</addOutputDirectory>
-                            <sourceDirectory>src/main/java</sourceDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>delombok-test</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>testDelombok</goal>
-                        </goals>
-                        <configuration>
-                            <addOutputDirectory>false</addOutputDirectory>
-                            <sourceDirectory>src/test/java</sourceDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <!-- AspectJ -->
                 <groupId>org.codehaus.mojo</groupId>
@@ -149,15 +114,35 @@
                     <target>${java.version}</target>
                     <!-- Version 1.10 -->
                     <complianceLevel>${java.version}</complianceLevel>
+
+                    <!-- fix Lombok -->
+                    <showWeaveInfo/>
+                    <forceAjcCompile>true</forceAjcCompile>
+                    <sources/>
+                    <weaveDirectories>
+                        <weaveDirectory>${project.build.directory}/classes</weaveDirectory>
+                        <weaveDirectory>${project.build.directory}/test-classes</weaveDirectory>
+                    </weaveDirectories>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>compile</goal>
-                            <goal>test-compile</goal>
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjrt</artifactId>
+                        <version>1.8.10</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjtools</artifactId>
+                        <version>1.8.10</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
