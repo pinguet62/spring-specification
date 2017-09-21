@@ -21,10 +21,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER;
 import static fr.pinguet62.springruleengine.server.ParameterController.PATH;
 import static java.util.stream.Collectors.toList;
 
-@Transactional
+@Transactional(TRANSACTION_MANAGER)
 @RestController
 @RequestMapping(PATH)
 public class ParameterController {

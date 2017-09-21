@@ -3,11 +3,17 @@ package fr.pinguet62.springruleengine.sample.model;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
+@Entity
 public class Product {
+
+    @Id
+    private Integer id;
 
     @NotNull
     private String type;

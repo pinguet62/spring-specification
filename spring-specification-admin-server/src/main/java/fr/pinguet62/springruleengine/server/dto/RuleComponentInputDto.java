@@ -13,7 +13,7 @@ public class RuleComponentInputDto {
      */
     private Integer parent;
 
-    @NotBlank
+    // TODO different for PATCH @NotBlank
     private String key;
 
     private String description;

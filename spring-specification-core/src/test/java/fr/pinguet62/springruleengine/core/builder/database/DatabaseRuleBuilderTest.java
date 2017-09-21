@@ -1,5 +1,8 @@
 package fr.pinguet62.springruleengine.core.builder.database;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import fr.pinguet62.springruleengine.core.SpringRule;
 import fr.pinguet62.springruleengine.core.TestApplication;
 import fr.pinguet62.springruleengine.core.api.AndRule;
@@ -13,14 +16,18 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import static fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest.TestRules;
 import static fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest.TestRules.*;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import static org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS;
 
 /**
  * Test case:
@@ -38,8 +45,11 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {TestApplication.class, TestRules.class})
-@Sql("/sample.sql")
-@Transactional
+@Transactional(TRANSACTION_MANAGER)
+// DbUnit
+@TestExecutionListeners(mergeMode = MERGE_WITH_DEFAULTS, listeners = DbUnitTestExecutionListener.class)
+@DbUnitConfiguration(databaseConnection = DATASOURCE)
+@DatabaseSetup("/sample.xml")
 public class DatabaseRuleBuilderTest {
 
     @Component

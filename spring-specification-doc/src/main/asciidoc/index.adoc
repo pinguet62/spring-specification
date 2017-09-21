@@ -322,7 +322,62 @@ assertTrue(0 <= rule.param && rule.param <= 100);
 
 === Database
 
-TODO
+Because the target database usage is depending to the _use case_,
+the configuration of datasource and JPA options is fully _delegated to user_.
+
+TIP: By default, the H2 is used for *in-memory* storage.
+
+==== Configuration
+
+Like this project use *Spring Data JPA* for database access,
+you have to declare these 3 beans:
+
+* `springSpecification.dataSource` of type https://docs.oracle.com/javase/9/docs/api/javax/sql/DataSource.html[`DataSource`];
+* `springSpecification.entityManagerFactory` of type https://docs.oracle.com/javaee/7/api/javax/persistence/EntityManagerFactory.html[`EntityManagerFactory`];
+* `springSpecification.transactionManager` of type https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/PlatformTransactionManager.html[`PlatformTransactionManager`].
+
+(See https://docs.spring.io/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/repository/config/EnableJpaRepositories.html[Spring Data JPA - `@EnableJpaRepositories`])
+
+==== Auto-configuration
+
+To facilitate the configuration, this project defines an Spring Boot *auto-configuration* module.
+
+The behavior is the same than for Spring Boot (see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-sql.html[Spring Boot - Working with SQL databases]). +
+But to avoid collision, the differences are:
+
+* base *properties*: `springSpecification.datasource` and `springSpecification.jpa` (see https://docs.spring.io/spring-boot/docs/current/reference/html/howto-data-access.html[Spring Boot - Data Access]);
+* root folder for *database initialization*: `/spring-specification` (see https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html[Spring Boot - Database initialization]);
+* *bean name* are prefixed by `springSpecification.`.
+
+WARNING: 2 auto-configuration `DataSourceAutoConfiguration` and `HibernateJpaAutoConfiguration` will _inevitably_ be enabled, because of Spring Boot Data JPA transitive dependency. +
+         If there is any _side effect_ because you don't use database, you can *exclude* theses auto-configurations.
+
+==== Example
+
+[source, xml]
+.pom.xml
+----
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <version>LATEST</version>
+</dependency>
+----
+
+[source, yaml]
+.application.properties
+----
+springSpecification:
+    datasource:
+        url: jdbc:h2:mem:testdb <1>
+        data: spring-specification/data.sql <2>
+    jpa:
+        show-sql: true <3>
+----
+
+<1> Target database
+<2> Script to initialize the database (default value, if present)
+<3> Enable logging
 
 == Admin application
 

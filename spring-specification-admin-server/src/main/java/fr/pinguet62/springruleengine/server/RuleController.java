@@ -4,6 +4,7 @@ import fr.pinguet62.springruleengine.core.RuleTypeFilter;
 import fr.pinguet62.springruleengine.core.api.Rule;
 import fr.pinguet62.springruleengine.server.dto.RuleDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,9 +14,11 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER;
 import static fr.pinguet62.springruleengine.server.RuleController.PATH;
 import static java.util.stream.Collectors.toList;
 
+@Transactional(TRANSACTION_MANAGER)
 @RestController
 @RequestMapping(PATH)
 public class RuleController {

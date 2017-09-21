@@ -11,6 +11,7 @@ import fr.pinguet62.springruleengine.server.dto.BusinessRuleInputDto;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,12 +20,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
 
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER;
 import static fr.pinguet62.springruleengine.server.BusinessRuleController.PATH;
 import static java.nio.charset.Charset.defaultCharset;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.web.util.UriUtils.encode;
 
+@Transactional(TRANSACTION_MANAGER)
 @RestController
 @RequestMapping(PATH)
 public class BusinessRuleController {

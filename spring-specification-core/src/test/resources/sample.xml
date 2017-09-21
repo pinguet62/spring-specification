@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+        <RULE_COMPONENT_ENTITY id="1" key="fr.pinguet62.springruleengine.core.api.AndRule" />
+            <RULE_COMPONENT_ENTITY id="11" key="fr.pinguet62.springruleengine.core.api.NotRule" parent_id="1" />
+                <RULE_COMPONENT_ENTITY id="111" key="fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest$TestRules$FirstCustomRule" parent_id="11" />
+                        <PARAMETER_ENTITY id="1111" rule_id="111" key="111_k1" value="111_v1" />
+                        <PARAMETER_ENTITY id="1112" rule_id="111" key="111_k2" value="111_v2" />
+            <RULE_COMPONENT_ENTITY id="12" key="fr.pinguet62.springruleengine.core.api.OrRule" parent_id="1" />
+                <RULE_COMPONENT_ENTITY id="121" key="fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest$TestRules$SecondCustomRule" parent_id="12" />
+                <RULE_COMPONENT_ENTITY id="122" key="fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest$TestRules$ThirdCustomRule" parent_id="12" />
+                        <PARAMETER_ENTITY id="1221" rule_id="122" key="122_k1" value="122_v1" />
+    <BUSINESS_RULE_ENTITY id="test" argument_type="fr.pinguet62.springruleengine.sample.model.Product" root_rule_component_id="1" title="null" />
+</dataset>
