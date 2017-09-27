@@ -27,7 +27,6 @@ public class Jsr303ValidationAspect {
 
     @Before("execution(*.new(..)) && intoApplication() && hasAnnotatedArgument() && excludingThisAspect()")
     public void validateConstructorParameters(JoinPoint joinPoint) {
-        System.err.println(joinPoint);
         Constructor<?> constructor = ConstructorSignature.class.cast(joinPoint.getSignature()).getConstructor();
         Object[] parameterValues = joinPoint.getArgs();
         Set<ConstraintViolation<Object>> theViolations = Validation.buildDefaultValidatorFactory().getValidator()
