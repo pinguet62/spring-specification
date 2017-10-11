@@ -11,7 +11,7 @@ body {
 
 /* Permanent toolbar and content scrollable */
 
-app-root > md-toolbar {
+app-root > mat-toolbar {
     position: fixed;
     z-index: 2;
 }

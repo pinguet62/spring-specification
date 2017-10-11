@@ -18,116 +18,131 @@ package fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceInitializedEvent;
+import org.springframework.boot.autoconfigure.DatabaseInitializationMode;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.config.ResourceNotFoundException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.config.SortedResourcesFactoryBean;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
-
 /**
- * Bean to handle {@link DataSource} initialization by running {@literal schema-*.sql} on
- * {@link PostConstruct} and {@literal data-*.sql} SQL scripts on a
- * {@link SpringSpecificationDataSourceInitializedEvent}.
+ * Initialize a {@link DataSource} based on a matching {@link DataSourceProperties}
+ * config.
  *
  * @author Dave Syer
  * @author Phillip Webb
  * @author Eddú Meléndez
  * @author Stephane Nicoll
  * @author Kazuki Shimizu
- * @since 1.1.0
- * @see SpringSpecificationDataSourceAutoConfiguration
  */
-class SpringSpecificationDataSourceInitializer implements ApplicationListener<SpringSpecificationDataSourceInitializedEvent> {
+class SpringSpecificationDataSourceInitializer {
 
 	private static final Log logger = LogFactory.getLog(SpringSpecificationDataSourceInitializer.class);
 
+	private final DataSource dataSource;
+
 	private final DataSourceProperties properties;
 
-	private final ApplicationContext applicationContext;
+	private final ResourceLoader resourceLoader;
 
-	private DataSource dataSource;
-
-	private boolean initialized = false;
-
-	SpringSpecificationDataSourceInitializer(DataSourceProperties properties,
-            ApplicationContext applicationContext) {
+	/**
+	 * Create a new instance with the {@link DataSource} to initialize and its matching
+	 * {@link DataSourceProperties configuration}.
+	 * @param dataSource the datasource to initialize
+	 * @param properties the matching configuration
+	 * @param resourceLoader the resource loader to use (can be null)
+	 */
+	SpringSpecificationDataSourceInitializer(DataSource dataSource, DataSourceProperties properties,
+			ResourceLoader resourceLoader) {
+		this.dataSource = dataSource;
 		this.properties = properties;
-		this.applicationContext = applicationContext;
+		this.resourceLoader = (resourceLoader != null ? resourceLoader
+				: new DefaultResourceLoader());
 	}
 
-	@PostConstruct
-	public void init() {
-		if (!this.properties.isInitialize()) {
-			logger.debug("Initialization disabled (not running DDL scripts)");
-			return;
-		}
-		try {
-			this.dataSource = this.applicationContext.getBean(DATASOURCE, DataSource.class);
-		} catch (NoSuchBeanDefinitionException e) {
-			logger.debug("No DataSource found so not initializing");
-			return;
-		}
-		runSchemaScripts();
+	/**
+	 * Create a new instance with the {@link DataSource} to initialize and its matching
+	 * {@link DataSourceProperties configuration}.
+	 * @param dataSource the datasource to initialize
+	 * @param properties the matching configuration
+	 */
+	SpringSpecificationDataSourceInitializer(DataSource dataSource, DataSourceProperties properties) {
+		this(dataSource, properties, null);
 	}
 
-	private void runSchemaScripts() {
-		List<Resource> scripts = getScripts("springSpecification.datasource.schema",
+	public DataSource getDataSource() {
+		return this.dataSource;
+	}
+
+	/**
+	 * Create the schema if necessary.
+	 * @return {@code true} if the schema was created
+	 * @see DataSourceProperties#getSchema()
+	 */
+	public boolean createSchema() {
+		List<Resource> scripts = getScripts("spring.datasource.schema",
 				this.properties.getSchema(), "schema");
 		if (!scripts.isEmpty()) {
+			if (!isEnabled()) {
+				logger.debug("Initialization disabled (not running DDL scripts)");
+				return false;
+			}
 			String username = this.properties.getSchemaUsername();
 			String password = this.properties.getSchemaPassword();
 			runScripts(scripts, username, password);
-			try {
-				this.applicationContext
-						.publishEvent(new DataSourceInitializedEvent(this.dataSource));
-				// The listener might not be registered yet, so don't rely on it.
-				if (!this.initialized) {
-					runDataScripts();
-					this.initialized = true;
-				}
-			}
-			catch (IllegalStateException ex) {
-				logger.warn("Could not send event to complete DataSource initialization ("
-						+ ex.getMessage() + ")");
-			}
 		}
+		return !scripts.isEmpty();
 	}
 
-	@Override
-	public void onApplicationEvent(SpringSpecificationDataSourceInitializedEvent event) {
-		if (!this.properties.isInitialize()) {
-			logger.debug("Initialization disabled (not running data scripts)");
-			return;
-		}
-		// NOTE the event can happen more than once and
-		// the event datasource is not used here
-		if (!this.initialized) {
-			runDataScripts();
-			this.initialized = true;
-		}
-	}
-
-	private void runDataScripts() {
-		List<Resource> scripts = getScripts("springSpecification.datasource.data",
+	/**
+	 * Initialize the schema if necessary.
+	 * @see DataSourceProperties#getData()
+	 */
+	public void initSchema() {
+		List<Resource> scripts = getScripts("spring-specification.datasource.data",
 				this.properties.getData(), "data");
-		String username = this.properties.getDataUsername();
-		String password = this.properties.getDataPassword();
-		runScripts(scripts, username, password);
+		if (!scripts.isEmpty()) {
+			if (!isEnabled()) {
+				logger.debug("Initialization disabled (not running data scripts)");
+				return;
+			}
+			String username = this.properties.getDataUsername();
+			String password = this.properties.getDataPassword();
+			runScripts(scripts, username, password);
+		}
+	}
+
+	private boolean isEnabled() {
+		DatabaseInitializationMode mode = DatabaseInitializationMode.EMBEDDED; // TODO this.properties.getInitializationMode();
+		if (mode == DatabaseInitializationMode.NEVER) {
+			return false;
+		}
+		if (mode == DatabaseInitializationMode.EMBEDDED
+				&& !isEmbedded()) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean isEmbedded() {
+		try {
+			return EmbeddedDatabaseConnection.isEmbedded(this.dataSource);
+		}
+		catch (Exception ex) {
+			logger.debug("Could not determine if datasource is embedded", ex);
+			return false;
+		}
 	}
 
 	private List<Resource> getScripts(String propertyName, List<String> resources,
@@ -136,7 +151,7 @@ class SpringSpecificationDataSourceInitializer implements ApplicationListener<Sp
 			return getResources(propertyName, resources, true);
 		}
 		String platform = this.properties.getPlatform();
-		List<String> fallbackResources = new ArrayList<String>();
+		List<String> fallbackResources = new ArrayList<>();
 		fallbackResources.add("classpath*:spring-specification/" + fallback + "-" + platform + ".sql");
 		fallbackResources.add("classpath*:spring-specification/" + fallback + ".sql");
 		return getResources(propertyName, fallbackResources, false);
@@ -144,7 +159,7 @@ class SpringSpecificationDataSourceInitializer implements ApplicationListener<Sp
 
 	private List<Resource> getResources(String propertyName, List<String> locations,
 			boolean validate) {
-		List<Resource> resources = new ArrayList<Resource>();
+		List<Resource> resources = new ArrayList<>();
 		for (String location : locations) {
 			for (Resource resource : doGetResources(location)) {
 				if (resource.exists()) {
@@ -161,7 +176,7 @@ class SpringSpecificationDataSourceInitializer implements ApplicationListener<Sp
 	private Resource[] doGetResources(String location) {
 		try {
 			SortedResourcesFactoryBean factory = new SortedResourcesFactoryBean(
-					this.applicationContext, Collections.singletonList(location));
+					this.resourceLoader, Collections.singletonList(location));
 			factory.afterPropertiesSet();
 			return factory.getObject();
 		}

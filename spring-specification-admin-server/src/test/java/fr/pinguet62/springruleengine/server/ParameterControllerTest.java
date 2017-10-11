@@ -73,7 +73,7 @@ public class ParameterControllerTest {
      */
     @Test
     public void test_getByRuleComponent() throws Exception {
-        final int ruleComponentId = 1;
+        final int ruleComponentId = -1;
         mockMvc
                 .perform(
                         get(PATH)
@@ -81,8 +81,8 @@ public class ParameterControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()", equalTo(2)))
-                .andExpect(jsonPath("$[?(@.id==1)].key", equalTo(asList("key1"))))
-                .andExpect(jsonPath("$[?(@.id==1)].value", equalTo(asList("value1"))));
+                .andExpect(jsonPath("$[?(@.id==-1)].key", equalTo(asList("key1"))))
+                .andExpect(jsonPath("$[?(@.id==-1)].value", equalTo(asList("value1"))));
     }
 
     /**
@@ -134,7 +134,7 @@ public class ParameterControllerTest {
     @Test
     @ExpectedDatabase(value = "/ParameterControllerTest_update_ExpectedDatabase.xml", assertionMode = NON_STRICT_UNORDERED)
     public void test_update() throws Exception {
-        int parameterId = 2;
+        int parameterId = -2;
         String body = IOUtils.toString(getClass().getResourceAsStream("/ParameterControllerTest_update_request.json"), defaultCharset());
         mockMvc
                 .perform(
@@ -149,7 +149,7 @@ public class ParameterControllerTest {
      */
     @Test
     public void test_update_notFound() throws Exception {
-        int parameterId = -1; // not in database
+        int parameterId = 999; // not in database
         String body = IOUtils.toString(getClass().getResourceAsStream("/ParameterControllerTest_update_request.json"), defaultCharset()); // any validating @RequestBody
         mockMvc
                 .perform(
@@ -165,7 +165,7 @@ public class ParameterControllerTest {
     @Test
     @ExpectedDatabase(value = "/ParameterControllerTest_delete_ExpectedDatabase.xml", assertionMode = NON_STRICT_UNORDERED)
     public void test_delete() throws Exception {
-        int parameterId = 2;
+        int parameterId = -2;
         mockMvc
                 .perform(delete(PATH + "/{id}", Integer.toString(parameterId)))
                 .andExpect(status().isOk());
@@ -176,7 +176,7 @@ public class ParameterControllerTest {
      */
     @Test
     public void test_delete_notFound() throws Exception {
-        int parameterId = -1; // not in database
+        int parameterId = 999; // not in database
         mockMvc
                 .perform(delete(PATH + "/{id}", Integer.toString(parameterId)))
                 .andExpect(status().isNotFound());

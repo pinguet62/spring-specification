@@ -30,7 +30,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>utput-html5</id>
+                        <id>output-html5</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>process-asciidoc</goal>

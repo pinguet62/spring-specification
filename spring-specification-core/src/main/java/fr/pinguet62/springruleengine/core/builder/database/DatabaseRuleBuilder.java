@@ -23,7 +23,7 @@ public class DatabaseRuleBuilder implements RuleBuilder {
     @Override
     public @NotNull Rule<?> apply(String key) {
         requireNonNull(key);
-        return ruleFactory.apply(businessRuleRepository.findOne(key).getRootRuleComponent()).orElseThrow(IllegalArgumentException::new);
+        return ruleFactory.apply(businessRuleRepository.findById(key).get().getRootRuleComponent()).orElseThrow(IllegalArgumentException::new);
     }
 
 }

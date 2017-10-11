@@ -5,6 +5,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import fr.pinguet62.springruleengine.server.dto.BusinessRuleDto;
+import fr.pinguet62.springruleengine.server.dto.BusinessRuleInputDto;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +59,7 @@ public class BusinessRuleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(businessRuleId)))
                 .andExpect(jsonPath("$.argumentType", equalTo("fr.pinguet62.springruleengine.sample.model.Product")))
-                .andExpect(jsonPath("$.rootRuleComponent.id", equalTo(1)));
+                .andExpect(jsonPath("$.rootRuleComponent.id", equalTo(-1)));
     }
 
     /**
@@ -81,12 +82,12 @@ public class BusinessRuleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()", equalTo(2)))
-                .andExpect(jsonPath("$[?(@.rootRuleComponent.id==1)].id", equalTo(asList("test"))))
-                .andExpect(jsonPath("$[?(@.rootRuleComponent.id==2)].id", equalTo(asList("other"))));
+                .andExpect(jsonPath("$[?(@.rootRuleComponent.id==-1)].id", equalTo(asList("test"))))
+                .andExpect(jsonPath("$[?(@.rootRuleComponent.id==-2)].id", equalTo(asList("other"))));
     }
 
     /**
-     * @see BusinessRuleController#create(BusinessRuleDto)
+     * @see BusinessRuleController#create(BusinessRuleInputDto)
      */
     @Test
     @ExpectedDatabase(value = "/BusinessRuleControllerTest_create_ExpectedDatabase.xml", assertionMode = NON_STRICT_UNORDERED)

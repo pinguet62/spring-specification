@@ -22,8 +22,8 @@ import {NodeMovedEvent, TreeNode} from './tree-node';
         <li>
             <div class="tree-content">
                 <div style="width: 40px;">
-                    <button md-icon-button *ngIf="node.children?.length > 0" (click)="node.expanded = !node.expanded">
-                        <md-icon>{{node.expanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}}</md-icon>
+                    <button mat-icon-button *ngIf="node.children?.length > 0" (click)="node.expanded = !node.expanded">
+                        <mat-icon>{{node.expanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}}</mat-icon>
                     </button>
                 </div>
 

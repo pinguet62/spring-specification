@@ -5,17 +5,17 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-    MdAutocompleteModule,
-    MdButtonModule,
-    MdCheckboxModule,
-    MdDialogModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdSelectModule,
-    MdSidenavModule,
-    MdTableModule,
-    MdToolbarModule
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatTableModule,
+    MatToolbarModule
 } from '@angular/material';
 import {CdkTableModule} from '@angular/cdk/table';
 
@@ -36,7 +36,7 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './
 @NgModule({
     imports: [
         BrowserModule, FormsModule, ReactiveFormsModule, HttpModule, BrowserAnimationsModule,
-        MdAutocompleteModule, MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule, MdListModule, MdSelectModule, MdSidenavModule, MdTableModule, MdToolbarModule,
+        MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatSelectModule, MatSidenavModule, MatTableModule, MatToolbarModule,
         CdkTableModule,
         TreeModule, RouterModule.forRoot(appRoutes)
     ],

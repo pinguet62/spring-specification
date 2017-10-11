@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *	  http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jpa;
+package fr.pinguet62.springruleengine.core.builder.database.autoconfigure.orm.jpa;
 
-import fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc.SpringSpecificationDataSourceInitializedEvent;
+import fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc.SpringSpecificationDataSourceSchemaCreatedEvent;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -24,6 +24,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
@@ -35,8 +36,8 @@ import java.util.Map;
 import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.*;
 
 /**
- * {@link BeanPostProcessor} used to fire {@link SpringSpecificationDataSourceInitializedEvent}s. Should only
- * be registered via the inner {@link Registrar} class.
+ * {@link BeanPostProcessor} used to fire {@link SpringSpecificationDataSourceSchemaCreatedEvent}s. Should
+ * only be registered via the inner {@link Registrar} class.
  *
  * @author Dave Syer
  * @since 1.1.0
@@ -76,7 +77,7 @@ class SpringSpecificationDataSourceInitializedPublisher implements BeanPostProce
 		DataSource dataSource = findDataSource(entityManagerFactory);
 		if (dataSource != null && isInitializingDatabase(dataSource)) {
 			this.applicationContext
-					.publishEvent(new SpringSpecificationDataSourceInitializedEvent(dataSource));
+					.publishEvent(new SpringSpecificationDataSourceSchemaCreatedEvent(dataSource));
 		}
 	}
 
@@ -91,8 +92,10 @@ class SpringSpecificationDataSourceInitializedPublisher implements BeanPostProce
 		if (this.properties == null) {
 			return true; // better safe than sorry
 		}
+		String defaultDdlAuto = (EmbeddedDatabaseConnection.isEmbedded(dataSource)
+				? "create-drop" : "none");
 		Map<String, String> hibernate = this.properties
-				.getHibernateProperties(dataSource);
+				.getHibernateProperties(defaultDdlAuto);
 		if (hibernate.containsKey("hibernate.hbm2ddl.auto")) {
 			return true;
 		}

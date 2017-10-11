@@ -2,5 +2,6 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc.SpringSpecificationDataSourceAutoConfiguration,\
 fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc.SpringSpecificationJndiDataSourceAutoConfiguration,\
 fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc.SpringSpecificationXADataSourceAutoConfiguration,\
-fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jpa.SpringSpecificationHibernateJpaAutoConfiguration,\
+fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc.SpringSpecificationDataSourceTransactionManagerAutoConfiguration,\
+fr.pinguet62.springruleengine.core.builder.database.autoconfigure.orm.jpa.SpringSpecificationHibernateJpaConfiguration,\
 fr.pinguet62.springruleengine.core.SpringSpecificationAutoConfiguration

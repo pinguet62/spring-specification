@@ -46,11 +46,11 @@ public class ParameterController {
 
     @GetMapping(params = "ruleComponent")
     public ResponseEntity<List<ParameterDto>> getByRuleComponent(@NotNull @RequestParam("ruleComponent") Integer ruleComponentId) {
-        RuleComponentEntity rule = ruleRepository.findOne(ruleComponentId);
-        if (rule == null)
+        Optional<RuleComponentEntity> rule = ruleRepository.findById(ruleComponentId);
+        if (!rule.isPresent())
             return ResponseEntity.notFound().build();
 
-        List<ParameterDto> dtos = rule.getParameters().stream().map(this::convert).collect(toList());
+        List<ParameterDto> dtos = rule.get().getParameters().stream().map(this::convert).collect(toList());
         return ResponseEntity.ok(dtos);
     }
 
@@ -71,7 +71,7 @@ public class ParameterController {
         // entity.setId();
         entity.setKey(dto.getKey());
         entity.setValue(dto.getValue());
-        entity.setRule(ruleRepository.findOne(dto.getRuleComponent()));
+        entity.setRule(ruleRepository.findById(dto.getRuleComponent()).get());
         entity = parameterRepository.save(entity);
 
         return ResponseEntity.created(URI.create(PATH + "/" + entity.getId())).body(convert(entity));
@@ -79,9 +79,10 @@ public class ParameterController {
 
     @PostMapping("/{id}")
     public ResponseEntity<ParameterDto> update(@NotNull @PathVariable Integer id, @Valid @RequestBody ParameterInputDto dto) {
-        ParameterEntity entity = parameterRepository.findOne(id);
-        if (entity == null)
+        Optional<ParameterEntity> entityOp = parameterRepository.findById(id);
+        if (!entityOp.isPresent())
             return ResponseEntity.notFound().build();
+        ParameterEntity entity = entityOp.get();
 
         if (dto.getKey() != null)
             entity.setKey(dto.getKey());
@@ -95,13 +96,13 @@ public class ParameterController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ParameterDto> delete(@NotNull @PathVariable Integer id) {
-        ParameterEntity entity = parameterRepository.findOne(id);
-        if (entity == null)
+        Optional<ParameterEntity> entity = parameterRepository.findById(id);
+        if (!entity.isPresent())
             return ResponseEntity.notFound().build();
 
-        ParameterDto dto = convert(entity);
+        ParameterDto dto = convert(entity.get());
 
-        parameterRepository.delete(id);
+        parameterRepository.deleteById(id);
 
         return ResponseEntity.ok(dto);
     }

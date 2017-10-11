@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER;
 import static fr.pinguet62.springruleengine.server.BusinessRuleController.PATH;
@@ -50,11 +51,11 @@ public class BusinessRuleController {
 
     @GetMapping("/{id:.+}")
     public @Valid ResponseEntity<BusinessRuleDto> getById(@NotBlank @PathVariable String id) {
-        BusinessRuleEntity entity = businessRuleRepository.findOne(id);
-        if (entity == null)
+        Optional<BusinessRuleEntity> entity = businessRuleRepository.findById(id);
+        if (!entity.isPresent())
             return ResponseEntity.status(NOT_FOUND).build();
 
-        return ResponseEntity.ok(convert(entity));
+        return ResponseEntity.ok(convert(entity.get()));
     }
 
     @PutMapping
@@ -80,13 +81,13 @@ public class BusinessRuleController {
 
     @DeleteMapping("/{id:.+}")
     public @Valid ResponseEntity<BusinessRuleDto> delete(@NotBlank @PathVariable String id) {
-        BusinessRuleEntity entity = businessRuleRepository.findOne(id);
-        if (entity == null)
+        Optional<BusinessRuleEntity> entity = businessRuleRepository.findById(id);
+        if (!entity.isPresent())
             return ResponseEntity.notFound().build();
 
-        BusinessRuleDto dto = convert(entity);
+        BusinessRuleDto dto = convert(entity.get());
 
-        businessRuleRepository.delete(id);
+        businessRuleRepository.deleteById(id);
 
         return ResponseEntity.ok(dto);
     }

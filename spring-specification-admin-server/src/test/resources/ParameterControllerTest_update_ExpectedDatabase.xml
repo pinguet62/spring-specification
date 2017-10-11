@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-        <RULE_COMPONENT_ENTITY id="1" key="any"/>
-                <PARAMETER_ENTITY id="1" rule_id="1" key="key1" value="value1"/>
-                <PARAMETER_ENTITY id="2" rule_id="1" key="new key" value="new value"/> <!-- updated -->
-    <BUSINESS_RULE_ENTITY id="test" argument_type="any" root_rule_component_id="1"/>
+        <RULE_COMPONENT_ENTITY id="-1" key="any"/>
+                <PARAMETER_ENTITY id="-1" rule_id="-1" key="key1" value="value1"/>
+                <PARAMETER_ENTITY id="-2" rule_id="-1" key="new key" value="new value"/> <!-- updated -->
+    <BUSINESS_RULE_ENTITY id="test" argument_type="any" root_rule_component_id="-1"/>
 </dataset>

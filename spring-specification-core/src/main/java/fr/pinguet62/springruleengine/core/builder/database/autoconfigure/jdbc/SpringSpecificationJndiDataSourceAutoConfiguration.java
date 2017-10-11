@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 the original author or authors.
+ * Copyright 2012-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc;
 
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -50,7 +49,7 @@ import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.
 @AutoConfigureBefore({ SpringSpecificationXADataSourceAutoConfiguration.class,
 		SpringSpecificationDataSourceAutoConfiguration.class })
 @ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class })
-@ConditionalOnProperty(prefix = "springSpecification.datasource", name = "jndi-name")
+@ConditionalOnProperty(prefix = "spring-specification.datasource", name = "jndi-name")
 @EnableConfigurationProperties(DataSourceProperties.class)
 public class SpringSpecificationJndiDataSourceAutoConfiguration {
 
@@ -70,14 +69,11 @@ public class SpringSpecificationJndiDataSourceAutoConfiguration {
 	}
 
 	private void excludeMBeanIfNecessary(Object candidate, String beanName) {
-		try {
-			MBeanExporter mbeanExporter = this.context.getBean(MBeanExporter.class);
+		for (MBeanExporter mbeanExporter : this.context
+				.getBeansOfType(MBeanExporter.class).values()) {
 			if (JmxUtils.isMBean(candidate.getClass())) {
 				mbeanExporter.addExcludedBean(beanName);
 			}
-		}
-		catch (NoSuchBeanDefinitionException ex) {
-			// No exporter. Exclusion is unnecessary
 		}
 	}
 

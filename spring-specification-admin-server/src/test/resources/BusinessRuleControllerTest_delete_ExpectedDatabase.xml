@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-        <RULE_COMPONENT_ENTITY id="2" key="any"/>
-                <PARAMETER_ENTITY id="21" rule_id="2" key="key21" value="value21"/>
-    <BUSINESS_RULE_ENTITY id="other" argument_type="java.lang.String" root_rule_component_id="2"/>
+        <RULE_COMPONENT_ENTITY id="-2" key="any"/>
+                <PARAMETER_ENTITY id="-21" rule_id="-2" key="key21" value="value21"/>
+    <BUSINESS_RULE_ENTITY id="other" argument_type="java.lang.String" root_rule_component_id="-2"/>
 </dataset>

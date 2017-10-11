@@ -345,7 +345,7 @@ To facilitate the configuration, this project defines an Spring Boot *auto-confi
 The behavior is the same than for Spring Boot (see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-sql.html[Spring Boot - Working with SQL databases]). +
 But to avoid collision, the differences are:
 
-* base *properties*: `springSpecification.datasource` and `springSpecification.jpa` (see https://docs.spring.io/spring-boot/docs/current/reference/html/howto-data-access.html[Spring Boot - Data Access]);
+* base *properties*: `spring-specification.datasource` and `spring-specification.jpa` (see https://docs.spring.io/spring-boot/docs/current/reference/html/howto-data-access.html[Spring Boot - Data Access]);
 * root folder for *database initialization*: `/spring-specification` (see https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html[Spring Boot - Database initialization]);
 * *bean name* are prefixed by `springSpecification.`.
 
@@ -367,7 +367,7 @@ WARNING: 2 auto-configuration `DataSourceAutoConfiguration` and `HibernateJpaAut
 [source, yaml]
 .application.properties
 ----
-springSpecification:
+spring-specification:
     datasource:
         url: jdbc:h2:mem:testdb <1>
         data: spring-specification/data.sql <2>

@@ -1,8 +1,8 @@
 # Spring Specification
-springSpecification:
+spring-specification:
   datasource:
     url: jdbc:h2:mem:testdb
-    data: spring-specification/data.sql
+    data: classpath:/spring-specification/data.sql
   jpa:
     show-sql: true
 

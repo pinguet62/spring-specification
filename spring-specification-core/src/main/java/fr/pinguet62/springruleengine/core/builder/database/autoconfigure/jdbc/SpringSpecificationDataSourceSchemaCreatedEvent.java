@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2014 the original author or authors.
+ * Copyright 2012-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,22 +21,22 @@ import org.springframework.context.ApplicationEvent;
 import javax.sql.DataSource;
 
 /**
- * {@link ApplicationEvent} used internally to trigger {@link DataSource} initialization.
- * Initialization can occur when {@literal schema-*.sql} files are executed or when
- * external libraries (e.g. JPA) initialize the database.
+ * {@link ApplicationEvent} used internally to indicate that the schema of a new
+ * {@link DataSource} has been created. This happens when {@literal spring-specification/schema-*.sql} files
+ * are executed or when Hibernate initializes the database.
  *
  * @author Dave Syer
- * @see SpringSpecificationDataSourceInitializer
- * @since 1.1.0
+ * @author Stephane Nicoll
+ * @since 2.0.0
  */
 @SuppressWarnings("serial")
-public class SpringSpecificationDataSourceInitializedEvent extends ApplicationEvent {
+public class SpringSpecificationDataSourceSchemaCreatedEvent extends ApplicationEvent {
 
 	/**
-	 * Create a new {@link SpringSpecificationDataSourceInitializedEvent}.
+	 * Create a new {@link SpringSpecificationDataSourceSchemaCreatedEvent}.
 	 * @param source the source {@link DataSource}.
 	 */
-	public SpringSpecificationDataSourceInitializedEvent(DataSource source) {
+	public SpringSpecificationDataSourceSchemaCreatedEvent(DataSource source) {
 		super(source);
 	}
 

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {MdDialog, MdDialogConfig, MdDialogRef} from '@angular/material';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 import {ObservableDataSource} from '../simple-data-source';
@@ -10,32 +10,32 @@ import {BusinessRule} from './business-rule';
 @Component({
     selector: 'p62-business-rule-update',
     template: `
-        <h2 md-dialog-title>Rule</h2>
-        <md-dialog-content>
+        <h2 mat-dialog-title>Rule</h2>
+        <mat-dialog-content>
             <form #form="ngForm">
-                <md-form-field>
-                    <input mdInput placeholder="Id" [(ngModel)]="businessRule.id" name="id" required>
-                </md-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Id" [(ngModel)]="businessRule.id" name="id" required>
+                </mat-form-field>
                 <br>
-                <md-form-field>
-                    <input mdInput placeholder="Argument type" [(ngModel)]="businessRule.argumentType" name="argumentType">
-                </md-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Argument type" [(ngModel)]="businessRule.argumentType" name="argumentType">
+                </mat-form-field>
                 <br>
-                <md-form-field>
-                    <input mdInput placeholder="Title" [(ngModel)]="businessRule.title" name="title">
-                </md-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Title" [(ngModel)]="businessRule.title" name="title">
+                </mat-form-field>
             </form>
-        </md-dialog-content>
-        <md-dialog-actions>
-            <button md-button (click)="dialogRef.close(undefined)">Cancel</button>
-            <button md-button [disabled]="!form.form.valid" (click)="dialogRef.close(businessRule)">Apply</button>
-        </md-dialog-actions>`
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button mat-button (click)="dialogRef.close(undefined)">Cancel</button>
+            <button mat-button [disabled]="!form.form.valid" (click)="dialogRef.close(businessRule)">Apply</button>
+        </mat-dialog-actions>`
 })
 export class CreateBusinessRuleDialog {
 
     businessRule: BusinessRule = {};
 
-    constructor(public dialogRef: MdDialogRef<CreateBusinessRuleDialog>) {
+    constructor(public dialogRef: MatDialogRef<CreateBusinessRuleDialog>) {
     }
 
 }
@@ -43,18 +43,18 @@ export class CreateBusinessRuleDialog {
 @Component({
     selector: 'p62-business-rule-delete',
     template: `
-        <h2 md-dialog-title>Delete</h2>
-        <md-dialog-content>
+        <h2 mat-dialog-title>Delete</h2>
+        <mat-dialog-content>
             Delete this rule?
-        </md-dialog-content>
-        <md-dialog-actions>
-            <button md-button (click)="dialogRef.close(false)">Cancel</button>
-            <button md-button (click)="dialogRef.close(true)">Discard</button>
-        </md-dialog-actions>`
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button mat-button (click)="dialogRef.close(false)">Cancel</button>
+            <button mat-button (click)="dialogRef.close(true)">Discard</button>
+        </mat-dialog-actions>`
 })
 export class DeleteBusinessRuleDialog {
 
-    constructor(public dialogRef: MdDialogRef<DeleteBusinessRuleDialog>) {
+    constructor(public dialogRef: MatDialogRef<DeleteBusinessRuleDialog>) {
     }
 
 }
@@ -63,35 +63,35 @@ export class DeleteBusinessRuleDialog {
     selector: 'p62-business-rule-list',
     template: `
         <div style="position: relative;">
-            <md-table [dataSource]="dataSource" style="margin-right: 50px;">
+            <mat-table [dataSource]="dataSource" style="margin-right: 50px;">
                 <ng-container cdkColumnDef="id">
-                    <md-header-cell *cdkHeaderCellDef>Id</md-header-cell>
-                    <md-cell *cdkCellDef="let businessRule">{{businessRule.id}}</md-cell>
+                    <mat-header-cell *cdkHeaderCellDef>Id</mat-header-cell>
+                    <mat-cell *cdkCellDef="let businessRule">{{businessRule.id}}</mat-cell>
                 </ng-container>
                 <ng-container cdkColumnDef="argumentType">
-                    <md-header-cell *cdkHeaderCellDef>Argument type</md-header-cell>
-                    <md-cell *cdkCellDef="let businessRule">{{businessRule.argumentType}}</md-cell>
+                    <mat-header-cell *cdkHeaderCellDef>Argument type</mat-header-cell>
+                    <mat-cell *cdkCellDef="let businessRule">{{businessRule.argumentType}}</mat-cell>
                 </ng-container>
                 <ng-container cdkColumnDef="title">
-                    <md-header-cell *cdkHeaderCellDef>Title</md-header-cell>
-                    <md-cell *cdkCellDef="let businessRule">{{businessRule.title}}</md-cell>
+                    <mat-header-cell *cdkHeaderCellDef>Title</mat-header-cell>
+                    <mat-cell *cdkCellDef="let businessRule">{{businessRule.title}}</mat-cell>
                 </ng-container>
                 <ng-container cdkColumnDef="actions">
-                    <md-header-cell *cdkHeaderCellDef></md-header-cell>
-                    <md-cell *cdkCellDef="let businessRule">
-                        <!-- TODO fix <md-row (click)> triggered when <button (click)> -->
-                        <button md-icon-button (click)="openDeleteDialog(businessRule)">
-                            <md-icon>delete</md-icon>
+                    <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+                    <mat-cell *cdkCellDef="let businessRule">
+                        <!-- TODO fix <mat-row (click)> triggered when <button (click)> -->
+                        <button mat-icon-button (click)="openDeleteDialog(businessRule)">
+                            <mat-icon>delete</mat-icon>
                         </button>
-                    </md-cell>
+                    </mat-cell>
                 </ng-container>
 
-                <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-                <md-row *cdkRowDef="let businessRule; columns: displayedColumns;" (click)="router.navigate(['businessRule', businessRule.id])"></md-row>
-            </md-table>
+                <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *cdkRowDef="let businessRule; columns: displayedColumns;" (click)="router.navigate(['businessRule', businessRule.id])"></mat-row>
+            </mat-table>
 
-            <button md-mini-fab (click)="openCreateDialog()" style="position: absolute; bottom: 0; margin-bottom: 5px; right: 0; margin-right: 5px;">
-                <md-icon>add</md-icon>
+            <button mat-mini-fab (click)="openCreateDialog()" style="position: absolute; bottom: 0; margin-bottom: 5px; right: 0; margin-right: 5px;">
+                <mat-icon>add</mat-icon>
             </button>
         </div>`,
     styles: [`
@@ -130,7 +130,7 @@ export class BusinessRuleListComponent {
     dataSource: ObservableDataSource<BusinessRule> = new ObservableDataSource<BusinessRule>(new BehaviorSubject<BusinessRule[]>([]));
 
     constructor(public router: Router,
-                private dialog: MdDialog,
+                private dialog: MatDialog,
                 private businessRuleService: BusinessRuleService) {
         this.refresh();
     }
@@ -142,7 +142,7 @@ export class BusinessRuleListComponent {
     }
 
     openCreateDialog(): void {
-        let createDialog: MdDialogRef<CreateBusinessRuleDialog> = this.dialog.open(CreateBusinessRuleDialog, this.getCommonDialogConfig());
+        let createDialog: MatDialogRef<CreateBusinessRuleDialog> = this.dialog.open(CreateBusinessRuleDialog, this.getCommonDialogConfig());
         createDialog.afterClosed().subscribe((createdBusinessRule: BusinessRule) => {
             // Canceled
             if (createdBusinessRule == null)
@@ -155,7 +155,7 @@ export class BusinessRuleListComponent {
     }
 
     openDeleteDialog(businessRule: BusinessRule): void {
-        let deleteDialog: MdDialogRef<DeleteBusinessRuleDialog> = this.dialog.open(DeleteBusinessRuleDialog, this.getCommonDialogConfig());
+        let deleteDialog: MatDialogRef<DeleteBusinessRuleDialog> = this.dialog.open(DeleteBusinessRuleDialog, this.getCommonDialogConfig());
         deleteDialog.afterClosed().subscribe((confirm: boolean) => {
             if (confirm)
                 this.businessRuleService.delete(businessRule).subscribe(x =>
@@ -164,7 +164,7 @@ export class BusinessRuleListComponent {
         });
     }
 
-    getCommonDialogConfig(): MdDialogConfig {
+    getCommonDialogConfig(): MatDialogConfig {
         return {disableClose: true};
     }
 

@@ -1,6 +1,6 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {MD_DIALOG_DATA, MdDialog, MdDialogConfig, MdDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 import {ObservableDataSource} from '../simple-data-source';
@@ -11,25 +11,25 @@ import {RuleComponent} from '../rule-component/rule-component';
 @Component({
     selector: 'p62-parameter-edit',
     template: `
-        <h2 md-dialog-title>Parameter</h2>
-        <md-dialog-content>
+        <h2 mat-dialog-title>Parameter</h2>
+        <mat-dialog-content>
             <form #form="ngForm">
-                <md-form-field>
-                    <input mdInput placeholder="Key" [(ngModel)]="parameter.key" name="key" required [mdAutocomplete]="keys">
-                </md-form-field>
-                <md-autocomplete #keys="mdAutocomplete">
-                    <md-option *ngFor="let key of requiredKeys" [value]="key">{{key}}</md-option>
-                </md-autocomplete>
+                <mat-form-field>
+                    <input matInput placeholder="Key" [(ngModel)]="parameter.key" name="key" required [matAutocomplete]="keys">
+                    <mat-autocomplete #keys="matAutocomplete">
+                        <mat-option *ngFor="let key of requiredKeys" [value]="key">{{key}}</mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
                 <br>
-                <md-form-field>
-                    <input mdInput placeholder="Value" [(ngModel)]="parameter.value" name="value" required>
-                </md-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Value" [(ngModel)]="parameter.value" name="value" required>
+                </mat-form-field>
             </form>
-        </md-dialog-content>
-        <md-dialog-actions>
-            <button md-button (click)="dialogRef.close(undefined)">Cancel</button>
-            <button md-button [disabled]="!form.form.valid" (click)="dialogRef.close(parameter)">Apply</button>
-        </md-dialog-actions>`
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button mat-button (click)="dialogRef.close(undefined)">Cancel</button>
+            <button mat-button [disabled]="!form.form.valid" (click)="dialogRef.close(parameter)">Apply</button>
+        </mat-dialog-actions>`
 })
 export class EditParameterDialog {
 
@@ -38,8 +38,8 @@ export class EditParameterDialog {
 
     requiredKeys: string[];
 
-    constructor(public dialogRef: MdDialogRef<EditParameterDialog>,
-                @Inject(MD_DIALOG_DATA) public data: any,
+    constructor(public dialogRef: MatDialogRef<EditParameterDialog>,
+                @Inject(MAT_DIALOG_DATA) public data: any,
                 parameterService: ParameterService) {
         this.ruleComponent = data.ruleComponent;
         this.parameter = <Parameter> (data && data.parameter || {}); // update or create
@@ -55,18 +55,18 @@ export class EditParameterDialog {
 @Component({
     selector: 'p62-parameter-delete',
     template: `
-        <h2 md-dialog-title>Delete</h2>
-        <md-dialog-content>
+        <h2 mat-dialog-title>Delete</h2>
+        <mat-dialog-content>
             Delete this parameter?
-        </md-dialog-content>
-        <md-dialog-actions>
-            <button md-button (click)="dialogRef.close(false)">Cancel</button>
-            <button md-button (click)="dialogRef.close(true)">Discard</button>
-        </md-dialog-actions>`
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button mat-button (click)="dialogRef.close(false)">Cancel</button>
+            <button mat-button (click)="dialogRef.close(true)">Discard</button>
+        </mat-dialog-actions>`
 })
 export class DeleteParameterDialog {
 
-    constructor(public dialogRef: MdDialogRef<DeleteParameterDialog>) {
+    constructor(public dialogRef: MatDialogRef<DeleteParameterDialog>) {
     }
 
 }
@@ -75,35 +75,35 @@ export class DeleteParameterDialog {
     selector: 'p62-parameter',
     template: `
         <div class="mat-elevation-z8" style="position: relative;">
-            <md-table [dataSource]="dataSource" style="margin-right: 50px;">
+            <mat-table [dataSource]="dataSource" style="margin-right: 50px;">
                 <ng-container cdkColumnDef="key">
-                    <md-header-cell *cdkHeaderCellDef>Key</md-header-cell>
-                    <md-cell *cdkCellDef="let parameter">{{parameter.key}}</md-cell>
+                    <mat-header-cell *cdkHeaderCellDef>Key</mat-header-cell>
+                    <mat-cell *cdkCellDef="let parameter">{{parameter.key}}</mat-cell>
                 </ng-container>
                 <ng-container cdkColumnDef="value">
-                    <md-header-cell *cdkHeaderCellDef>Value</md-header-cell>
-                    <md-cell *cdkCellDef="let parameter">{{parameter.value}}</md-cell>
+                    <mat-header-cell *cdkHeaderCellDef>Value</mat-header-cell>
+                    <mat-cell *cdkCellDef="let parameter">{{parameter.value}}</mat-cell>
                 </ng-container>
                 <ng-container cdkColumnDef="actions">
-                    <md-header-cell *cdkHeaderCellDef></md-header-cell>
-                    <md-cell *cdkCellDef="let parameter">
+                    <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+                    <mat-cell *cdkCellDef="let parameter">
                         <div style="display: flex;"><!--flex: no line break-->
-                            <button md-icon-button (click)="openUpdateDialog(parameter)">
-                                <md-icon>mode_edit</md-icon>
+                            <button mat-icon-button (click)="openUpdateDialog(parameter)">
+                                <mat-icon>mode_edit</mat-icon>
                             </button>
-                            <button md-icon-button (click)="openDeleteDialog(parameter)">
-                                <md-icon>delete</md-icon>
+                            <button mat-icon-button (click)="openDeleteDialog(parameter)">
+                                <mat-icon>delete</mat-icon>
                             </button>
                         </div>
-                    </md-cell>
+                    </mat-cell>
                 </ng-container>
 
-                <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-                <md-row *cdkRowDef="let parameter; columns: displayedColumns;"></md-row>
-            </md-table>
+                <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *cdkRowDef="let parameter; columns: displayedColumns;"></mat-row>
+            </mat-table>
 
-            <button (click)="openCreateDialog()" md-mini-fab style="position: absolute; bottom: 0; margin-bottom: 5px; right: 0; margin-right: 5px;">
-                <md-icon>add</md-icon>
+            <button (click)="openCreateDialog()" mat-mini-fab style="position: absolute; bottom: 0; margin-bottom: 5px; right: 0; margin-right: 5px;">
+                <mat-icon>add</mat-icon>
             </button>
         </div>`,
     styles: [
@@ -121,7 +121,7 @@ export class ParameterComponent implements OnInit {
     displayedColumns = ['key', 'value', 'actions'];
     dataSource: ObservableDataSource<Parameter> = new ObservableDataSource<Parameter>(new BehaviorSubject<Parameter[]>([]));
 
-    constructor(private dialog: MdDialog,
+    constructor(private dialog: MatDialog,
                 private parameterService: ParameterService) {
     }
 
@@ -136,9 +136,9 @@ export class ParameterComponent implements OnInit {
     }
 
     openCreateDialog(): void {
-        let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
+        let dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
         dialogConfig.data = {ruleComponent: this.ruleComponent};
-        let createDialog: MdDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, dialogConfig);
+        let createDialog: MatDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, dialogConfig);
         createDialog.afterClosed().subscribe((createdParameter: Parameter) => {
             // Canceled
             if (createdParameter == null)
@@ -152,12 +152,12 @@ export class ParameterComponent implements OnInit {
     }
 
     openUpdateDialog(parameter: Parameter): void {
-        let dialogConfig: MdDialogConfig = this.getCommonDialogConfig();
+        let dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
         dialogConfig.data = {
             ruleComponent: this.ruleComponent,
             parameter: Object.assign({}, parameter)
         };
-        let createDialog: MdDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, dialogConfig);
+        let createDialog: MatDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, dialogConfig);
         createDialog.afterClosed().subscribe((updatedParameter: Parameter) => {
             // Canceled
             if (updatedParameter == null)
@@ -171,7 +171,7 @@ export class ParameterComponent implements OnInit {
     }
 
     openDeleteDialog(parameter: Parameter): void {
-        let deleteDialog: MdDialogRef<DeleteParameterDialog> = this.dialog.open(DeleteParameterDialog, this.getCommonDialogConfig());
+        let deleteDialog: MatDialogRef<DeleteParameterDialog> = this.dialog.open(DeleteParameterDialog, this.getCommonDialogConfig());
         deleteDialog.afterClosed().subscribe((confirm: boolean) => {
             if (confirm)
                 this.parameterService.delete(parameter).subscribe(x =>
@@ -180,7 +180,7 @@ export class ParameterComponent implements OnInit {
         });
     }
 
-    getCommonDialogConfig(): MdDialogConfig {
+    getCommonDialogConfig(): MatDialogConfig {
         return {disableClose: true};
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2016 the original author or authors.
+ * Copyright 2012-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc;
 
+
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,8 +28,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.bind.RelaxedDataBinder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
+import org.springframework.boot.context.properties.source.ConfigurationPropertyNameAliases;
+import org.springframework.boot.context.properties.source.ConfigurationPropertySource;
+import org.springframework.boot.context.properties.source.MapConfigurationPropertySource;
 import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.boot.jta.XADataSourceWrapper;
 import org.springframework.context.annotation.Bean;
@@ -42,15 +47,14 @@ import javax.sql.DataSource;
 import javax.sql.XADataSource;
 import javax.transaction.TransactionManager;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.XA_DATASOURCE;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.*;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link DataSource} with XA.
  *
  * @author Phillip Webb
  * @author Josh Long
+ * @author Madhura Bhave
  * @since 1.2.0
  */
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
@@ -104,7 +108,7 @@ public class SpringSpecificationXADataSourceAutoConfiguration implements BeanCla
 	private XADataSource createXaDataSourceInstance(String className) {
 		try {
 			Class<?> dataSourceClass = ClassUtils.forName(className, this.classLoader);
-			Object instance = BeanUtils.instantiate(dataSourceClass);
+			Object instance = BeanUtils.instantiateClass(dataSourceClass);
 			Assert.isInstanceOf(XADataSource.class, instance);
 			return (XADataSource) instance;
 		}
@@ -114,13 +118,22 @@ public class SpringSpecificationXADataSourceAutoConfiguration implements BeanCla
 		}
 	}
 
-	private void bindXaProperties(XADataSource target, DataSourceProperties properties) {
-		MutablePropertyValues values = new MutablePropertyValues();
-		values.add("user", this.properties.determineUsername());
-		values.add("password", this.properties.determinePassword());
-		values.add("url", this.properties.determineUrl());
-		values.addPropertyValues(properties.getXa().getProperties());
-		new RelaxedDataBinder(target).withAlias("user", "username").bind(values);
+	private void bindXaProperties(XADataSource target,
+			DataSourceProperties dataSourceProperties) {
+		Binder binder = new Binder(getBinderSource(dataSourceProperties));
+		binder.bind(ConfigurationPropertyName.EMPTY, Bindable.ofInstance(target));
+	}
+
+	private ConfigurationPropertySource getBinderSource(
+			DataSourceProperties dataSourceProperties) {
+		MapConfigurationPropertySource source = new MapConfigurationPropertySource();
+		source.put("user", this.properties.determineUsername());
+		source.put("password", this.properties.determinePassword());
+		source.put("url", this.properties.determineUrl());
+		source.putAll(dataSourceProperties.getXa().getProperties());
+		ConfigurationPropertyNameAliases aliases = new ConfigurationPropertyNameAliases();
+		aliases.addAliases("user", "username");
+		return source.withAliases(aliases);
 	}
 
 }

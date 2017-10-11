@@ -73,7 +73,7 @@ describe('TreeComponent', () => {
 
         // Check than all <ul> tree are present
         it('collapse & expand', () => {
-            let getButton = (fixture: ComponentFixture<TreeComponentTester>) => fixture.debugElement.queryAll(By.css('p62-tree li ul li'))[0].query(By.css('.tree-content button[md-icon-button]'));
+            let getButton = (fixture: ComponentFixture<TreeComponentTester>) => fixture.debugElement.queryAll(By.css('p62-tree li ul li'))[0].query(By.css('.tree-content button[mat-icon-button]'));
 
             fixture.detectChanges(); // @Input()
             // expanded

@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER;
 import static fr.pinguet62.springruleengine.server.RuleComponentController.PATH;
@@ -32,33 +33,34 @@ public class RuleComponentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RuleComponentDto> getById(@NotNull @PathVariable Integer id) {
-        RuleComponentEntity entity = ruleComponentRepository.findOne(id);
-        if (entity == null)
+        Optional<RuleComponentEntity> entity = ruleComponentRepository.findById(id);
+        if (!entity.isPresent())
             return ResponseEntity.status(NOT_FOUND).build();
 
-        return ResponseEntity.ok(convert(entity));
+        return ResponseEntity.ok(convert(entity.get()));
     }
 
     @PutMapping
     public ResponseEntity<RuleComponentDto> create(@Valid @RequestBody RuleComponentInputDto dto) {
         RuleComponentEntity entity = new RuleComponentEntity();
         // entity.setId();
-        entity.setParent(ruleComponentRepository.findOne(dto.getParent()));
+        entity.setParent(ruleComponentRepository.findById(dto.getParent()).get());
         entity.setIndex(entity.getParent().getComponents().size()); // default: at the end
         entity.setKey(dto.getKey());
         entity.setDescription(dto.getDescription());
         entity = ruleComponentRepository.save(entity);
 
-        ruleComponentRepository.findOne(dto.getParent()).getComponents().add(entity);
+        ruleComponentRepository.findById(dto.getParent()).get().getComponents().add(entity);
 
         return ResponseEntity.created(URI.create(PATH + "/" + entity.getId())).body(convert(entity));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<RuleComponentDto> update(@NotNull @PathVariable Integer id, @Valid @RequestBody RuleComponentInputDto dto) {
-        RuleComponentEntity entity = ruleComponentRepository.findOne(id);
-        if (entity == null)
+        Optional<RuleComponentEntity> entityOp = ruleComponentRepository.findById(id);
+        if (!entityOp.isPresent())
             return ResponseEntity.status(NOT_FOUND).build();
+        RuleComponentEntity entity = entityOp.get();
 
         if (dto.getKey() != null)
             entity.setKey(dto.getKey());
@@ -73,7 +75,7 @@ public class RuleComponentController {
                 moved.setIndex(moved.getIndex() - 1);
             }
             // offset next rule of target parent
-            RuleComponentEntity tgtParent = dto.getParent() == null ? entity.getParent() : ruleComponentRepository.findOne(dto.getParent());
+            RuleComponentEntity tgtParent = dto.getParent() == null ? entity.getParent() : ruleComponentRepository.findById(dto.getParent()).get();
             int tgtIndex = dto.getIndex();
             for (int i = tgtIndex; i < tgtParent.getComponents().size(); i++) {
                 RuleComponentEntity moved = tgtParent.getComponents().get(i);
@@ -83,7 +85,7 @@ public class RuleComponentController {
         }
 
         if (dto.getParent() != null)
-            entity.setParent(ruleComponentRepository.findOne(dto.getParent()));
+            entity.setParent(ruleComponentRepository.findById(dto.getParent()).get());
 
         entity = ruleComponentRepository.save(entity);
 
@@ -92,9 +94,10 @@ public class RuleComponentController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<RuleComponentDto> delete(@NotNull @PathVariable Integer id) {
-        RuleComponentEntity entity = ruleComponentRepository.findOne(id);
-        if (entity == null)
+        Optional<RuleComponentEntity> entityOp = ruleComponentRepository.findById(id);
+        if (!entityOp.isPresent())
             return ResponseEntity.status(NOT_FOUND).build();
+        RuleComponentEntity entity = entityOp.get();
 
         RuleComponentDto dto = convert(entity);
         ruleComponentRepository.delete(entity);

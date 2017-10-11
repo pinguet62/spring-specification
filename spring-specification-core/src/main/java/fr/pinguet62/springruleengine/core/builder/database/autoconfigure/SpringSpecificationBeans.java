@@ -20,6 +20,8 @@ public class SpringSpecificationBeans {
      */
     public static final String XA_DATASOURCE = "springSpecification.xaDataSource";
 
+    public static final String DATASOURCE_MBEAN = "springSpecification.dataSourceMBean";
+
     /**
      * @see org.springframework.boot.autoconfigure.jdbc.DataSourceInitializer
      */

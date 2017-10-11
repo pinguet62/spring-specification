@@ -38,6 +38,7 @@ public class FixPrimaryBeanDefinitionRegistryPostProcessor implements BeanDefini
         springBootBeans.put(DataSourceProperties.class, DATASOURCE_PROPERTIES);
         springBootBeans.put(DataSource.class, DATASOURCE);
         springBootBeans.put(XADataSource.class, XA_DATASOURCE);
+        springBootBeans.put(Object.class, DATASOURCE_MBEAN);
         springBootBeans.put(DataSourceInitializer.class, DATASOURCE_INITIALIZER);
         // JPA
         springBootBeans.put(JpaProperties.class, JPA_PROPERTIES);

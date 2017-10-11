@@ -17,7 +17,7 @@ import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.
 public class SpringSpecificationPropertiesConfiguration {
 
     @Bean(DATASOURCE_PROPERTIES)
-    @ConfigurationProperties(prefix = "springSpecification.dataSource")
+    @ConfigurationProperties(prefix = "spring-specification.datasource")
     public DataSourceProperties springSpecificationDataSourceProperties() {
         DataSourceProperties dataSourceProperties = new DataSourceProperties();
         dataSourceProperties.setName("springSpecification"); // @Override default
@@ -25,7 +25,7 @@ public class SpringSpecificationPropertiesConfiguration {
     }
 
     @Bean(JPA_PROPERTIES)
-    @ConfigurationProperties(prefix = "springSpecification.jpa")
+    @ConfigurationProperties(prefix = "spring-specification.jpa")
     public JpaProperties springSpecificationJpaProperties() {
         return new JpaProperties();
     }
