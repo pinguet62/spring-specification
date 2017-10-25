@@ -13,6 +13,8 @@ public abstract class AbstractCompositeRule<T> implements Rule<T> {
      * @throws IllegalArgumentException Empty value.
      */
     public AbstractCompositeRule(@Size(min = 1) Rule<T>... rules) {
+        if (rules.length == 0)
+            throw new IllegalArgumentException("At least 1 " + Rule.class.getSimpleName() + " is required");
         this.rules = rules;
     }
 

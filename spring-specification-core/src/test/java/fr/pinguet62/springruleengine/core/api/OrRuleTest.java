@@ -4,7 +4,6 @@ import fr.pinguet62.springruleengine.core.Jsr303ValidationAspect;
 import org.aspectj.lang.annotation.Aspect;
 import org.junit.Test;
 
-import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -47,8 +46,8 @@ public class OrRuleTest {
         )))
             try {
                 fct.run();
-                fail(format("@%s %s not enabled", Aspect.class.getSimpleName(), Jsr303ValidationAspect.class.getSimpleName()));
-            } catch (ConstraintViolationException e) {
+                fail(format("Maybe @%s %s not enabled", Aspect.class.getSimpleName(), Jsr303ValidationAspect.class.getSimpleName()));
+            } catch (RuntimeException e) {
                 // ok
             }
     }
