@@ -4,7 +4,6 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import fr.pinguet62.springruleengine.server.dto.BusinessRuleDto;
 import fr.pinguet62.springruleengine.server.dto.BusinessRuleInputDto;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -19,7 +18,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.github.springtestdbunit.assertion.DatabaseAssertionMode.NON_STRICT_UNORDERED;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
 import static fr.pinguet62.springruleengine.server.BusinessRuleController.PATH;
 import static java.nio.charset.Charset.defaultCharset;
 import static java.util.Arrays.asList;
@@ -40,7 +38,7 @@ import static org.springframework.web.util.UriUtils.encode;
 @AutoConfigureMockMvc
 // DbUnit
 @TestExecutionListeners(mergeMode = MERGE_WITH_DEFAULTS, listeners = DbUnitTestExecutionListener.class)
-@DbUnitConfiguration(databaseConnection = DATASOURCE)
+@DbUnitConfiguration(databaseConnection = "springSpecification.dataSource")
 @DatabaseSetup("/BusinessRuleControllerTest_dataset.xml")
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD) // simulate @Transactional (TODO check is works with MockMvc)
 public class BusinessRuleControllerTest {

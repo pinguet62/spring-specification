@@ -25,7 +25,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.github.springtestdbunit.assertion.DatabaseAssertionMode.NON_STRICT_UNORDERED;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
 import static fr.pinguet62.springruleengine.server.ParameterController.PATH;
 import static fr.pinguet62.springruleengine.server.TestRules.ParameterizedRule;
 import static java.lang.String.valueOf;
@@ -54,7 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 // DbUnit
 @TestExecutionListeners(mergeMode = MERGE_WITH_DEFAULTS, listeners = DbUnitTestExecutionListener.class)
-@DbUnitConfiguration(databaseConnection = DATASOURCE)
+@DbUnitConfiguration(databaseConnection = "springSpecification.dataSource")
 @DatabaseSetup("/ParameterControllerTest_dataset.xml")
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD) // simulate @Transactional (TODO check is works with MockMvc)
 public class ParameterControllerTest {

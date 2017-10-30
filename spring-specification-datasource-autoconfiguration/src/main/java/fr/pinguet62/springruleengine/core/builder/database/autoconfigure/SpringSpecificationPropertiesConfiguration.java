@@ -6,8 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.JPA_PROPERTIES;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.JPA_PROPERTIES_NAME;
 
 /**
  * Custom property groups, to create auto-configuration based on properties
@@ -16,7 +16,7 @@ import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.
 @Configuration
 public class SpringSpecificationPropertiesConfiguration {
 
-    @Bean(DATASOURCE_PROPERTIES)
+    @Bean(DATASOURCE_PROPERTIES_NAME)
     @ConfigurationProperties(prefix = "spring-specification.datasource")
     public DataSourceProperties springSpecificationDataSourceProperties() {
         DataSourceProperties dataSourceProperties = new DataSourceProperties();
@@ -24,7 +24,7 @@ public class SpringSpecificationPropertiesConfiguration {
         return dataSourceProperties;
     }
 
-    @Bean(JPA_PROPERTIES)
+    @Bean(JPA_PROPERTIES_NAME)
     @ConfigurationProperties(prefix = "spring-specification.jpa")
     public JpaProperties springSpecificationJpaProperties() {
         return new JpaProperties();

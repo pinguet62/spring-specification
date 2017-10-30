@@ -34,8 +34,8 @@ import org.springframework.jmx.support.JmxUtils;
 
 import javax.sql.DataSource;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for a JNDI located
@@ -59,12 +59,12 @@ public class SpringSpecificationJndiDataSourceAutoConfiguration {
 		this.context = context;
 	}
 
-	@Bean(name = DATASOURCE, destroyMethod = "")
-	@ConditionalOnMissingBean(name = DATASOURCE)
-	public DataSource dataSource(@Qualifier(DATASOURCE_PROPERTIES) DataSourceProperties properties) {
+	@Bean(name = DATASOURCE_NAME, destroyMethod = "")
+	@ConditionalOnMissingBean(name = DATASOURCE_NAME)
+	public DataSource dataSource(@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
 		JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
 		DataSource dataSource = dataSourceLookup.getDataSource(properties.getJndiName());
-		excludeMBeanIfNecessary(dataSource, DATASOURCE);
+		excludeMBeanIfNecessary(dataSource, DATASOURCE_NAME);
 		return dataSource;
 	}
 

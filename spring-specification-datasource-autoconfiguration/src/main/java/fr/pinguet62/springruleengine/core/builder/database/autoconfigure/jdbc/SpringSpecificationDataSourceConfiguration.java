@@ -28,8 +28,8 @@ import org.springframework.context.annotation.Bean;
 
 import javax.sql.DataSource;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
 
 /**
  * Actual DataSource configurations imported by {@link SpringSpecificationDataSourceAutoConfiguration}.
@@ -53,10 +53,10 @@ abstract class SpringSpecificationDataSourceConfiguration {
 	@ConditionalOnProperty(name = "spring-specification.datasource.type", havingValue = "org.apache.tomcat.jdbc.pool.DataSource", matchIfMissing = true)
 	static class Tomcat extends SpringSpecificationDataSourceConfiguration {
 
-		@Bean(DATASOURCE)
+		@Bean(DATASOURCE_NAME)
 		@ConfigurationProperties(prefix = "spring-specification.datasource.tomcat")
 		public org.apache.tomcat.jdbc.pool.DataSource dataSource(
-				@Qualifier(DATASOURCE_PROPERTIES) DataSourceProperties properties) {
+				@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
 			org.apache.tomcat.jdbc.pool.DataSource dataSource = createDataSource(
 					properties, org.apache.tomcat.jdbc.pool.DataSource.class);
 			DatabaseDriver databaseDriver = DatabaseDriver
@@ -78,9 +78,9 @@ abstract class SpringSpecificationDataSourceConfiguration {
 	@ConditionalOnProperty(name = "spring-specification.datasource.type", havingValue = "com.zaxxer.hikari.HikariDataSource", matchIfMissing = true)
 	static class Hikari extends SpringSpecificationDataSourceConfiguration {
 
-		@Bean(DATASOURCE)
+		@Bean(DATASOURCE_NAME)
 		@ConfigurationProperties(prefix = "spring-specification.datasource.hikari")
-		public HikariDataSource dataSource(@Qualifier(DATASOURCE_PROPERTIES) DataSourceProperties properties) {
+		public HikariDataSource dataSource(@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
 			HikariDataSource dataSource = createDataSource(properties,
 					HikariDataSource.class);
 			if (properties.getName() != null) {
@@ -98,10 +98,10 @@ abstract class SpringSpecificationDataSourceConfiguration {
 	@ConditionalOnProperty(name = "spring-specification.datasource.type", havingValue = "org.apache.commons.dbcp2.BasicDataSource", matchIfMissing = true)
 	static class Dbcp2 extends SpringSpecificationDataSourceConfiguration {
 
-		@Bean(DATASOURCE)
+		@Bean(DATASOURCE_NAME)
 		@ConfigurationProperties(prefix = "spring-specification.datasource.dbcp2")
 		public org.apache.commons.dbcp2.BasicDataSource dataSource(
-				@Qualifier(DATASOURCE_PROPERTIES) DataSourceProperties properties) {
+				@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
 			return createDataSource(properties,
 					org.apache.commons.dbcp2.BasicDataSource.class);
 		}
@@ -111,12 +111,12 @@ abstract class SpringSpecificationDataSourceConfiguration {
 	/**
 	 * Generic DataSource configuration.
 	 */
-	@ConditionalOnMissingBean(value = DataSource.class, name = DATASOURCE)
+	@ConditionalOnMissingBean(value = DataSource.class, name = DATASOURCE_NAME)
 	@ConditionalOnProperty(name = "spring-specification.datasource.type")
 	static class Generic {
 
-		@Bean(DATASOURCE)
-		public DataSource dataSource(@Qualifier(DATASOURCE_PROPERTIES) DataSourceProperties properties) {
+		@Bean(DATASOURCE_NAME)
+		public DataSource dataSource(@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
 			return properties.initializeDataSourceBuilder().build();
 		}
 

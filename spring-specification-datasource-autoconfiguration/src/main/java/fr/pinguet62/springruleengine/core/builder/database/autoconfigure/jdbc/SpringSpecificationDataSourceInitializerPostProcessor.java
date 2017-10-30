@@ -24,7 +24,7 @@ import org.springframework.core.Ordered;
 
 import javax.sql.DataSource;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
 
 /**
  * {@link BeanPostProcessor} used to ensure that {@link SpringSpecificationDataSourceInitializer} is
@@ -54,7 +54,7 @@ class SpringSpecificationDataSourceInitializerPostProcessor implements BeanPostP
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName)
 			throws BeansException {
-		if (bean instanceof DataSource && beanName.equals(DATASOURCE)) {
+		if (bean instanceof DataSource && beanName.equals(DATASOURCE_NAME)) {
 			// force initialization of this bean as soon as we see a DataSource
 			this.beanFactory.getBean(SpringSpecificationDataSourceInitializerInvoker.class);
 		}

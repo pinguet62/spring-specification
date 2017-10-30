@@ -28,8 +28,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
 import javax.annotation.PreDestroy;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
 
 /**
  * Configuration for embedded data sources.
@@ -48,7 +48,7 @@ public class SpringSpecificationEmbeddedDataSourceConfiguration implements BeanC
 
 	private final DataSourceProperties properties;
 
-	public SpringSpecificationEmbeddedDataSourceConfiguration(@Qualifier(DATASOURCE_PROPERTIES) DataSourceProperties properties) {
+	public SpringSpecificationEmbeddedDataSourceConfiguration(@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
 		this.properties = properties;
 	}
 
@@ -57,7 +57,7 @@ public class SpringSpecificationEmbeddedDataSourceConfiguration implements BeanC
 		this.classLoader = classLoader;
 	}
 
-	@Bean(DATASOURCE)
+	@Bean(DATASOURCE_NAME)
 	public EmbeddedDatabase dataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder()
 				.setType(EmbeddedDatabaseConnection.get(this.classLoader).getType());

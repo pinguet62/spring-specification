@@ -16,12 +16,12 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER_NAME;
 import static fr.pinguet62.springruleengine.server.RuleComponentController.PATH;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@Transactional(TRANSACTION_MANAGER)
+@Transactional(TRANSACTION_MANAGER_NAME)
 @RestController
 @RequestMapping(PATH)
 public class RuleComponentController {

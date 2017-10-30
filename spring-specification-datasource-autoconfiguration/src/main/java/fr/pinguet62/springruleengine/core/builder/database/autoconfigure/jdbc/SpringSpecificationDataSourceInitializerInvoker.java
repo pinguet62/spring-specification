@@ -27,8 +27,8 @@ import org.springframework.context.ApplicationListener;
 
 import javax.sql.DataSource;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
 
 /**
  * Bean to handle {@link DataSource} initialization by running {@literal spring-specification/schema-*.sql} on
@@ -54,8 +54,8 @@ class SpringSpecificationDataSourceInitializerInvoker
 
 	private boolean initialized;
 
-	SpringSpecificationDataSourceInitializerInvoker(@Qualifier(DATASOURCE) ObjectProvider<DataSource> dataSource,
-			@Qualifier(DATASOURCE_PROPERTIES) DataSourceProperties properties, ApplicationContext applicationContext) {
+	SpringSpecificationDataSourceInitializerInvoker(@Qualifier(DATASOURCE_NAME) ObjectProvider<DataSource> dataSource,
+                                                    @Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties, ApplicationContext applicationContext) {
 		this.dataSource = dataSource;
 		this.properties = properties;
 		this.applicationContext = applicationContext;

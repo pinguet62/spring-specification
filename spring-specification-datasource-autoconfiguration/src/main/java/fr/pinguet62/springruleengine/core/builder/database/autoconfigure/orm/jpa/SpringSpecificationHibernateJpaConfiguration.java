@@ -1,6 +1,5 @@
 package fr.pinguet62.springruleengine.core.builder.database.autoconfigure.orm.jpa;
 
-import fr.pinguet62.springruleengine.core.builder.database.SpringDataJpaConfig;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -52,7 +51,7 @@ import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.
  * @since 2.0.0
  */
 @Configuration
-@ConditionalOnBean(value = DataSource.class, name = DATASOURCE)
+@ConditionalOnBean(value = DataSource.class, name = DATASOURCE_NAME)
 public class SpringSpecificationHibernateJpaConfiguration extends JpaBaseConfiguration {
 
     private static final String PERSISTENCE_UNIT_NAME = "springSpecification";
@@ -79,8 +78,8 @@ public class SpringSpecificationHibernateJpaConfiguration extends JpaBaseConfigu
     private final SpringSpecificationHibernateDefaultDdlAutoProvider defaultDdlAutoProvider;
 
     SpringSpecificationHibernateJpaConfiguration(
-            @Qualifier(DATASOURCE) DataSource dataSource,
-            @Qualifier(JPA_PROPERTIES) JpaProperties jpaProperties,
+            @Qualifier(DATASOURCE_NAME) DataSource dataSource,
+            @Qualifier(JPA_PROPERTIES_NAME) JpaProperties jpaProperties,
             ObjectProvider<JtaTransactionManager> jtaTransactionManager,
             ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers,
             ObjectProvider<List<SchemaManagementProvider>> providers) {
@@ -192,32 +191,32 @@ public class SpringSpecificationHibernateJpaConfiguration extends JpaBaseConfigu
         throw new IllegalStateException("Could not configure JTA platform");
     }
 
-    @Bean(TRANSACTION_MANAGER)
-    @ConditionalOnMissingBean(/*value = PlatformTransactionManager.class,*/ name = TRANSACTION_MANAGER)
+    @Bean(TRANSACTION_MANAGER_NAME)
+    @ConditionalOnMissingBean(/*value = PlatformTransactionManager.class,*/ name = TRANSACTION_MANAGER_NAME)
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = (JpaTransactionManager) super.transactionManager();
         transactionManager.setPersistenceUnitName(PERSISTENCE_UNIT_NAME);
         return transactionManager;
     }
 
-    @Bean(JPA_VENDOR_ADAPTER)
-    @ConditionalOnMissingBean(name = JPA_VENDOR_ADAPTER)
+    @Bean(JPA_VENDOR_ADAPTER_NAME)
+    @ConditionalOnMissingBean(name = JPA_VENDOR_ADAPTER_NAME)
     public JpaVendorAdapter jpaVendorAdapter() {
         return super.jpaVendorAdapter();
     }
 
-    @Bean(ENTITY_MANAGER_FACTORY_BUILDER)
-    @ConditionalOnMissingBean(name = ENTITY_MANAGER_FACTORY_BUILDER)
+    @Bean(ENTITY_MANAGER_FACTORY_BUILDER_NAME)
+    @ConditionalOnMissingBean(name = ENTITY_MANAGER_FACTORY_BUILDER_NAME)
     public EntityManagerFactoryBuilder entityManagerFactoryBuilder(
-            @Qualifier(JPA_VENDOR_ADAPTER) JpaVendorAdapter jpaVendorAdapter,
+            @Qualifier(JPA_VENDOR_ADAPTER_NAME) JpaVendorAdapter jpaVendorAdapter,
             ObjectProvider<PersistenceUnitManager> persistenceUnitManager) {
         return super.entityManagerFactoryBuilder(jpaVendorAdapter, persistenceUnitManager);
     }
 
-    @Bean(ENTITY_MANAGER_FACTORY)
-    @ConditionalOnMissingBean(name = ENTITY_MANAGER_FACTORY)
+    @Bean(ENTITY_MANAGER_FACTORY_NAME)
+    @ConditionalOnMissingBean(name = ENTITY_MANAGER_FACTORY_NAME)
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            @Qualifier(ENTITY_MANAGER_FACTORY_BUILDER) EntityManagerFactoryBuilder factoryBuilder) {
+            @Qualifier(ENTITY_MANAGER_FACTORY_BUILDER_NAME) EntityManagerFactoryBuilder factoryBuilder) {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = super.entityManagerFactory(factoryBuilder);
         entityManagerFactory.setPersistenceUnitName(PERSISTENCE_UNIT_NAME);
         return entityManagerFactory;
@@ -225,7 +224,7 @@ public class SpringSpecificationHibernateJpaConfiguration extends JpaBaseConfigu
 
     @Override
     protected String[] getPackagesToScan() {
-        return new String[]{SpringDataJpaConfig.class.getPackage().getName()};
+        return new String[]{"fr.pinguet62.springruleengine.core.builder.database"};
     }
 
 }

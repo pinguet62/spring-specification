@@ -16,11 +16,9 @@
 
 package fr.pinguet62.springruleengine.core.builder.database.autoconfigure.jdbc;
 
-import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.tomcat.jdbc.pool.DataSourceProxy;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -28,13 +26,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jmx.export.MBeanExporter;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
 
 /**
  * Configures DataSource related MBeans.
@@ -56,7 +52,7 @@ class SpringSpecificationDataSourceJmxConfiguration {
 //
 //		private final ObjectProvider<MBeanExporter> mBeanExporter;
 //
-//		Hikari(@Qualifier(DATASOURCE) HikariDataSource dataSource, ObjectProvider<MBeanExporter> mBeanExporter) {
+//		Hikari(@Qualifier(DATASOURCE_NAME) HikariDataSource dataSource, ObjectProvider<MBeanExporter> mBeanExporter) {
 //			this.dataSource = dataSource;
 //			this.mBeanExporter = mBeanExporter;
 //		}
@@ -65,7 +61,7 @@ class SpringSpecificationDataSourceJmxConfiguration {
 //		public void validateMBeans() {
 //			MBeanExporter exporter = this.mBeanExporter.getIfUnique();
 //			if (exporter != null && this.dataSource.isRegisterMbeans()) {
-//				exporter.addExcludedBean(DATASOURCE);
+//				exporter.addExcludedBean(DATASOURCE_NAME);
 //			}
 //		}
 //
@@ -79,7 +75,7 @@ class SpringSpecificationDataSourceJmxConfiguration {
 
 		@Bean
 		@ConditionalOnMissingBean(name = "dataSourceMBean")
-		public Object dataSourceMBean(@Qualifier(DATASOURCE) DataSource dataSource) {
+		public Object dataSourceMBean(@Qualifier(DATASOURCE_NAME) DataSource dataSource) {
 			if (dataSource instanceof DataSourceProxy) {
 				try {
 					return ((DataSourceProxy) dataSource).createPool().getJmxPool();

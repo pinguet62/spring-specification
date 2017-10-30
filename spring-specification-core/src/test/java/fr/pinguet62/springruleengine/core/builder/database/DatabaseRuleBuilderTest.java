@@ -17,14 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import static fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest.TestRules;
 import static fr.pinguet62.springruleengine.core.builder.database.DatabaseRuleBuilderTest.TestRules.*;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS;
@@ -45,10 +42,10 @@ import static org.springframework.test.context.TestExecutionListeners.MergeMode.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {TestApplication.class, TestRules.class})
-@Transactional(TRANSACTION_MANAGER)
+@Transactional("springSpecification.transactionManager")
 // DbUnit
 @TestExecutionListeners(mergeMode = MERGE_WITH_DEFAULTS, listeners = DbUnitTestExecutionListener.class)
-@DbUnitConfiguration(databaseConnection = DATASOURCE)
+@DbUnitConfiguration(databaseConnection = "springSpecification.dataSource")
 @DatabaseSetup("/sample.xml")
 public class DatabaseRuleBuilderTest {
 

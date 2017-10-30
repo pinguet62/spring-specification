@@ -340,7 +340,7 @@ you have to declare these 3 beans:
 
 ==== Auto-configuration
 
-To facilitate the configuration, this project defines an Spring Boot *auto-configuration* module.
+To facilitate the configuration, this project defines and uses a Spring Boot *auto-configuration* module named `spring-specification-datasource-autoconfiguration`.
 
 The behavior is the same than for Spring Boot (see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-sql.html[Spring Boot - Working with SQL databases]). +
 But to avoid collision, the differences are:

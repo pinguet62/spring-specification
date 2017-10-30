@@ -62,23 +62,23 @@ import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.
 @ConditionalOnClass({ DataSource.class, TransactionManager.class,
 		EmbeddedDatabaseType.class })
 @ConditionalOnBean(XADataSourceWrapper.class)
-@ConditionalOnMissingBean(value = DataSource.class, name = DATASOURCE)
+@ConditionalOnMissingBean(value = DataSource.class, name = DATASOURCE_NAME)
 public class SpringSpecificationXADataSourceAutoConfiguration implements BeanClassLoaderAware {
 
 	@Autowired
 	private XADataSourceWrapper wrapper;
 
 	@Autowired
-	@Qualifier(DATASOURCE_PROPERTIES)
+	@Qualifier(DATASOURCE_PROPERTIES_NAME)
 	private DataSourceProperties properties;
 
 	@Autowired(required = false)
-	@Qualifier(XA_DATASOURCE)
+	@Qualifier(XA_DATASOURCE_NAME)
 	private XADataSource xaDataSource;
 
 	private ClassLoader classLoader;
 
-	@Bean(DATASOURCE)
+	@Bean(DATASOURCE_NAME)
 	public DataSource dataSource() throws Exception {
 		XADataSource xaDataSource = this.xaDataSource;
 		if (xaDataSource == null) {

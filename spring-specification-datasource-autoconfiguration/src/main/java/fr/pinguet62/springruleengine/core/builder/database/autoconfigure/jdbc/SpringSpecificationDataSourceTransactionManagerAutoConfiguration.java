@@ -37,8 +37,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for
@@ -57,14 +57,14 @@ import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.
 public class SpringSpecificationDataSourceTransactionManagerAutoConfiguration {
 
 	@Configuration
-	@ConditionalOnBean(value = DataSource.class, name = DATASOURCE)
+	@ConditionalOnBean(value = DataSource.class, name = DATASOURCE_NAME)
 	static class DataSourceTransactionManagerConfiguration {
 
 		private final DataSource dataSource;
 
 		private final TransactionManagerCustomizers transactionManagerCustomizers;
 
-		DataSourceTransactionManagerConfiguration(@Qualifier(DATASOURCE) DataSource dataSource,
+		DataSourceTransactionManagerConfiguration(@Qualifier(DATASOURCE_NAME) DataSource dataSource,
 				ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
 			this.dataSource = dataSource;
 			this.transactionManagerCustomizers = transactionManagerCustomizers
@@ -74,7 +74,7 @@ public class SpringSpecificationDataSourceTransactionManagerAutoConfiguration {
 		@Bean
 		@ConditionalOnMissingBean(PlatformTransactionManager.class)
 		public DataSourceTransactionManager transactionManager(
-				@Qualifier(DATASOURCE_PROPERTIES) DataSourceProperties properties) {
+				@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
 			DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(
 					this.dataSource);
 			if (this.transactionManagerCustomizers != null) {

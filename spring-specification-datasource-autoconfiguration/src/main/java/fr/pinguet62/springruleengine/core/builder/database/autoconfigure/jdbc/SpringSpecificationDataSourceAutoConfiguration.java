@@ -37,8 +37,8 @@ import javax.sql.DataSource;
 import javax.sql.XADataSource;
 import java.util.Arrays;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE;
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.XA_DATASOURCE;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.XA_DATASOURCE_NAME;
 import static java.util.function.Predicate.isEqual;
 
 /**
@@ -59,7 +59,7 @@ public class SpringSpecificationDataSourceAutoConfiguration {
 
 	@Configuration
 	@Conditional(EmbeddedDatabaseCondition.class)
-	@ConditionalOnMissingBean(value = { DataSource.class, XADataSource.class }, name = DATASOURCE)
+	@ConditionalOnMissingBean(value = { DataSource.class, XADataSource.class }, name = DATASOURCE_NAME)
 	@Import(SpringSpecificationEmbeddedDataSourceConfiguration.class)
 	protected static class EmbeddedDatabaseConfiguration {
 
@@ -67,7 +67,7 @@ public class SpringSpecificationDataSourceAutoConfiguration {
 
 	@Configuration
 	@Conditional(PooledDataSourceCondition.class)
-	@ConditionalOnMissingBean(value = { DataSource.class, XADataSource.class }, name = DATASOURCE)
+	@ConditionalOnMissingBean(value = { DataSource.class, XADataSource.class }, name = DATASOURCE_NAME)
 	@Import({ SpringSpecificationDataSourceConfiguration.Hikari.class, SpringSpecificationDataSourceConfiguration.Tomcat.class,
 			SpringSpecificationDataSourceConfiguration.Dbcp2.class, SpringSpecificationDataSourceConfiguration.Generic.class,
 			SpringSpecificationDataSourceJmxConfiguration.class })
@@ -174,8 +174,8 @@ public class SpringSpecificationDataSourceAutoConfiguration {
 												AnnotatedTypeMetadata metadata) {
 			ConditionMessage.Builder message = ConditionMessage
 					.forCondition("DataSourceAvailable");
-			if (hasBean(context, DataSource.class, DATASOURCE)
-					|| hasBean(context, XADataSource.class, XA_DATASOURCE)) {
+			if (hasBean(context, DataSource.class, DATASOURCE_NAME)
+					|| hasBean(context, XADataSource.class, XA_DATASOURCE_NAME)) {
 				return ConditionOutcome
 						.match(message.foundExactly("existing data source bean"));
 			}

@@ -60,14 +60,14 @@ class SpringSpecificationDataSourceInitializedPublisher implements BeanPostProce
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName)
 			throws BeansException {
-		if (bean instanceof DataSource && beanName.equals(DATASOURCE)) {
+		if (bean instanceof DataSource && beanName.equals(DATASOURCE_NAME)) {
 			// Normally this will be the right DataSource
 			this.dataSource = (DataSource) bean;
 		}
-		if (bean instanceof JpaProperties && beanName.equals(JPA_PROPERTIES)) {
+		if (bean instanceof JpaProperties && beanName.equals(JPA_PROPERTIES_NAME)) {
 			this.properties = (JpaProperties) bean;
 		}
-		if (bean instanceof EntityManagerFactory && beanName.equals(ENTITY_MANAGER_FACTORY)) {
+		if (bean instanceof EntityManagerFactory && beanName.equals(ENTITY_MANAGER_FACTORY_NAME)) {
 			publishEventIfRequired((EntityManagerFactory) bean);
 		}
 		return bean;

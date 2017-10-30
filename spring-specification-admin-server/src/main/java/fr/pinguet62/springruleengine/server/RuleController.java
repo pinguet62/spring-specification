@@ -14,11 +14,11 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER;
+import static fr.pinguet62.springruleengine.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER_NAME;
 import static fr.pinguet62.springruleengine.server.RuleController.PATH;
 import static java.util.stream.Collectors.toList;
 
-@Transactional(TRANSACTION_MANAGER)
+@Transactional(TRANSACTION_MANAGER_NAME)
 @RestController
 @RequestMapping(PATH)
 public class RuleController {
