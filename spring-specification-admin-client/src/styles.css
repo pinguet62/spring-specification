@@ -1,9 +1,8 @@
 /* Material2 */
-@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
-@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
 /* Dragula */
-@import "../node_modules/dragula/dist/dragula.css";
+@import "~dragula/dist/dragula.css";
 
 body {
     margin: 0;

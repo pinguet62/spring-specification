@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
     MatAutocompleteModule,
@@ -35,7 +35,7 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './
 
 @NgModule({
     imports: [
-        BrowserModule, FormsModule, ReactiveFormsModule, HttpModule, BrowserAnimationsModule,
+        BrowserModule, FormsModule, ReactiveFormsModule, HttpClientModule, BrowserAnimationsModule,
         MatAutocompleteModule, MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatListModule, MatSelectModule, MatSidenavModule, MatTableModule, MatToolbarModule,
         CdkTableModule,
         TreeModule, RouterModule.forRoot(appRoutes)

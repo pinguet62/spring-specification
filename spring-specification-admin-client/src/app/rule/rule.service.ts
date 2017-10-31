@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Headers, Http, RequestOptionsArgs} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -12,16 +12,14 @@ export class RuleService {
 
     private static readonly resourceUrl: string = environment.apiUrl + '/rule';
 
-    private options: RequestOptionsArgs = {headers: new Headers({'Content-Type': 'application/json'})};
-
     CACHE: Rule[];
 
-    constructor(protected http: Http) {
+    constructor(protected http: HttpClient) {
     }
 
     load(): Observable<Rule[]> {
         let url: string = RuleService.resourceUrl + '/';
-        return this.http.get(url, this.options).map(res => res.json());
+        return this.http.get<Rule[]>(url);
     }
 
     getAll(): Rule[] {
@@ -45,7 +43,7 @@ export class RuleService {
 
     getAssociableRules(argumentType: string): Observable<Rule[]> {
         let url: string = RuleService.resourceUrl + '?argumentType=' + argumentType;
-        return this.http.get(url, this.options).map(res => res.json());
+        return this.http.get<Rule[]>(url);
     }
 
 }

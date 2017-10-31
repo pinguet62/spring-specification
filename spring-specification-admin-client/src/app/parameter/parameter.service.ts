@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Headers, Http, RequestOptionsArgs} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
@@ -12,36 +12,34 @@ export class ParameterService {
 
     private static readonly resourceUrl: string = environment.apiUrl + '/parameter';
 
-    private options: RequestOptionsArgs = {headers: new Headers({'Content-Type': 'application/json'})};
-
-    constructor(private http: Http) {
+    constructor(protected http: HttpClient) {
     }
 
     getByRuleComponent(ruleComponent: RuleComponent): Observable<Parameter[]> {
         let url: string = ParameterService.resourceUrl + '?ruleComponent=' + ruleComponent.id;
-        return this.http.get(url, this.options).map(res => res.json());
+        return this.http.get<Parameter[]>(url);
     }
 
     getKeyByRule(ruleKey: string): Observable<string[]> {
         let url: string = ParameterService.resourceUrl + '/key/' + ruleKey;
-        return this.http.get(url, this.options).map(res => res.json());
+        return this.http.get<string[]>(url);
     }
 
     create(parameter: Parameter): Observable<Parameter> {
         let url: string = ParameterService.resourceUrl;
         let body: string = JSON.stringify(parameter);
-        return this.http.put(url, body, this.options).map(res => res.json());
+        return this.http.put<Parameter>(url, body);
     }
 
     update(parameter: Parameter): Observable<Parameter> {
         let url: string = ParameterService.resourceUrl + '/' + parameter.id;
         let body: string = JSON.stringify(parameter);
-        return this.http.post(url, body, this.options).map(res => res.json());
+        return this.http.post<Parameter>(url, body);
     }
 
     delete(parameter: Parameter): Observable<Parameter> {
         let url: string = ParameterService.resourceUrl + '/' + parameter.id;
-        return this.http.delete(url, this.options).map(res => res.json());
+        return this.http.delete<Parameter>(url);
     }
 
 }
