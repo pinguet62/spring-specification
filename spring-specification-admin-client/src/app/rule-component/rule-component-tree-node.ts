@@ -12,7 +12,7 @@ export interface RuleComponentDataTreeNode {
 export function convert(ruleComponent: RuleComponent): TreeNode<RuleComponentDataTreeNode> {
     let treeNode: TreeNode<RuleComponentDataTreeNode> = <TreeNode<RuleComponentDataTreeNode>> {
         expanded: true, // TODO test
-        acceptChildren: ['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(ruleComponent.key),
+        acceptChildren: ['fr.pinguet62.springspecification.core.api.AndRule', 'fr.pinguet62.springspecification.core.api.OrRule', 'fr.pinguet62.springspecification.core.api.NotRule'].includes(ruleComponent.key),
         children: [],
         data: <RuleComponentDataTreeNode> {
             ruleComponent: ruleComponent,

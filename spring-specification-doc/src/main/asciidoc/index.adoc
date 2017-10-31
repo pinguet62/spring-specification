@@ -117,7 +117,7 @@ Rule composedRule = first.not().and( second.or(third) );
 
 [source, java]
 ----
-import fr.pinguet62.springruleengine.core.api.*;
+import fr.pinguet62.springspecification.core.api.*;
 
 Rule composedRule = new AndRule(
                         new NotRule(
@@ -136,7 +136,7 @@ Rule composedRule = new AndRule(
 
 [source, java]
 ----
-import static fr.pinguet62.springruleengine.core.api.RuleUtils.*;
+import static fr.pinguet62.springspecification.core.api.RuleUtils.*;
 
 Rule composedRule = and(
                         not(

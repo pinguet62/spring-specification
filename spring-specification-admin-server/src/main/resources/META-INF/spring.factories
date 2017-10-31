@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-fr.pinguet62.springruleengine.server.SpringSpecificationServerAutoConfiguration
+fr.pinguet62.springspecification.admin.server.SpringSpecificationServerAutoConfiguration

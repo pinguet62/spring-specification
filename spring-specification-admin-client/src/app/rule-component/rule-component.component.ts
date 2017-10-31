@@ -105,7 +105,7 @@ export class SettingsRuleComponentDialog {
                     <!-- Composite: accept sub-rules -->
                     <div style="width: 40px;">
                         <ng-template
-                                [ngIf]="['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.ruleComponent.key)">
+                                [ngIf]="['fr.pinguet62.springspecification.core.api.AndRule', 'fr.pinguet62.springspecification.core.api.OrRule', 'fr.pinguet62.springspecification.core.api.NotRule'].includes(node.data.ruleComponent.key)">
                             <button mat-icon-button (click)="openCreateDialog(node.data.ruleComponent)">
                                 <mat-icon>add</mat-icon>
                             </button>
@@ -117,7 +117,7 @@ export class SettingsRuleComponentDialog {
                     <!-- Custom: accept parameters -->
                     <div style="width: 40px;">
                         <ng-template
-                                [ngIf]="!['fr.pinguet62.springruleengine.core.api.AndRule', 'fr.pinguet62.springruleengine.core.api.OrRule', 'fr.pinguet62.springruleengine.core.api.NotRule'].includes(node.data.ruleComponent.key)">
+                                [ngIf]="!['fr.pinguet62.springspecification.core.api.AndRule', 'fr.pinguet62.springspecification.core.api.OrRule', 'fr.pinguet62.springspecification.core.api.NotRule'].includes(node.data.ruleComponent.key)">
                             <button mat-icon-button (click)="openSettingsDialog(node.data.ruleComponent)">
                                 <mat-icon>settings</mat-icon>
                             </button>
