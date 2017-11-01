@@ -22,6 +22,12 @@ public class BusinessRuleEntity {
     private String id;
 
     /**
+     * Root element of {@link Rule} tree.
+     */
+    @OneToOne(cascade = REMOVE)
+    private RuleComponentEntity rootRuleComponent;
+
+    /**
      * Argument type of {@link Rule#test(Object)} method.
      * <p>
      * Used to filter assocoable {@link Rule} to this.
@@ -29,12 +35,6 @@ public class BusinessRuleEntity {
      * @see Class#name
      */
     private String argumentType;
-
-    /**
-     * Root element of {@link Rule} tree.
-     */
-    @OneToOne(cascade = REMOVE)
-    private RuleComponentEntity rootRuleComponent;
 
     /**
      * User's notes.

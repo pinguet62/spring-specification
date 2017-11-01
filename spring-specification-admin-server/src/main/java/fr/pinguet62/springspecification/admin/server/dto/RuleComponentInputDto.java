@@ -17,6 +17,7 @@ public class RuleComponentInputDto {
 
     private String description;
 
+    // TODO different for PUT
     private Integer index;
 
 }

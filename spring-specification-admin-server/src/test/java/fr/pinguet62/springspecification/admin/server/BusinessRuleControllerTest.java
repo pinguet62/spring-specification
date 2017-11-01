@@ -103,8 +103,8 @@ public class BusinessRuleControllerTest {
 
     /**
      * <ul>
-     * <li>Delete all {@link fr.pinguet62.springspecification.core.builder.database.model.BusinessRuleEntity}</li>
-     * <li>Delete all {@link fr.pinguet62.springspecification.core.builder.database.model.RuleComponentEntity}</li>
+     * <li>Delete the {@link fr.pinguet62.springspecification.core.builder.database.model.BusinessRuleEntity}</li>
+     * <li>Delete all sub-{@link fr.pinguet62.springspecification.core.builder.database.model.RuleComponentEntity}</li>
      * <li>Delete all {@link fr.pinguet62.springspecification.core.builder.database.model.ParameterEntity}</li>
      * </ul>
      *

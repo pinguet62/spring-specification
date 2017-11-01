@@ -4,12 +4,12 @@
                 <PARAMETER_ENTITY id="-11" rule_id="-1" key="key11" value="value11"/>
             <RULE_COMPONENT_ENTITY id="-11" key="any" parent_id="-1"/>
                     <PARAMETER_ENTITY id="-111" rule_id="-11" key="key111" value="value111"/>
-    <BUSINESS_RULE_ENTITY id="test" argument_type="fr.pinguet62.springspecification.sample.model.Product" root_rule_component_id="-1"/>
+    <BUSINESS_RULE_ENTITY id="test" root_rule_component_id="-1" argument_type="fr.pinguet62.springspecification.sample.model.Product"/>
 
         <RULE_COMPONENT_ENTITY id="-2" key="any"/>
                 <PARAMETER_ENTITY id="-21" rule_id="-2" key="key21" value="value21"/>
-    <BUSINESS_RULE_ENTITY id="other" argument_type="java.lang.String" root_rule_component_id="-2"/>
+    <BUSINESS_RULE_ENTITY id="other" root_rule_component_id="-2" argument_type="java.lang.String"/>
 
         <RULE_COMPONENT_ENTITY id="1" key="fr.pinguet62.springspecification.core.api.FailingRule"/> <!-- inserted -->
-    <BUSINESS_RULE_ENTITY id="new id" argument_type="new argument_type" root_rule_component_id="1" title="new title"/> <!-- inserted -->
+    <BUSINESS_RULE_ENTITY id="new id" root_rule_component_id="1" argument_type="new argument_type" title="new title"/> <!-- inserted -->
 </dataset>

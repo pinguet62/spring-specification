@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <RULE_COMPONENT_ENTITY id="-1" key="any" description="any"/>
+        <RULE_COMPONENT_ENTITY id="-11" parent_id="-1" key="any" description="any"/>
+                <PARAMETER_ENTITY id="-111" rule_id="-11" key="key111" value="value111"/>
+        <RULE_COMPONENT_ENTITY id="1" parent_id="-1" key="new key" description="new description"/> <!-- inserted -->
+    <BUSINESS_RULE_ENTITY id="test" root_rule_component_id="-1" argument_type="fr.pinguet62.springspecification.sample.model.Product"/>
+</dataset>

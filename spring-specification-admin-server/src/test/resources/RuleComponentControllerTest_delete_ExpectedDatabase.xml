@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+        <RULE_COMPONENT_ENTITY id="-1" key="any" description="any"/>
+            <!-- deleted -->
+                    <!-- deleted -->
+    <BUSINESS_RULE_ENTITY id="test" root_rule_component_id="-1" argument_type="fr.pinguet62.springspecification.sample.model.Product"/>
+</dataset>
