@@ -111,7 +111,7 @@ abstract class SpringSpecificationDataSourceConfiguration {
 	/**
 	 * Generic DataSource configuration.
 	 */
-	@ConditionalOnMissingBean(value = DataSource.class, name = DATASOURCE_NAME)
+	@ConditionalOnMissingBean(/*value = DataSource.class,*/ name = DATASOURCE_NAME)
 	@ConditionalOnProperty(name = "spring-specification.datasource.type")
 	static class Generic {
 

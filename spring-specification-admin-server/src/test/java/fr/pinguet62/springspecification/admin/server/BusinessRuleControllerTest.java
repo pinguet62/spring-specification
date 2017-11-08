@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.github.springtestdbunit.assertion.DatabaseAssertionMode.NON_STRICT_UNORDERED;
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
 import static java.nio.charset.Charset.defaultCharset;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
@@ -39,7 +40,7 @@ import static org.springframework.web.util.UriUtils.encode;
 @AutoConfigureMockMvc
 // DbUnit
 @TestExecutionListeners(mergeMode = MERGE_WITH_DEFAULTS, listeners = DbUnitTestExecutionListener.class)
-@DbUnitConfiguration(databaseConnection = "springSpecification.dataSource")
+@DbUnitConfiguration(databaseConnection = DATASOURCE_NAME)
 @DatabaseSetup("/BusinessRuleControllerTest_dataset.xml")
 @DirtiesContext(classMode = AFTER_EACH_TEST_METHOD) // simulate @Transactional (TODO check is works with MockMvc)
 public class BusinessRuleControllerTest {

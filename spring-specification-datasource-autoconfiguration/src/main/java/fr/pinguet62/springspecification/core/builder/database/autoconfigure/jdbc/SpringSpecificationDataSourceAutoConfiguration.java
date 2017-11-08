@@ -59,7 +59,7 @@ public class SpringSpecificationDataSourceAutoConfiguration {
 
 	@Configuration
 	@Conditional(EmbeddedDatabaseCondition.class)
-	@ConditionalOnMissingBean(value = { DataSource.class, XADataSource.class }, name = DATASOURCE_NAME)
+	@ConditionalOnMissingBean(/*value = { DataSource.class, XADataSource.class },*/ name = DATASOURCE_NAME)
 	@Import(SpringSpecificationEmbeddedDataSourceConfiguration.class)
 	protected static class EmbeddedDatabaseConfiguration {
 
@@ -67,7 +67,7 @@ public class SpringSpecificationDataSourceAutoConfiguration {
 
 	@Configuration
 	@Conditional(PooledDataSourceCondition.class)
-	@ConditionalOnMissingBean(value = { DataSource.class, XADataSource.class }, name = DATASOURCE_NAME)
+	@ConditionalOnMissingBean(/*value = { DataSource.class, XADataSource.class },*/ name = DATASOURCE_NAME)
 	@Import({ SpringSpecificationDataSourceConfiguration.Hikari.class, SpringSpecificationDataSourceConfiguration.Tomcat.class,
 			SpringSpecificationDataSourceConfiguration.Dbcp2.class, SpringSpecificationDataSourceConfiguration.Generic.class,
 			SpringSpecificationDataSourceJmxConfiguration.class })

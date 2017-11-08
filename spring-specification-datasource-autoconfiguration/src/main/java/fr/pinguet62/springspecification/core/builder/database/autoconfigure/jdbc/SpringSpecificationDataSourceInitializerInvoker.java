@@ -55,7 +55,7 @@ class SpringSpecificationDataSourceInitializerInvoker
 	private boolean initialized;
 
 	SpringSpecificationDataSourceInitializerInvoker(@Qualifier(DATASOURCE_NAME) ObjectProvider<DataSource> dataSource,
-                                                    @Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties, ApplicationContext applicationContext) {
+			@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties, ApplicationContext applicationContext) {
 		this.dataSource = dataSource;
 		this.properties = properties;
 		this.applicationContext = applicationContext;

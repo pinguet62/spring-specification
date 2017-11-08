@@ -19,12 +19,17 @@ package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdb
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.jdbc.metadata.CommonsDbcp2DataSourcePoolMetadata;
 import org.springframework.boot.jdbc.metadata.DataSourcePoolMetadataProvider;
 import org.springframework.boot.jdbc.metadata.HikariDataSourcePoolMetadata;
 import org.springframework.boot.jdbc.metadata.TomcatDataSourcePoolMetadata;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER_NAME;
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.HIKARI_POOL_DATASOURCE_METADATA_PROVIDER_NAME;
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.TOMCAT_POOL_DATASOURCE_METADATA_PROVIDER_NAME;
 
 /**
  * Register the {@link DataSourcePoolMetadataProvider} instances for the supported data
@@ -40,7 +45,8 @@ public class SpringSpecificationDataSourcePoolMetadataProvidersConfiguration {
 	@ConditionalOnClass(org.apache.tomcat.jdbc.pool.DataSource.class)
 	static class TomcatDataSourcePoolMetadataProviderConfiguration {
 
-		@Bean
+		@Bean(TOMCAT_POOL_DATASOURCE_METADATA_PROVIDER_NAME)
+		@ConditionalOnMissingBean(name = TOMCAT_POOL_DATASOURCE_METADATA_PROVIDER_NAME)
 		public DataSourcePoolMetadataProvider tomcatPoolDataSourceMetadataProvider() {
 			return (dataSource) -> {
 				if (dataSource instanceof org.apache.tomcat.jdbc.pool.DataSource) {
@@ -57,7 +63,8 @@ public class SpringSpecificationDataSourcePoolMetadataProvidersConfiguration {
 	@ConditionalOnClass(HikariDataSource.class)
 	static class HikariPoolDataSourceMetadataProviderConfiguration {
 
-		@Bean
+		@Bean(HIKARI_POOL_DATASOURCE_METADATA_PROVIDER_NAME)
+		@ConditionalOnMissingBean(name = HIKARI_POOL_DATASOURCE_METADATA_PROVIDER_NAME)
 		public DataSourcePoolMetadataProvider hikariPoolDataSourceMetadataProvider() {
 			return (dataSource) -> {
 				if (dataSource instanceof HikariDataSource) {
@@ -74,7 +81,8 @@ public class SpringSpecificationDataSourcePoolMetadataProvidersConfiguration {
 	@ConditionalOnClass(BasicDataSource.class)
 	static class CommonsDbcp2PoolDataSourceMetadataProviderConfiguration {
 
-		@Bean
+		@Bean(COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER_NAME)
+		@ConditionalOnMissingBean(name = COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER_NAME)
 		public DataSourcePoolMetadataProvider commonsDbcp2PoolDataSourceMetadataProvider() {
 			return (dataSource) -> {
 				if (dataSource instanceof BasicDataSource) {

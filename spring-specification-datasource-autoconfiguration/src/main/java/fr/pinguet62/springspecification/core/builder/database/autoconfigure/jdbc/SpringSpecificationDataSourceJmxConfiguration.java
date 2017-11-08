@@ -20,16 +20,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.tomcat.jdbc.pool.DataSourceProxy;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
+import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_MBEAN_NAME;
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
 
 /**
@@ -70,11 +68,11 @@ class SpringSpecificationDataSourceJmxConfiguration {
 	@Configuration
 	@ConditionalOnProperty(prefix = "spring-specification.datasource", name = "jmx-enabled")
 	@ConditionalOnClass(name = "org.apache.tomcat.jdbc.pool.DataSourceProxy")
-	@ConditionalOnSingleCandidate(DataSource.class)
+	@ConditionalOnBean(/*value = DataSource.class,*/ name = DATASOURCE_NAME)
 	static class TomcatDataSourceJmxConfiguration {
 
-		@Bean
-		@ConditionalOnMissingBean(name = "dataSourceMBean")
+		@Bean(DATASOURCE_MBEAN_NAME)
+		@ConditionalOnMissingBean(name = DATASOURCE_MBEAN_NAME)
 		public Object dataSourceMBean(@Qualifier(DATASOURCE_NAME) DataSource dataSource) {
 			if (dataSource instanceof DataSourceProxy) {
 				try {

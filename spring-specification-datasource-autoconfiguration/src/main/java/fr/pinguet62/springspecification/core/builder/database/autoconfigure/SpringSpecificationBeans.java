@@ -25,4 +25,10 @@ public class SpringSpecificationBeans {
 
     public static final String TRANSACTION_MANAGER_NAME = "springSpecification.transactionManager";
 
+    public static final String TOMCAT_POOL_DATASOURCE_METADATA_PROVIDER_NAME = "springSpecification.tomcatPoolDataSourceMetadataProvider";
+
+    public static final String HIKARI_POOL_DATASOURCE_METADATA_PROVIDER_NAME = "springSpecification.hikariPoolDataSourceMetadataProvider";
+
+    public static final String COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER_NAME = "springSpecification.commonsDbcp2PoolDataSourceMetadataProvider";
+
 }

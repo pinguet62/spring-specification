@@ -16,7 +16,6 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc;
 
-import fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -38,6 +37,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER_NAME;
+
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for
  * {@link DataSourceTransactionManager}.
@@ -55,24 +58,24 @@ import javax.sql.DataSource;
 public class SpringSpecificationDataSourceTransactionManagerAutoConfiguration {
 
 	@Configuration
-	@ConditionalOnBean(value = DataSource.class, name = SpringSpecificationBeans.DATASOURCE_NAME)
+	@ConditionalOnBean(/*value = DataSource.class,*/ name = DATASOURCE_NAME)
 	static class DataSourceTransactionManagerConfiguration {
 
 		private final DataSource dataSource;
 
 		private final TransactionManagerCustomizers transactionManagerCustomizers;
 
-		DataSourceTransactionManagerConfiguration(@Qualifier(SpringSpecificationBeans.DATASOURCE_NAME) DataSource dataSource,
+		DataSourceTransactionManagerConfiguration(@Qualifier(DATASOURCE_NAME) DataSource dataSource,
 				ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
 			this.dataSource = dataSource;
 			this.transactionManagerCustomizers = transactionManagerCustomizers
 					.getIfAvailable();
 		}
 
-		@Bean
+		@Bean(TRANSACTION_MANAGER_NAME)
 		@ConditionalOnMissingBean(PlatformTransactionManager.class)
 		public DataSourceTransactionManager transactionManager(
-				@Qualifier(SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
+				@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
 			DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(
 					this.dataSource);
 			if (this.transactionManagerCustomizers != null) {

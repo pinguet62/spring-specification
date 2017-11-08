@@ -44,7 +44,13 @@ public enum SpringSpecificationBean {
     /**
      * @see javax.transaction.TransactionManager
      */
-    TRANSACTION_MANAGER(PlatformTransactionManager.class, SpringSpecificationBeans.TRANSACTION_MANAGER_NAME);
+    TRANSACTION_MANAGER(PlatformTransactionManager.class, SpringSpecificationBeans.TRANSACTION_MANAGER_NAME),
+
+    TOMCAT_POOL_DATASOURCE_METADATA_PROVIDER(DataSourceProperties.class, SpringSpecificationBeans.TOMCAT_POOL_DATASOURCE_METADATA_PROVIDER_NAME),
+
+    HIKARI_POOL_DATASOURCE_METADATA_PROVIDER(DataSourceProperties.class, SpringSpecificationBeans.HIKARI_POOL_DATASOURCE_METADATA_PROVIDER_NAME),
+
+    COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER(DataSourceProperties.class, SpringSpecificationBeans.COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER_NAME);
 
     @Getter
     private final Class<?> beanType;

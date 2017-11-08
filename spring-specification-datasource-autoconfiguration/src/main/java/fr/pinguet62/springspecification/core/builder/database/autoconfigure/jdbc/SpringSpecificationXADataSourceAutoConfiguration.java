@@ -62,7 +62,7 @@ import static fr.pinguet62.springspecification.core.builder.database.autoconfigu
 @ConditionalOnClass({ DataSource.class, TransactionManager.class,
 		EmbeddedDatabaseType.class })
 @ConditionalOnBean(XADataSourceWrapper.class)
-@ConditionalOnMissingBean(value = DataSource.class, name = DATASOURCE_NAME)
+@ConditionalOnMissingBean(/*value = DataSource.class,*/ name = DATASOURCE_NAME)
 public class SpringSpecificationXADataSourceAutoConfiguration implements BeanClassLoaderAware {
 
 	@Autowired

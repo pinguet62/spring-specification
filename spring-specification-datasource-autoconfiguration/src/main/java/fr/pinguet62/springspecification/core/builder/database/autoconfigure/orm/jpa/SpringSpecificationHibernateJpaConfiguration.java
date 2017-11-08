@@ -51,7 +51,7 @@ import static fr.pinguet62.springspecification.core.builder.database.autoconfigu
  * @since 2.0.0
  */
 @Configuration
-@ConditionalOnBean(value = DataSource.class, name = DATASOURCE_NAME)
+@ConditionalOnBean(/*value = DataSource.class,*/ name = DATASOURCE_NAME)
 public class SpringSpecificationHibernateJpaConfiguration extends JpaBaseConfiguration {
 
     private static final String PERSISTENCE_UNIT_NAME = "springSpecification";

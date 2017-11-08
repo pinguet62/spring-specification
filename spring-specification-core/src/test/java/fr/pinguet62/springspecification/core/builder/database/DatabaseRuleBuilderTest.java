@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static fr.pinguet62.springspecification.core.builder.database.DatabaseRuleBuilderTest.TestRules;
 import static fr.pinguet62.springspecification.core.builder.database.DatabaseRuleBuilderTest.TestRules.*;
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
+import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER_NAME;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.context.TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS;
@@ -42,10 +44,10 @@ import static org.springframework.test.context.TestExecutionListeners.MergeMode.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {TestApplication.class, TestRules.class})
-@Transactional("springSpecification.transactionManager")
+@Transactional(TRANSACTION_MANAGER_NAME)
 // DbUnit
 @TestExecutionListeners(mergeMode = MERGE_WITH_DEFAULTS, listeners = DbUnitTestExecutionListener.class)
-@DbUnitConfiguration(databaseConnection = "springSpecification.dataSource")
+@DbUnitConfiguration(databaseConnection = DATASOURCE_NAME)
 @DatabaseSetup("/sample.xml")
 public class DatabaseRuleBuilderTest {
 
