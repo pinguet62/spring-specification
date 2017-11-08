@@ -1,5 +1,6 @@
 # Spring Specification
 
+![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat)
 [![Libraries.io for GitHub](https://img.shields.io/librariesio/github/pinguet62/spring-specification.svg)](https://libraries.io/github/pinguet62/spring-specification)
 [![Known Vulnerabilities](https://snyk.io/test/github/pinguet62/spring-specification/badge.svg)](https://snyk.io/test/github/pinguet62/spring-specification)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7aa6eb05ba514f7aa13b86a6f4d567b9)](https://www.codacy.com/app/pinguet62/spring-specification?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pinguet62/spring-specification&amp;utm_campaign=Badge_Grade)
