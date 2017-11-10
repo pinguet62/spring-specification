@@ -1,14 +1,13 @@
-import { SpringRuleengineUiPage } from './app.po';
+import {browser, by, element} from 'protractor';
 
-describe('spring-ruleengine-admin-client App', () => {
-  let page: SpringRuleengineUiPage;
+describe('/', () => {
+    beforeEach(() => browser.get('/'));
 
-  beforeEach(() => {
-    page = new SpringRuleengineUiPage();
-  });
+    it('should display top application name', () => {
+        expect(element(by.css('mat-toolbar')).getText()).toContain('Spring Specification');
+    });
 
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
-  });
+    it('should display left menu items', () => {
+        expect(element.all(by.css('mat-sidenav-container mat-sidenav mat-nav-list mat-list-item .mat-list-text')).map(e => e.getText())).toEqual(['Rules', 'Business rules']);
+    });
 });
