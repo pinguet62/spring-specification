@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
     MatAutocompleteModule,
@@ -19,6 +19,7 @@ import {
 } from '@angular/material';
 import {CdkTableModule} from '@angular/cdk/table';
 
+import {ContentTypeHeaderHttpClientInterceptor} from './content-type-header-http-client.http-interceptor';
 import {appRoutes} from './app.route';
 import {AppComponent} from './app.component';
 import {ContentPageComponent, EmptyPageComponent} from './generic-pages.component';
@@ -40,7 +41,10 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './
         CdkTableModule,
         TreeModule, RouterModule.forRoot(appRoutes)
     ],
-    providers: [RuleService, RuleServiceResolver, BusinessRuleService, RuleComponentService, ParameterService],
+    providers: [
+        {provide: HTTP_INTERCEPTORS, useClass: ContentTypeHeaderHttpClientInterceptor, multi: true},
+        RuleService, RuleServiceResolver, BusinessRuleService, RuleComponentService, ParameterService
+    ],
     declarations: [
         AppComponent, ContentPageComponent, EmptyPageComponent,
         RuleListComponent, BusinessRuleListComponent, CreateBusinessRuleDialog, DeleteBusinessRuleDialog, BusinessRuleDetailComponent, RuleComponentComponent, EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,

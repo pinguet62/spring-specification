@@ -8,7 +8,6 @@ import fr.pinguet62.springspecification.core.builder.database.model.RuleComponen
 import fr.pinguet62.springspecification.core.builder.database.parameter.ParameterService;
 import fr.pinguet62.springspecification.core.builder.database.repository.ParameterRepository;
 import fr.pinguet62.springspecification.core.builder.database.repository.RuleComponentRepository;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.hibernate.validator.constraints.NotBlank;
@@ -24,17 +23,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static fr.pinguet62.springspecification.admin.server.ParameterController.PATH;
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER_NAME;
 import static java.util.stream.Collectors.toList;
 
 @Transactional(TRANSACTION_MANAGER_NAME)
 @RestController
-@RequestMapping(PATH)
-@Api(tags = "Parameter", description = "Services related to `Parameter`s, linked to a `RuleComponent`")
+@RequestMapping
 public class ParameterController {
-
-    public static final String PATH = "/parameter";
 
     @Autowired
     private ParameterService parameterService;
@@ -48,9 +43,9 @@ public class ParameterController {
     @Autowired
     private RuleComponentRepository ruleRepository;
 
-    @GetMapping(params = "ruleComponent")
-    @ApiOperation(value = "Find all `Parameter`s by parent `RuleComponent`")
-    public ResponseEntity<List<ParameterDto>> getByRuleComponent(@NotNull @RequestParam("ruleComponent") @ApiParam(value = "The `RuleComponent.id`", required = true) Integer ruleComponentId) {
+    @GetMapping(value = RuleComponentController.PATH + "/{ruleComponent}/parameter")
+    @ApiOperation(value = "Find all `Parameter`s by parent `RuleComponent`", tags = "RuleComponent")
+    public ResponseEntity<List<ParameterDto>> getByRuleComponent(@NotNull @PathVariable("ruleComponent") @ApiParam(value = "The parent `RuleComponent.id`", required = true) Integer ruleComponentId) {
         Optional<RuleComponentEntity> rule = ruleRepository.findById(ruleComponentId);
         if (!rule.isPresent())
             return ResponseEntity.notFound().build();
@@ -59,8 +54,8 @@ public class ParameterController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/key/{rule:.+}")
-    @ApiOperation(value = "List all `Parameter.key` required by a `Rule`. Used for *autocompletion*.")
+    @GetMapping(RuleController.PATH + "/{rule:.+}/parameter/key")
+    @ApiOperation(value = "List all `Parameter.key` required by a `Rule`. Used for *autocompletion*.", tags = "Rule")
     public ResponseEntity<Set<String>> getKeyByRule(@NotBlank @PathVariable("rule") @ApiParam(value = "The `Rule` key", required = true) String ruleKey) {
         Optional<Class<Rule<?>>> ruleOp = ruleService.getFromKey(ruleKey);
         if (!ruleOp.isPresent())
@@ -71,22 +66,29 @@ public class ParameterController {
         return ResponseEntity.ok(keys);
     }
 
-    @PutMapping
-    @ApiOperation(value = "Create a new `Parameter`")
-    public ResponseEntity<ParameterDto> create(@Valid @RequestBody ParameterInputDto dto) {
+    @PutMapping(RuleComponentController.PATH + "/{ruleComponent}/parameter")
+    @ApiOperation(value = "Create a new `Parameter`", tags = "RuleComponent")
+    public ResponseEntity<ParameterDto> create(
+            @NotNull @PathVariable("ruleComponent") @ApiParam(value = "The parent `RuleComponent.id`", required = true) Integer ruleComponentId,
+            @Valid @RequestBody ParameterInputDto dto
+    ) {
         ParameterEntity entity = new ParameterEntity();
         // entity.setId();
         entity.setKey(dto.getKey());
         entity.setValue(dto.getValue());
-        entity.setRule(ruleRepository.findById(dto.getRuleComponent()).get());
+        entity.setRule(ruleRepository.findById(ruleComponentId).get());
         entity = parameterRepository.save(entity);
 
-        return ResponseEntity.created(URI.create(PATH + "/" + entity.getId())).body(convert(entity));
+        return ResponseEntity.created(URI.create(RuleComponentController.PATH + "/" + ruleComponentId + "/parameter/" + entity.getId())).body(convert(entity));
     }
 
-    @PostMapping("/{id}")
-    @ApiOperation(value = "Update an existing `Parameter`")
-    public ResponseEntity<ParameterDto> update(@NotNull @PathVariable @ApiParam(value = "Its `id`", required = true) Integer id, @Valid @RequestBody ParameterInputDto dto) {
+    @PostMapping(RuleComponentController.PATH + "/{ruleComponent}/parameter/{id}")
+    @ApiOperation(value = "Update an existing `Parameter`", tags = "RuleComponent")
+    public ResponseEntity<ParameterDto> update(
+            @NotNull @PathVariable("ruleComponent") @ApiParam(value = "The parent `RuleComponent.id`", required = true) Integer ruleComponentId,
+            @NotNull @PathVariable @ApiParam(value = "Its `id`", required = true) Integer id,
+            @Valid @RequestBody ParameterInputDto dto
+    ) {
         Optional<ParameterEntity> entityOp = parameterRepository.findById(id);
         if (!entityOp.isPresent())
             return ResponseEntity.notFound().build();
@@ -102,9 +104,12 @@ public class ParameterController {
         return ResponseEntity.ok().body(convert(entity));
     }
 
-    @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete an existing `Parameter`")
-    public ResponseEntity<ParameterDto> delete(@NotNull @PathVariable @ApiParam(value = "Its `id`", required = true) Integer id) {
+    @DeleteMapping(RuleComponentController.PATH + "/{ruleComponent}/parameter/{id}")
+    @ApiOperation(value = "Delete an existing `Parameter`", tags = "RuleComponent")
+    public ResponseEntity<ParameterDto> delete(
+            @NotNull @PathVariable("ruleComponent") @ApiParam(value = "The parent `RuleComponent.id`", required = true) Integer ruleComponentId,
+            @NotNull @PathVariable @ApiParam(value = "Its `id`", required = true) Integer id
+    ) {
         Optional<ParameterEntity> entity = parameterRepository.findById(id);
         if (!entity.isPresent())
             return ResponseEntity.notFound().build();

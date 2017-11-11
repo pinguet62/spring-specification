@@ -10,7 +10,7 @@ import {Rule} from './rule';
 @Injectable()
 export class RuleService {
 
-    private static readonly resourceUrl: string = environment.apiUrl + '/rule';
+    public static readonly resourceUrl: string = environment.apiUrl + '/rule';
 
     CACHE: Rule[];
 

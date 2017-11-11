@@ -9,7 +9,7 @@ import {RuleComponent} from './rule-component';
 @Injectable()
 export class RuleComponentService {
 
-    private static readonly resourceUrl: string = environment.apiUrl + '/ruleComponent';
+    public static readonly resourceUrl: string = environment.apiUrl + '/ruleComponent';
 
     constructor(protected http: HttpClient) {
     }

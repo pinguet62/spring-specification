@@ -25,10 +25,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.github.springtestdbunit.assertion.DatabaseAssertionMode.NON_STRICT_UNORDERED;
-import static fr.pinguet62.springspecification.admin.server.ParameterController.PATH;
 import static fr.pinguet62.springspecification.admin.server.TestRules.ParameterizedRule;
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
-import static java.lang.String.valueOf;
 import static java.nio.charset.Charset.defaultCharset;
 import static java.util.Arrays.asList;
 import static java.util.Optional.of;
@@ -75,9 +73,7 @@ public class ParameterControllerTest {
     public void test_getByRuleComponent() throws Exception {
         final int ruleComponentId = -1;
         mockMvc
-                .perform(
-                        get(PATH)
-                                .param("ruleComponent", valueOf(ruleComponentId)))
+                .perform(get(RuleComponentController.PATH + "/{ruleComponent}/parameter", ruleComponentId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()", equalTo(2)))
@@ -95,7 +91,7 @@ public class ParameterControllerTest {
         when(parameterService.getDeclaratedKeys(any(Class.class))).thenReturn(parameterKeys);
 
         mockMvc
-                .perform(get(PATH + "/key/{rule}", "any"))
+                .perform(get(RuleController.PATH + "/{rule}/parameter/key", "any"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()", equalTo(3)))
@@ -109,12 +105,12 @@ public class ParameterControllerTest {
     public void test_getKeyByRule_notFound() throws Exception {
         String ruleKey = "unknown";
         mockMvc
-                .perform(get(PATH + "/key/{rule}", ruleKey))
+                .perform(get(RuleController.PATH + "/{rule}/key", ruleKey))
                 .andExpect(status().isNotFound());
     }
 
     /**
-     * @see ParameterController#create(ParameterInputDto)
+     * @see ParameterController#create(Integer, ParameterInputDto)
      */
     @Test
     @ExpectedDatabase(value = "/ParameterControllerTest_create_ExpectedDatabase.xml", assertionMode = NON_STRICT_UNORDERED)
@@ -122,14 +118,14 @@ public class ParameterControllerTest {
         String body = IOUtils.toString(getClass().getResourceAsStream("/ParameterControllerTest_create_request.json"), defaultCharset());
         mockMvc
                 .perform(
-                        put(PATH)
+                        put(RuleComponentController.PATH + "/{ruleComponent}/parameter", -1)
                                 .contentType(APPLICATION_JSON)
                                 .content(body))
                 .andExpect(status().isCreated());
     }
 
     /**
-     * @see ParameterController#update(Integer, ParameterInputDto)
+     * @see ParameterController#update(Integer, Integer, ParameterInputDto)
      */
     @Test
     @ExpectedDatabase(value = "/ParameterControllerTest_update_ExpectedDatabase.xml", assertionMode = NON_STRICT_UNORDERED)
@@ -138,14 +134,14 @@ public class ParameterControllerTest {
         String body = IOUtils.toString(getClass().getResourceAsStream("/ParameterControllerTest_update_request.json"), defaultCharset());
         mockMvc
                 .perform(
-                        post(PATH + "/{id}", Integer.toString(parameterId))
+                        post(RuleComponentController.PATH + "/{ruleComponent}/parameter/{id}", Integer.toString(-1), Integer.toString(parameterId))
                                 .contentType(APPLICATION_JSON)
                                 .content(body))
                 .andExpect(status().isOk());
     }
 
     /**
-     * @see ParameterController#update(Integer, ParameterInputDto)
+     * @see ParameterController#update(Integer, Integer, ParameterInputDto)
      */
     @Test
     public void test_update_notFound() throws Exception {
@@ -153,32 +149,32 @@ public class ParameterControllerTest {
         String body = IOUtils.toString(getClass().getResourceAsStream("/ParameterControllerTest_update_request.json"), defaultCharset()); // any validating @RequestBody
         mockMvc
                 .perform(
-                        post(PATH + "/{id}", Integer.toString(parameterId))
+                        post(RuleComponentController.PATH + "/{ruleComponent}/parameter/{id}", -1, parameterId)
                                 .contentType(APPLICATION_JSON)
                                 .content(body))
                 .andExpect(status().isNotFound());
     }
 
     /**
-     * @see ParameterController#delete(Integer)
+     * @see ParameterController#delete(Integer, Integer)
      */
     @Test
     @ExpectedDatabase(value = "/ParameterControllerTest_delete_ExpectedDatabase.xml", assertionMode = NON_STRICT_UNORDERED)
     public void test_delete() throws Exception {
         int parameterId = -2;
         mockMvc
-                .perform(delete(PATH + "/{id}", Integer.toString(parameterId)))
+                .perform(delete(RuleComponentController.PATH + "/{ruleComponent}/parameter/{id}", -1, parameterId))
                 .andExpect(status().isOk());
     }
 
     /**
-     * @see ParameterController#delete(Integer)
+     * @see ParameterController#delete(Integer, Integer)
      */
     @Test
     public void test_delete_notFound() throws Exception {
         int parameterId = 999; // not in database
         mockMvc
-                .perform(delete(PATH + "/{id}", Integer.toString(parameterId)))
+                .perform(delete(RuleComponentController.PATH + "/{ruleComponent}/parameter/{id}", -1, parameterId))
                 .andExpect(status().isNotFound());
     }
 

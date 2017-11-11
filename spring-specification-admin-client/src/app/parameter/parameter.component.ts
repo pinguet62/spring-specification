@@ -87,14 +87,12 @@ export class DeleteParameterDialog {
                 <ng-container cdkColumnDef="actions">
                     <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
                     <mat-cell *cdkCellDef="let parameter">
-                        <div style="display: flex;"><!--flex: no line break-->
-                            <button mat-icon-button (click)="openUpdateDialog(parameter)">
-                                <mat-icon>mode_edit</mat-icon>
-                            </button>
-                            <button mat-icon-button (click)="openDeleteDialog(parameter)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>
+                        <button mat-icon-button (click)="openUpdateDialog(parameter)">
+                            <mat-icon>mode_edit</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="openDeleteDialog(parameter)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
                     </mat-cell>
                 </ng-container>
 
@@ -144,9 +142,8 @@ export class ParameterComponent implements OnInit {
             if (createdParameter == null)
                 return;
 
-            createdParameter.ruleComponent = this.ruleComponent.id;
-            this.parameterService.create(createdParameter).subscribe(x =>
-                this.refresh()
+            this.parameterService.create(this.ruleComponent, createdParameter).subscribe(x =>
+                this.refresh() // TODO refresh this.ruleComponent
             );
         });
     }
@@ -163,9 +160,8 @@ export class ParameterComponent implements OnInit {
             if (updatedParameter == null)
                 return;
 
-            updatedParameter.ruleComponent = this.ruleComponent.id;
-            this.parameterService.update(updatedParameter).subscribe(x =>
-                this.refresh()
+            this.parameterService.update(this.ruleComponent, updatedParameter).subscribe(x =>
+                this.refresh() // TODO refresh this.ruleComponent
             );
         });
     }
@@ -174,8 +170,8 @@ export class ParameterComponent implements OnInit {
         let deleteDialog: MatDialogRef<DeleteParameterDialog> = this.dialog.open(DeleteParameterDialog, this.getCommonDialogConfig());
         deleteDialog.afterClosed().subscribe((confirm: boolean) => {
             if (confirm)
-                this.parameterService.delete(parameter).subscribe(x =>
-                    this.refresh()
+                this.parameterService.delete(this.ruleComponent, parameter).subscribe(x =>
+                    this.refresh() // TODO refresh this.ruleComponent
                 );
         });
     }

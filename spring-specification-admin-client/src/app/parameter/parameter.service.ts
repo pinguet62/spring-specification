@@ -3,42 +3,41 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import {environment} from '../../environments/environment';
+import {RuleService} from '../rule/rule.service';
+import {RuleComponentService} from '../rule-component/rule-component.service';
 import {RuleComponent} from '../rule-component/rule-component';
 import {Parameter} from './parameter';
 
 @Injectable()
 export class ParameterService {
 
-    private static readonly resourceUrl: string = environment.apiUrl + '/parameter';
-
     constructor(protected http: HttpClient) {
     }
 
     getByRuleComponent(ruleComponent: RuleComponent): Observable<Parameter[]> {
-        let url: string = ParameterService.resourceUrl + '?ruleComponent=' + ruleComponent.id;
+        let url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter';
         return this.http.get<Parameter[]>(url);
     }
 
     getKeyByRule(ruleKey: string): Observable<string[]> {
-        let url: string = ParameterService.resourceUrl + '/key/' + ruleKey;
+        let url: string = RuleService.resourceUrl + '/' + ruleKey + '/parameter/key';
         return this.http.get<string[]>(url);
     }
 
-    create(parameter: Parameter): Observable<Parameter> {
-        let url: string = ParameterService.resourceUrl;
+    create(ruleComponent: RuleComponent, parameter: Parameter): Observable<Parameter> {
+        let url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter';
         let body: string = JSON.stringify(parameter);
         return this.http.put<Parameter>(url, body);
     }
 
-    update(parameter: Parameter): Observable<Parameter> {
-        let url: string = ParameterService.resourceUrl + '/' + parameter.id;
+    update(ruleComponent: RuleComponent, parameter: Parameter): Observable<Parameter> {
+        let url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter' + '/' + parameter.id;
         let body: string = JSON.stringify(parameter);
         return this.http.post<Parameter>(url, body);
     }
 
-    delete(parameter: Parameter): Observable<Parameter> {
-        let url: string = ParameterService.resourceUrl + '/' + parameter.id;
+    delete(ruleComponent: RuleComponent, parameter: Parameter): Observable<Parameter> {
+        let url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter' + '/' + parameter.id;
         return this.http.delete<Parameter>(url);
     }
 
