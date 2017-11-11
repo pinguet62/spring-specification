@@ -8,6 +8,7 @@
 [![codecov.io](https://codecov.io/github/pinguet62/spring-specification/coverage.svg?branch=master)](https://codecov.io/github/pinguet62/spring-specification?branch=master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/fr.pinguet62/spring-specification/badge.svg)](https://maven-badges.herokuapp.com/maven-central/fr.pinguet62/spring-specification)
 [![Javadocs](https://www.javadoc.io/badge/fr.pinguet62/spring-specification.svg)](https://www.javadoc.io/doc/fr.pinguet62/spring-specification)
+[![Swagger](http://online.swagger.io/validator?url=https://spring-specification-sample.herokuapp.com/v2/api-docs)](https://spring-specification-sample.herokuapp.com/swagger-ui.html)
 
 This project provides:
 * **specification pattern** basic API
