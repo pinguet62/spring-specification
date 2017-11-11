@@ -5,6 +5,9 @@ import fr.pinguet62.springspecification.admin.server.dto.RuleComponentDto;
 import fr.pinguet62.springspecification.admin.server.dto.RuleComponentInputDto;
 import fr.pinguet62.springspecification.core.builder.database.model.RuleComponentEntity;
 import fr.pinguet62.springspecification.core.builder.database.repository.RuleComponentRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Transactional(TRANSACTION_MANAGER_NAME)
 @RestController
 @RequestMapping(PATH)
+@Api(tags = "RuleComponent", description = "Services related to `RuleComponent`s, structured as a *tree*")
 public class RuleComponentController {
 
     public static final String PATH = "/ruleComponent";
@@ -32,7 +36,8 @@ public class RuleComponentController {
     private RuleComponentRepository ruleComponentRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<RuleComponentDto> getById(@NotNull @PathVariable Integer id) {
+    @ApiOperation(value = "Find a `RuleComponent`s by `id`")
+    public ResponseEntity<RuleComponentDto> getById(@NotNull @PathVariable @ApiParam(value = "Its `id`", required = true) Integer id) {
         Optional<RuleComponentEntity> entity = ruleComponentRepository.findById(id);
         if (!entity.isPresent())
             return ResponseEntity.status(NOT_FOUND).build();
@@ -41,6 +46,7 @@ public class RuleComponentController {
     }
 
     @PutMapping
+    @ApiOperation(value = "Create a new `RuleComponent`")
     public ResponseEntity<RuleComponentDto> create(@Valid @RequestBody RuleComponentInputDto dto) {
         RuleComponentEntity entity = new RuleComponentEntity();
         // entity.setId();
@@ -56,7 +62,8 @@ public class RuleComponentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<RuleComponentDto> update(@NotNull @PathVariable Integer id, @Valid @RequestBody RuleComponentInputDto dto) {
+    @ApiOperation(value = "Delete an existing `RuleComponent`")
+    public ResponseEntity<RuleComponentDto> update(@NotNull @PathVariable @ApiParam(value = "Its `id`", required = true) Integer id, @Valid @RequestBody RuleComponentInputDto dto) {
         Optional<RuleComponentEntity> entityOp = ruleComponentRepository.findById(id);
         if (!entityOp.isPresent())
             return ResponseEntity.status(NOT_FOUND).build();
@@ -93,7 +100,8 @@ public class RuleComponentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RuleComponentDto> delete(@NotNull @PathVariable Integer id) {
+    @ApiOperation(value = "Delete an existing `RuleComponent`")
+    public ResponseEntity<RuleComponentDto> delete(@NotNull @PathVariable @ApiParam(value = "Its `id`", required = true) Integer id) {
         Optional<RuleComponentEntity> entityOp = ruleComponentRepository.findById(id);
         if (!entityOp.isPresent())
             return ResponseEntity.status(NOT_FOUND).build();

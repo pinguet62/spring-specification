@@ -3,6 +3,9 @@ package fr.pinguet62.springspecification.admin.server;
 import fr.pinguet62.springspecification.admin.server.dto.RuleDto;
 import fr.pinguet62.springspecification.core.RuleTypeFilter;
 import fr.pinguet62.springspecification.core.api.Rule;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,7 @@ import static java.util.stream.Collectors.toList;
 @Transactional(TRANSACTION_MANAGER_NAME)
 @RestController
 @RequestMapping(PATH)
+@Api(tags = "Rule", description = "Services related to `Rule`, elements used by pattern composition")
 public class RuleController {
 
     public static final String PATH = "/rule";
@@ -29,13 +33,15 @@ public class RuleController {
     private RuleService ruleService;
 
     @GetMapping
+    @ApiOperation(value = "List all `Rule`s available into classpath.")
     public List<RuleDto> getAll() {
         return ruleService.getAllRules().stream().map(this::convert).collect(toList());
     }
 
     // TODO merge with getAll()
     @GetMapping(params = "argumentType")
-    public List<RuleDto> getAvailable(@NotNull @RequestParam("argumentType") String argumentTypeName) throws ClassNotFoundException {
+    @ApiOperation(value = "Find `Rule`s by `argumentType` field")
+    public List<RuleDto> getAvailable(@NotNull @RequestParam("argumentType") @ApiParam(value = "The type of `Rule.test()` argument. Used to *filter supported* `Rule`s supported by `BusinessRule` during adding.") String argumentTypeName) throws ClassNotFoundException {
         Class<Rule<?>> argumentType = (Class<Rule<?>>) Class.forName(argumentTypeName);
         Predicate<Class<Rule<?>>> ruleTypeFilter = new RuleTypeFilter(argumentType);
         return ruleService.getAllRules().stream().filter(ruleTypeFilter).map(this::convert).collect(toList());

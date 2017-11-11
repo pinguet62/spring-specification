@@ -8,6 +8,9 @@ import fr.pinguet62.springspecification.core.builder.database.model.BusinessRule
 import fr.pinguet62.springspecification.core.builder.database.model.RuleComponentEntity;
 import fr.pinguet62.springspecification.core.builder.database.repository.BusinessRuleRepository;
 import fr.pinguet62.springspecification.core.builder.database.repository.RuleComponentRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,7 @@ import static org.springframework.web.util.UriUtils.encode;
 @Transactional(TRANSACTION_MANAGER_NAME)
 @RestController
 @RequestMapping(PATH)
+@Api(tags = "BusinessRule", description = "Services related to `BusinessRule`s, containing root `RuleComponent`s and additional information")
 public class BusinessRuleController {
 
     public static final String PATH = "/businessRule";
@@ -45,12 +49,14 @@ public class BusinessRuleController {
     private RuleService ruleService;
 
     @GetMapping
+    @ApiOperation(value = "List all `BusinessRule`s")
     public @NotNull @Valid List<BusinessRuleDto> getAll() {
         return businessRuleRepository.findAll().stream().map(this::convert).collect(toList());
     }
 
     @GetMapping("/{id:.+}")
-    public @Valid ResponseEntity<BusinessRuleDto> getById(@NotBlank @PathVariable String id) {
+    @ApiOperation(value = "Find a `BusinessRule`s by `id`")
+    public @Valid ResponseEntity<BusinessRuleDto> getById(@NotBlank @PathVariable @ApiParam(value = "Its `id`", required = true) String id) {
         Optional<BusinessRuleEntity> entity = businessRuleRepository.findById(id);
         if (!entity.isPresent())
             return ResponseEntity.status(NOT_FOUND).build();
@@ -59,6 +65,7 @@ public class BusinessRuleController {
     }
 
     @PutMapping
+    @ApiOperation(value = "Create a new `BusinessRule`")
     public @Valid ResponseEntity<BusinessRuleDto> create(@Valid @RequestBody BusinessRuleInputDto dto) throws UnsupportedEncodingException {
         RuleComponentEntity rootRuleComponent = new RuleComponentEntity();
         rootRuleComponent.setParent(null /*root*/);
@@ -80,6 +87,7 @@ public class BusinessRuleController {
     }
 
     @DeleteMapping("/{id:.+}")
+    @ApiOperation(value = "Delete an existing `RuleComponent`")
     public @Valid ResponseEntity<BusinessRuleDto> delete(@NotBlank @PathVariable String id) {
         Optional<BusinessRuleEntity> entity = businessRuleRepository.findById(id);
         if (!entity.isPresent())
