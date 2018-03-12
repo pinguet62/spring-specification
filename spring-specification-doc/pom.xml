@@ -17,7 +17,7 @@
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>1.5.5</version>
+                <version>${asciidoctor-maven-plugin.version}</version>
                 <configuration>
                     <sourceHighlighter>highlight.js</sourceHighlighter>
                     <attributes>
@@ -45,7 +45,7 @@
                         <!-- Support for: ditaa, PlantUML, Graphviz dot -->
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctorj-diagram</artifactId>
-                        <version>1.5.4.1</version>
+                        <version>${asciidoctorj-diagram.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -53,7 +53,7 @@
             <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
-                <version>0.12</version>
+                <version>${site-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>deploy</phase>

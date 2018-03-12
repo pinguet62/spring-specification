@@ -31,4 +31,14 @@ public class SpringSpecificationBeans {
 
     public static final String COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER_NAME = "springSpecification.commonsDbcp2PoolDataSourceMetadataProvider";
 
+    public static final String JDBC_TEMPLATE_NAME = "springSpecification.jdbcTemplate";
+
+    public static final String JDBC_OPERATIONS_NAME = "springSpecification.jdbcOperations";
+
+    public static final String NAMED_PARAMETER_JDBC_TEMPLATE_NAME = "springSpecification.namedParameterJdbcTemplate";
+
+    public static final String OPEN_ENTITY_MANAGER_IN_VIEW_INTERCEPTOR_NAME = "springSpecification.openEntityManagerInViewInterceptor";
+
+    public static final String OPEN_ENTITY_MANAGER_IN_VIEW_FILTER_NAME = "springSpecification.openEntityManagerInViewFilter";
+
 }

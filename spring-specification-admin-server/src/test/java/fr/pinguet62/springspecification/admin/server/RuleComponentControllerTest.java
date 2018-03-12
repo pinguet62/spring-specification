@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestExecutionListeners(mergeMode = MERGE_WITH_DEFAULTS, listeners = DbUnitTestExecutionListener.class)
 @DbUnitConfiguration(databaseConnection = DATASOURCE_NAME)
 @DatabaseSetup("/RuleComponentControllerTest_dataset.xml")
-@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD) // simulate @Transactional (TODO check is works with MockMvc)
+@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD) // simulate @Transactional (TODO check it works with MockMvc)
 public class RuleComponentControllerTest {
 
     @Autowired

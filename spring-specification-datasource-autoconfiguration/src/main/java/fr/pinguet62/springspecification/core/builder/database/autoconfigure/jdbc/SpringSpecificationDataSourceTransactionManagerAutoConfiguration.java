@@ -16,6 +16,8 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -24,8 +26,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,10 +35,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
-
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
-import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.TRANSACTION_MANAGER_NAME;
 
 /**
@@ -51,21 +48,21 @@ import static fr.pinguet62.springspecification.core.builder.database.autoconfigu
  * @author Kazuki Shimizu
  */
 @Configuration
-@AutoConfigureAfter(DataSourceTransactionManagerAutoConfiguration.class) // let Spring Boot create auto-configuration beans
 @ConditionalOnClass({ JdbcTemplate.class, PlatformTransactionManager.class })
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
-@EnableConfigurationProperties(DataSourceProperties.class)
+@EnableConfigurationProperties(SpringSpecificationDataSourceProperties.class)
+@AutoConfigureAfter(org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration.class)
 public class SpringSpecificationDataSourceTransactionManagerAutoConfiguration {
 
 	@Configuration
 	@ConditionalOnBean(/*value = DataSource.class,*/ name = DATASOURCE_NAME)
-	static class DataSourceTransactionManagerConfiguration {
+	static class SpringSpecificationDataSourceTransactionManagerConfiguration {
 
 		private final DataSource dataSource;
 
 		private final TransactionManagerCustomizers transactionManagerCustomizers;
 
-		DataSourceTransactionManagerConfiguration(@Qualifier(DATASOURCE_NAME) DataSource dataSource,
+		SpringSpecificationDataSourceTransactionManagerConfiguration(@Qualifier(DATASOURCE_NAME) DataSource dataSource,
 				ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
 			this.dataSource = dataSource;
 			this.transactionManagerCustomizers = transactionManagerCustomizers
@@ -73,9 +70,9 @@ public class SpringSpecificationDataSourceTransactionManagerAutoConfiguration {
 		}
 
 		@Bean(TRANSACTION_MANAGER_NAME)
-		@ConditionalOnMissingBean(PlatformTransactionManager.class)
+		@ConditionalOnMissingBean(/*value = PlatformTransactionManager.class,*/ name = TRANSACTION_MANAGER_NAME)
 		public DataSourceTransactionManager transactionManager(
-				@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
+				SpringSpecificationDataSourceProperties properties) {
 			DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(
 					this.dataSource);
 			if (this.transactionManagerCustomizers != null) {

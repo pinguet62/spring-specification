@@ -44,3 +44,5 @@ Thumbs.db
 # Other
 # (copied from root project)
 tslint.json
+
+package-lock.json

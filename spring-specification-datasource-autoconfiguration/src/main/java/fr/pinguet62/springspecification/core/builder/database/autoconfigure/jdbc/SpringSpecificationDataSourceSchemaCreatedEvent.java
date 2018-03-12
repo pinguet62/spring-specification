@@ -16,9 +16,9 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc;
 
-import org.springframework.context.ApplicationEvent;
-
 import javax.sql.DataSource;
+
+import org.springframework.context.ApplicationEvent;
 
 /**
  * {@link ApplicationEvent} used internally to indicate that the schema of a new

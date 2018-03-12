@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2017 the original author or authors.
+ * Copyright 2012-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc;
 
+import javax.annotation.PreDestroy;
+
 import org.springframework.beans.factory.BeanClassLoaderAware;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.context.annotation.Bean;
@@ -26,10 +26,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
-import javax.annotation.PreDestroy;
-
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
-import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
 
 /**
  * Configuration for embedded data sources.
@@ -39,16 +36,16 @@ import static fr.pinguet62.springspecification.core.builder.database.autoconfigu
  * @see SpringSpecificationDataSourceAutoConfiguration
  */
 @Configuration
-@EnableConfigurationProperties(DataSourceProperties.class)
+@EnableConfigurationProperties(SpringSpecificationDataSourceProperties.class)
 public class SpringSpecificationEmbeddedDataSourceConfiguration implements BeanClassLoaderAware {
 
 	private EmbeddedDatabase database;
 
 	private ClassLoader classLoader;
 
-	private final DataSourceProperties properties;
+	private final SpringSpecificationDataSourceProperties properties;
 
-	public SpringSpecificationEmbeddedDataSourceConfiguration(@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
+	public SpringSpecificationEmbeddedDataSourceConfiguration(SpringSpecificationDataSourceProperties properties) {
 		this.properties = properties;
 	}
 
@@ -60,9 +57,9 @@ public class SpringSpecificationEmbeddedDataSourceConfiguration implements BeanC
 	@Bean(DATASOURCE_NAME)
 	public EmbeddedDatabase dataSource() {
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder()
-				.setType(EmbeddedDatabaseConnection.get(this.classLoader).getType());
-		this.database = builder.setName(this.properties.getName())
-				.generateUniqueName(this.properties.isGenerateUniqueName()).build();
+				.setType(EmbeddedDatabaseConnection.get(this.classLoader).getType())
+				.setName(this.properties.determineDatabaseName());
+		this.database = builder.build();
 		return this.database;
 	}
 

@@ -16,12 +16,13 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.orm.jpa;
 
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.jdbc.SchemaManagement;
 import org.springframework.boot.jdbc.SchemaManagementProvider;
-
-import javax.sql.DataSource;
-import java.util.List;
 
 /**
  * A {@link SchemaManagementProvider} that invokes a configurable number of

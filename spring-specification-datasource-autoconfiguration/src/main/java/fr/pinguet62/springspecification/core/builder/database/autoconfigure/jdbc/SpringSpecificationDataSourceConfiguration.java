@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2017 the original author or authors.
+ * Copyright 2012-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc;
 
+import javax.sql.DataSource;
+
 import com.zaxxer.hikari.HikariDataSource;
-import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.context.annotation.Bean;
-
-import javax.sql.DataSource;
+import org.springframework.util.StringUtils;
 
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
@@ -41,7 +41,7 @@ import static fr.pinguet62.springspecification.core.builder.database.autoconfigu
 abstract class SpringSpecificationDataSourceConfiguration {
 
 	@SuppressWarnings("unchecked")
-	protected <T> T createDataSource(DataSourceProperties properties,
+	protected <T> T createDataSource(SpringSpecificationDataSourceProperties properties,
 			Class<? extends DataSource> type) {
 		return (T) properties.initializeDataSourceBuilder().type(type).build();
 	}
@@ -56,7 +56,7 @@ abstract class SpringSpecificationDataSourceConfiguration {
 		@Bean(DATASOURCE_NAME)
 		@ConfigurationProperties(prefix = "spring-specification.datasource.tomcat")
 		public org.apache.tomcat.jdbc.pool.DataSource dataSource(
-				@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
+				SpringSpecificationDataSourceProperties properties) {
 			org.apache.tomcat.jdbc.pool.DataSource dataSource = createDataSource(
 					properties, org.apache.tomcat.jdbc.pool.DataSource.class);
 			DatabaseDriver databaseDriver = DatabaseDriver
@@ -80,10 +80,10 @@ abstract class SpringSpecificationDataSourceConfiguration {
 
 		@Bean(DATASOURCE_NAME)
 		@ConfigurationProperties(prefix = "spring-specification.datasource.hikari")
-		public HikariDataSource dataSource(@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
+		public HikariDataSource dataSource(SpringSpecificationDataSourceProperties properties) {
 			HikariDataSource dataSource = createDataSource(properties,
 					HikariDataSource.class);
-			if (properties.getName() != null) {
+			if (StringUtils.hasText(properties.getName())) {
 				dataSource.setPoolName(properties.getName());
 			}
 			return dataSource;
@@ -101,7 +101,7 @@ abstract class SpringSpecificationDataSourceConfiguration {
 		@Bean(DATASOURCE_NAME)
 		@ConfigurationProperties(prefix = "spring-specification.datasource.dbcp2")
 		public org.apache.commons.dbcp2.BasicDataSource dataSource(
-				@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
+				SpringSpecificationDataSourceProperties properties) {
 			return createDataSource(properties,
 					org.apache.commons.dbcp2.BasicDataSource.class);
 		}
@@ -116,7 +116,7 @@ abstract class SpringSpecificationDataSourceConfiguration {
 	static class Generic {
 
 		@Bean(DATASOURCE_NAME)
-		public DataSource dataSource(@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties) {
+		public DataSource dataSource(SpringSpecificationDataSourceProperties properties) {
 			return properties.initializeDataSourceBuilder().build();
 		}
 

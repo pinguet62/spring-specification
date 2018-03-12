@@ -42,7 +42,7 @@ import static org.springframework.web.util.UriUtils.encode;
 @TestExecutionListeners(mergeMode = MERGE_WITH_DEFAULTS, listeners = DbUnitTestExecutionListener.class)
 @DbUnitConfiguration(databaseConnection = DATASOURCE_NAME)
 @DatabaseSetup("/BusinessRuleControllerTest_dataset.xml")
-@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD) // simulate @Transactional (TODO check is works with MockMvc)
+@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD) // simulate @Transactional (TODO check it works with MockMvc)
 public class BusinessRuleControllerTest {
 
     @Autowired

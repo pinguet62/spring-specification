@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2017 the original author or authors.
+ * Copyright 2012-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,23 +16,25 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.orm.jpa;
 
+import java.util.Map;
+import java.util.function.Supplier;
+
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+
 import fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans;
-import fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc.SpringSpecificationDataSourceSchemaCreatedEvent;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-import java.util.Map;
+import fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc.SpringSpecificationDataSourceSchemaCreatedEvent;
 
 /**
  * {@link BeanPostProcessor} used to fire {@link SpringSpecificationDataSourceSchemaCreatedEvent}s. Should
@@ -48,7 +50,7 @@ class SpringSpecificationDataSourceInitializedPublisher implements BeanPostProce
 
 	private DataSource dataSource;
 
-	private JpaProperties properties;
+	private SpringSpecificationJpaProperties properties;
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName)
@@ -63,8 +65,8 @@ class SpringSpecificationDataSourceInitializedPublisher implements BeanPostProce
 			// Normally this will be the right DataSource
 			this.dataSource = (DataSource) bean;
 		}
-		if (bean instanceof JpaProperties && beanName.equals(SpringSpecificationBeans.JPA_PROPERTIES_NAME)) {
-			this.properties = (JpaProperties) bean;
+		if (bean instanceof SpringSpecificationJpaProperties/* && beanName.equals(SpringSpecificationBeans.JPA_PROPERTIES_NAME)*/) {
+			this.properties = (SpringSpecificationJpaProperties) bean;
 		}
 		if (bean instanceof EntityManagerFactory && beanName.equals(SpringSpecificationBeans.ENTITY_MANAGER_FACTORY_NAME)) {
 			publishEventIfRequired((EntityManagerFactory) bean);
@@ -91,10 +93,11 @@ class SpringSpecificationDataSourceInitializedPublisher implements BeanPostProce
 		if (this.properties == null) {
 			return true; // better safe than sorry
 		}
-		String defaultDdlAuto = (EmbeddedDatabaseConnection.isEmbedded(dataSource)
-				? "create-drop" : "none");
-		Map<String, String> hibernate = this.properties
-				.getHibernateProperties(defaultDdlAuto);
+		Supplier<String> defaultDdlAuto = () ->
+				EmbeddedDatabaseConnection.isEmbedded(dataSource) ? "create-drop"
+						: "none";
+		Map<String, Object> hibernate = this.properties
+				.getHibernateProperties(new SpringSpecificationHibernateSettings().ddlAuto(defaultDdlAuto));
 		if (hibernate.containsKey("hibernate.hbm2ddl.auto")) {
 			return true;
 		}

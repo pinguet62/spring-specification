@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2017 the original author or authors.
+ * Copyright 2012-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.orm.jpa;
 
-import fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc.SpringSpecificationDataSourceAutoConfiguration;
-import fr.pinguet62.springspecification.core.builder.database.autoconfigure.orm.jpa.SpringSpecificationHibernateJpaAutoConfiguration.HibernateEntityManagerCondition;
+import java.util.Arrays;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionMessage;
@@ -25,8 +27,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionMessage.Style;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.context.annotation.Conditional;
@@ -38,8 +38,8 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.util.ClassUtils;
 
-import javax.persistence.EntityManager;
-import java.util.Arrays;
+import fr.pinguet62.springspecification.core.builder.database.autoconfigure.orm.jpa.SpringSpecificationHibernateJpaAutoConfiguration.SpringSpecificationHibernateEntityManagerCondition;
+import fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc.SpringSpecificationDataSourceAutoConfiguration;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Hibernate JPA.
@@ -51,16 +51,16 @@ import java.util.Arrays;
  */
 @Configuration
 @ConditionalOnClass({ LocalContainerEntityManagerFactoryBean.class, EntityManager.class })
-@Conditional(HibernateEntityManagerCondition.class)
-@EnableConfigurationProperties(JpaProperties.class)
-@AutoConfigureAfter({ SpringSpecificationDataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class /*let Spring Boot create auto-configuration beans*/ })
-@Import({SpringSpecificationHibernateJpaConfiguration.class, SpringSpecificationDataSourceInitializedPublisher.Registrar.class})
+@Conditional(SpringSpecificationHibernateEntityManagerCondition.class)
+@EnableConfigurationProperties(SpringSpecificationJpaProperties.class)
+@AutoConfigureAfter({ SpringSpecificationDataSourceAutoConfiguration.class, org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class })
+@Import(SpringSpecificationHibernateJpaConfiguration.class)
 public class SpringSpecificationHibernateJpaAutoConfiguration {
 
 	@Order(Ordered.HIGHEST_PRECEDENCE + 20)
-	static class HibernateEntityManagerCondition extends SpringBootCondition {
+	static class SpringSpecificationHibernateEntityManagerCondition extends SpringBootCondition {
 
-		private static String[] CLASS_NAMES = {
+		private static final String[] CLASS_NAMES = {
 				"org.hibernate.ejb.HibernateEntityManager",
 				"org.hibernate.jpa.HibernateEntityManager" };
 

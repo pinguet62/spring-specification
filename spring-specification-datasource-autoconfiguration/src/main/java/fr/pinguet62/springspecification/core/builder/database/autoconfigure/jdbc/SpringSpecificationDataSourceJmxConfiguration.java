@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2017 the original author or authors.
+ * Copyright 2012-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,22 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc;
 
+import java.sql.SQLException;
+
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.tomcat.jdbc.pool.DataSourceProxy;
+
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.sql.DataSource;
-import java.sql.SQLException;
+import org.springframework.jmx.export.MBeanExporter;
 
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_MBEAN_NAME;
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
@@ -43,23 +49,33 @@ class SpringSpecificationDataSourceJmxConfiguration {
 
 //	@Configuration
 //	@ConditionalOnClass(HikariDataSource.class)
-//	@ConditionalOnSingleCandidate(HikariDataSource.class)
+//	@ConditionalOnSingleCandidate(DataSource.class)
 //	static class Hikari {
 //
-//		private final HikariDataSource dataSource;
+//		private final DataSource dataSource;
 //
 //		private final ObjectProvider<MBeanExporter> mBeanExporter;
 //
-//		Hikari(@Qualifier(DATASOURCE_NAME) HikariDataSource dataSource, ObjectProvider<MBeanExporter> mBeanExporter) {
+//		Hikari(@Qualifier(DATASOURCE_NAME) DataSource dataSource, ObjectProvider<MBeanExporter> mBeanExporter) {
 //			this.dataSource = dataSource;
 //			this.mBeanExporter = mBeanExporter;
 //		}
 //
 //		@PostConstruct
 //		public void validateMBeans() {
-//			MBeanExporter exporter = this.mBeanExporter.getIfUnique();
-//			if (exporter != null && this.dataSource.isRegisterMbeans()) {
-//				exporter.addExcludedBean(DATASOURCE_NAME);
+//			HikariDataSource hikariDataSource = unwrapHikariDataSource();
+//			if (hikariDataSource != null && hikariDataSource.isRegisterMbeans()) {
+//				this.mBeanExporter
+//						.ifUnique((exporter) -> exporter.addExcludedBean("dataSource"));
+//			}
+//		}
+//
+//		private HikariDataSource unwrapHikariDataSource() {
+//			try {
+//				return this.dataSource.unwrap(HikariDataSource.class);
+//			}
+//			catch (SQLException ex) {
+//				return null;
 //			}
 //		}
 //

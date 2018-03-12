@@ -16,19 +16,18 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 
-import javax.sql.DataSource;
-
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
-import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_PROPERTIES_NAME;
 
 /**
  * Bean to handle {@link DataSource} initialization by running {@literal spring-specification/schema-*.sql} on
@@ -39,14 +38,14 @@ import static fr.pinguet62.springspecification.core.builder.database.autoconfigu
  * @see SpringSpecificationDataSourceAutoConfiguration
  */
 class SpringSpecificationDataSourceInitializerInvoker
-        implements ApplicationListener<SpringSpecificationDataSourceSchemaCreatedEvent>, InitializingBean {
+		implements ApplicationListener<SpringSpecificationDataSourceSchemaCreatedEvent>, InitializingBean {
 
-    private static final Log logger = LogFactory
+	private static final Log logger = LogFactory
 			.getLog(SpringSpecificationDataSourceInitializerInvoker.class);
 
 	private final ObjectProvider<DataSource> dataSource;
 
-	private final DataSourceProperties properties;
+	private final SpringSpecificationDataSourceProperties properties;
 
 	private final ApplicationContext applicationContext;
 
@@ -55,7 +54,7 @@ class SpringSpecificationDataSourceInitializerInvoker
 	private boolean initialized;
 
 	SpringSpecificationDataSourceInitializerInvoker(@Qualifier(DATASOURCE_NAME) ObjectProvider<DataSource> dataSource,
-			@Qualifier(DATASOURCE_PROPERTIES_NAME) DataSourceProperties properties, ApplicationContext applicationContext) {
+			SpringSpecificationDataSourceProperties properties, ApplicationContext applicationContext) {
 		this.dataSource = dataSource;
 		this.properties = properties;
 		this.applicationContext = applicationContext;

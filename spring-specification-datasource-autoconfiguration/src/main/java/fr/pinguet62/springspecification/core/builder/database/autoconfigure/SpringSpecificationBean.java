@@ -5,9 +5,13 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
@@ -50,7 +54,17 @@ public enum SpringSpecificationBean {
 
     HIKARI_POOL_DATASOURCE_METADATA_PROVIDER(DataSourceProperties.class, SpringSpecificationBeans.HIKARI_POOL_DATASOURCE_METADATA_PROVIDER_NAME),
 
-    COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER(DataSourceProperties.class, SpringSpecificationBeans.COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER_NAME);
+    COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER(DataSourceProperties.class, SpringSpecificationBeans.COMMONSDBCP2_POOL_DATASOURCE_METADATA_PROVIDER_NAME),
+
+    JDBC_TEMPLATE_NAME(JdbcTemplate.class, SpringSpecificationBeans.JDBC_TEMPLATE_NAME),
+
+    JDBC_OPERATIONS_NAME(JdbcOperations.class, SpringSpecificationBeans.JDBC_OPERATIONS_NAME),
+
+    NAMED_PARAMETER_JDBC_TEMPLATE_NAME(JdbcOperations.class, SpringSpecificationBeans.NAMED_PARAMETER_JDBC_TEMPLATE_NAME)/*,
+
+    OPEN_ENTITY_MANAGER_IN_VIEW_INTERCEPTOR_NAME(OpenEntityManagerInViewInterceptor.class, SpringSpecificationBeans.OPEN_ENTITY_MANAGER_IN_VIEW_INTERCEPTOR_NAME),
+
+    OPEN_ENTITY_MANAGER_IN_VIEW_FILTER_NAME(OpenEntityManagerInViewFilter.class, SpringSpecificationBeans.OPEN_ENTITY_MANAGER_IN_VIEW_FILTER_NAME)*/;
 
     @Getter
     private final Class<?> beanType;

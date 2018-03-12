@@ -16,27 +16,30 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc;
 
-import fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc.metadata.SpringSpecificationDataSourcePoolMetadataProvidersConfiguration;
-import org.springframework.beans.factory.BeanFactoryUtils;
+import javax.sql.DataSource;
+import javax.sql.XADataSource;
+
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.*;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.AnyNestedCondition;
+import org.springframework.boot.autoconfigure.condition.ConditionMessage;
+import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.context.annotation.*;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
-import javax.sql.DataSource;
-import javax.sql.XADataSource;
-import java.util.Arrays;
-
+import fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc.metadata.SpringSpecificationDataSourcePoolMetadataProvidersConfiguration;
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.DATASOURCE_NAME;
 import static fr.pinguet62.springspecification.core.builder.database.autoconfigure.SpringSpecificationBeans.XA_DATASOURCE_NAME;
 import static java.util.function.Predicate.isEqual;
@@ -50,16 +53,16 @@ import static java.util.function.Predicate.isEqual;
  * @author Kazuki Shimizu
  */
 @Configuration
-@AutoConfigureAfter({DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class}) // let Spring Boot create auto-configuration beans
 @ConditionalOnClass({ DataSource.class, EmbeddedDatabaseType.class })
-@EnableConfigurationProperties(DataSourceProperties.class)
+@EnableConfigurationProperties(SpringSpecificationDataSourceProperties.class)
 @Import({ SpringSpecificationDataSourcePoolMetadataProvidersConfiguration.class,
 		SpringSpecificationDataSourceInitializationConfiguration.class })
+@AutoConfigureAfter(org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class)
 public class SpringSpecificationDataSourceAutoConfiguration {
 
 	@Configuration
 	@Conditional(EmbeddedDatabaseCondition.class)
-	@ConditionalOnMissingBean(/*value = { DataSource.class, XADataSource.class },*/ name = DATASOURCE_NAME)
+	@ConditionalOnMissingBean(/*value = { DataSource.class, XADataSource.class },*/ name = { DATASOURCE_NAME, XA_DATASOURCE_NAME })
 	@Import(SpringSpecificationEmbeddedDataSourceConfiguration.class)
 	protected static class EmbeddedDatabaseConfiguration {
 
@@ -67,7 +70,7 @@ public class SpringSpecificationDataSourceAutoConfiguration {
 
 	@Configuration
 	@Conditional(PooledDataSourceCondition.class)
-	@ConditionalOnMissingBean(/*value = { DataSource.class, XADataSource.class },*/ name = DATASOURCE_NAME)
+	@ConditionalOnMissingBean(/*value = { DataSource.class, XADataSource.class },*/ name = { DATASOURCE_NAME, XA_DATASOURCE_NAME })
 	@Import({ SpringSpecificationDataSourceConfiguration.Hikari.class, SpringSpecificationDataSourceConfiguration.Tomcat.class,
 			SpringSpecificationDataSourceConfiguration.Dbcp2.class, SpringSpecificationDataSourceConfiguration.Generic.class,
 			SpringSpecificationDataSourceJmxConfiguration.class })
@@ -104,7 +107,7 @@ public class SpringSpecificationDataSourceAutoConfiguration {
 
 		@Override
 		public ConditionOutcome getMatchOutcome(ConditionContext context,
-												AnnotatedTypeMetadata metadata) {
+				AnnotatedTypeMetadata metadata) {
 			ConditionMessage.Builder message = ConditionMessage
 					.forCondition("PooledDataSource");
 			if (getDataSourceClassLoader(context) != null) {
@@ -140,7 +143,7 @@ public class SpringSpecificationDataSourceAutoConfiguration {
 
 		@Override
 		public ConditionOutcome getMatchOutcome(ConditionContext context,
-												AnnotatedTypeMetadata metadata) {
+				AnnotatedTypeMetadata metadata) {
 			ConditionMessage.Builder message = ConditionMessage
 					.forCondition("EmbeddedDataSource");
 			if (anyMatches(context, metadata, this.pooledCondition)) {
@@ -154,45 +157,6 @@ public class SpringSpecificationDataSourceAutoConfiguration {
 						.noMatch(message.didNotFind("embedded database").atAll());
 			}
 			return ConditionOutcome.match(message.found("embedded database").items(type));
-		}
-
-	}
-
-	/**
-	 * {@link Condition} to detect when a {@link DataSource} is available (either because
-	 * the user provided one or because one will be auto-configured).
-	 */
-	@Order(Ordered.LOWEST_PRECEDENCE - 10)
-	static class DataSourceAvailableCondition extends SpringBootCondition {
-
-		private final SpringBootCondition pooledCondition = new PooledDataSourceCondition();
-
-		private final SpringBootCondition embeddedCondition = new EmbeddedDatabaseCondition();
-
-		@Override
-		public ConditionOutcome getMatchOutcome(ConditionContext context,
-												AnnotatedTypeMetadata metadata) {
-			ConditionMessage.Builder message = ConditionMessage
-					.forCondition("DataSourceAvailable");
-			if (hasBean(context, DataSource.class, DATASOURCE_NAME)
-					|| hasBean(context, XADataSource.class, XA_DATASOURCE_NAME)) {
-				return ConditionOutcome
-						.match(message.foundExactly("existing data source bean"));
-			}
-			if (anyMatches(context, metadata, this.pooledCondition,
-					this.embeddedCondition)) {
-				return ConditionOutcome.match(message
-						.foundExactly("existing auto-configured data source bean"));
-			}
-			return ConditionOutcome
-					.noMatch(message.didNotFind("any existing data source bean").atAll());
-		}
-
-		private boolean hasBean(ConditionContext context, Class<?> type, String beanName) {
-			return Arrays
-					.stream(BeanFactoryUtils.beanNamesForTypeIncludingAncestors(context.getBeanFactory(), type, true, false))
-					.filter(isEqual(beanName))
-					.count() > 0;
 		}
 
 	}

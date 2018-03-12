@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2017 the original author or authors.
+ * Copyright 2012-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,18 @@
 
 package fr.pinguet62.springspecification.core.builder.database.autoconfigure.jdbc;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.boot.autoconfigure.DatabaseInitializationMode;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.context.config.ResourceNotFoundException;
+
+import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.jdbc.DataSourceInitializationMode;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -31,13 +37,8 @@ import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
- * Initialize a {@link DataSource} based on a matching {@link DataSourceProperties}
+ * Initialize a {@link DataSource} based on a matching {@link SpringSpecificationDataSourceProperties}
  * config.
  *
  * @author Dave Syer
@@ -52,18 +53,18 @@ class SpringSpecificationDataSourceInitializer {
 
 	private final DataSource dataSource;
 
-	private final DataSourceProperties properties;
+	private final SpringSpecificationDataSourceProperties properties;
 
 	private final ResourceLoader resourceLoader;
 
 	/**
 	 * Create a new instance with the {@link DataSource} to initialize and its matching
-	 * {@link DataSourceProperties configuration}.
+	 * {@link SpringSpecificationDataSourceProperties configuration}.
 	 * @param dataSource the datasource to initialize
 	 * @param properties the matching configuration
 	 * @param resourceLoader the resource loader to use (can be null)
 	 */
-	SpringSpecificationDataSourceInitializer(DataSource dataSource, DataSourceProperties properties,
+	SpringSpecificationDataSourceInitializer(DataSource dataSource, SpringSpecificationDataSourceProperties properties,
 			ResourceLoader resourceLoader) {
 		this.dataSource = dataSource;
 		this.properties = properties;
@@ -73,11 +74,11 @@ class SpringSpecificationDataSourceInitializer {
 
 	/**
 	 * Create a new instance with the {@link DataSource} to initialize and its matching
-	 * {@link DataSourceProperties configuration}.
+	 * {@link SpringSpecificationDataSourceProperties configuration}.
 	 * @param dataSource the datasource to initialize
 	 * @param properties the matching configuration
 	 */
-	SpringSpecificationDataSourceInitializer(DataSource dataSource, DataSourceProperties properties) {
+	SpringSpecificationDataSourceInitializer(DataSource dataSource, SpringSpecificationDataSourceProperties properties) {
 		this(dataSource, properties, null);
 	}
 
@@ -88,10 +89,10 @@ class SpringSpecificationDataSourceInitializer {
 	/**
 	 * Create the schema if necessary.
 	 * @return {@code true} if the schema was created
-	 * @see DataSourceProperties#getSchema()
+	 * @see SpringSpecificationDataSourceProperties#getSchema()
 	 */
 	public boolean createSchema() {
-		List<Resource> scripts = getScripts("spring.datasource.schema",
+		List<Resource> scripts = getScripts("spring-specification.datasource.schema",
 				this.properties.getSchema(), "schema");
 		if (!scripts.isEmpty()) {
 			if (!isEnabled()) {
@@ -107,7 +108,7 @@ class SpringSpecificationDataSourceInitializer {
 
 	/**
 	 * Initialize the schema if necessary.
-	 * @see DataSourceProperties#getData()
+	 * @see SpringSpecificationDataSourceProperties#getData()
 	 */
 	public void initSchema() {
 		List<Resource> scripts = getScripts("spring-specification.datasource.data",
@@ -124,12 +125,11 @@ class SpringSpecificationDataSourceInitializer {
 	}
 
 	private boolean isEnabled() {
-		DatabaseInitializationMode mode = DatabaseInitializationMode.EMBEDDED; // TODO this.properties.getInitializationMode();
-		if (mode == DatabaseInitializationMode.NEVER) {
+		DataSourceInitializationMode mode = this.properties.getInitializationMode();
+		if (mode == DataSourceInitializationMode.NEVER) {
 			return false;
 		}
-		if (mode == DatabaseInitializationMode.EMBEDDED
-				&& !isEmbedded()) {
+		if (mode == DataSourceInitializationMode.EMBEDDED && !isEmbedded()) {
 			return false;
 		}
 		return true;
@@ -166,7 +166,8 @@ class SpringSpecificationDataSourceInitializer {
 					resources.add(resource);
 				}
 				else if (validate) {
-					throw new ResourceNotFoundException(propertyName, resource);
+					throw new InvalidConfigurationPropertyValueException(propertyName,
+							resource, "The specified resource does not exist.");
 				}
 			}
 		}

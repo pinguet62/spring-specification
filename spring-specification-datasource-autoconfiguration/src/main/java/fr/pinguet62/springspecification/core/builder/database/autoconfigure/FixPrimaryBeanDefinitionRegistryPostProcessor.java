@@ -6,7 +6,6 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
@@ -16,7 +15,6 @@ import java.util.Arrays;
  *
  * @see SpringSpecificationBean
  */
-@Component
 public class FixPrimaryBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
     /**

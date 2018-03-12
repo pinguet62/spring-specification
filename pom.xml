@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.M5</version>
+        <version>2.0.0.RELEASE</version>
     </parent>
 
     <groupId>fr.pinguet62</groupId>
@@ -18,10 +18,6 @@
     <description>Specification pattern: (Spring based) API + Admin UI</description>
     <url>https://github.com/pinguet62/spring-specification</url>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
-
     <modules>
         <module>spring-specification-core</module>
         <module>spring-specification-admin-server</module>
@@ -30,6 +26,27 @@
         <module>spring-specification-doc</module>
         <module>spring-specification-sample</module>
     </modules>
+
+    <properties>
+        <commons-lang3.version>3.7</commons-lang3.version>
+        <commons-io.version>2.6</commons-io.version>
+        <dbunit.version>2.5.4</dbunit.version>
+        <spring-test-dbunit.version>1.3.0</spring-test-dbunit.version>
+        <aspectj-maven-plugin.version>1.11</aspectj-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.0</jacoco-maven-plugin.version>
+        <!-- spring-specification-admin-server -->
+        <springfox-swagger.version>2.8.0</springfox-swagger.version>
+        <!-- spring-specification-admin-client -->
+        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+        <node.version>v9.8.0</node.version>
+        <npm.version>5.6.0</npm.version>
+        <!-- spring-specification-doc -->
+        <asciidoctor-maven-plugin.version>1.5.6</asciidoctor-maven-plugin.version>
+        <asciidoctorj-diagram.version>1.5.8</asciidoctorj-diagram.version>
+        <site-maven-plugin.version>0.12</site-maven-plugin.version>
+        <!-- spring-specification-sample -->
+        <heroku-maven-plugin.version>1.2.0</heroku-maven-plugin.version><!-- TODO version upgrade -->
+    </properties>
 
     <dependencies>
         <dependency>
@@ -46,36 +63,32 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.6</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <version>${commons-io.version}</version>
         </dependency>
 
         <!-- JSR 303 -->
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
-            <version>2.0.0.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>6.0.2.Final</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.el</artifactId>
-            <version>3.0.1-b08</version>
         </dependency>
 
         <!-- AspectJ -->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.8.11</version>
         </dependency>
 
         <dependency>
@@ -86,13 +99,13 @@
         <dependency>
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
-            <version>2.5.4</version>
+            <version>${dbunit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.springtestdbunit</groupId>
             <artifactId>spring-test-dbunit</artifactId>
-            <version>1.3.0</version>
+            <version>${spring-test-dbunit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -103,14 +116,11 @@
                 <!-- AspectJ -->
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.10</version>
+                <version>${aspectj-maven-plugin.version}</version>
                 <configuration>
-                    <!-- Version 1.4 -->
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <!-- Version 1.10 -->
                     <complianceLevel>${java.version}</complianceLevel>
-
                     <!-- fix Lombok -->
                     <showWeaveInfo/>
                     <forceAjcCompile>true</forceAjcCompile>
@@ -131,12 +141,12 @@
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjrt</artifactId>
-                        <version>1.8.11</version>
+                        <version>${aspectj.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.aspectj</groupId>
                         <artifactId>aspectjtools</artifactId>
-                        <version>1.8.11</version>
+                        <version>${aspectj.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -145,7 +155,7 @@
                 <!-- Code coverage: agent -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
+                <version>${jacoco-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>

@@ -62,7 +62,7 @@ public class RuleComponentController {
     }
 
     @PatchMapping("/{id}")
-    @ApiOperation(value = "Delete an existing `RuleComponent`")
+    @ApiOperation(value = "Update an existing `RuleComponent`")
     public ResponseEntity<RuleComponentDto> update(@NotNull @PathVariable @ApiParam(value = "Its `id`", required = true) Integer id, @Valid @RequestBody RuleComponentInputDto dto) {
         Optional<RuleComponentEntity> entityOp = ruleComponentRepository.findById(id);
         if (!entityOp.isPresent())
