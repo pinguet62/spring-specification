@@ -1,5 +1,5 @@
 /* Remove root level format */
-.tree-container > ::ng-deep p62-tree-node > li:before {
+.tree-container > ::ng-deep app-tree-node > li:before {
     content: none;
 }
 

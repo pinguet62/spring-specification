@@ -28,11 +28,11 @@ import {RuleListComponent} from './rule/rule-list.component';
 import {RuleService, RuleServiceResolver} from './rule/rule.service';
 import {BusinessRuleService} from './business-rule/business-rule.service';
 import {RuleComponentService} from './rule-component/rule-component.service';
-import {BusinessRuleListComponent, CreateBusinessRuleDialog, DeleteBusinessRuleDialog} from './business-rule/business-rules-list.component';
+import {BusinessRuleListComponent, CreateBusinessRuleDialogComponent, DeleteBusinessRuleDialogComponent} from './business-rule/business-rules-list.component';
 import {BusinessRuleDetailComponent} from './business-rule/business-rules-detail.component';
-import {DeleteRuleComponentDialog, EditRuleComponentDialog, RuleComponentComponent, SettingsRuleComponentDialog} from './rule-component/rule-component.component';
+import {DeleteRuleComponentDialogComponent, EditRuleComponentDialogComponent, RuleComponentComponent, SettingsRuleComponentDialogComponent} from './rule-component/rule-component.component';
 import {ParameterService} from './parameter/parameter.service';
-import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './parameter/parameter.component';
+import {DeleteParameterDialogComponent, EditParameterDialogComponent, ParameterComponent} from './parameter/parameter.component';
 
 @NgModule({
     imports: [
@@ -47,13 +47,15 @@ import {DeleteParameterDialog, EditParameterDialog, ParameterComponent} from './
     ],
     declarations: [
         AppComponent, ContentPageComponent, EmptyPageComponent,
-        RuleListComponent, BusinessRuleListComponent, CreateBusinessRuleDialog, DeleteBusinessRuleDialog, BusinessRuleDetailComponent, RuleComponentComponent, EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,
-        ParameterComponent, EditParameterDialog, DeleteParameterDialog
+        RuleListComponent,
+        RuleComponentComponent, EditRuleComponentDialogComponent, SettingsRuleComponentDialogComponent, DeleteRuleComponentDialogComponent,
+        BusinessRuleListComponent, CreateBusinessRuleDialogComponent, DeleteBusinessRuleDialogComponent, BusinessRuleDetailComponent,
+        ParameterComponent, EditParameterDialogComponent, DeleteParameterDialogComponent
     ],
     entryComponents: [
-        CreateBusinessRuleDialog, DeleteBusinessRuleDialog,
-        EditRuleComponentDialog, SettingsRuleComponentDialog, DeleteRuleComponentDialog,
-        EditParameterDialog, DeleteParameterDialog
+        CreateBusinessRuleDialogComponent, DeleteBusinessRuleDialogComponent,
+        EditRuleComponentDialogComponent, SettingsRuleComponentDialogComponent, DeleteRuleComponentDialogComponent,
+        EditParameterDialogComponent, DeleteParameterDialogComponent
     ],
     bootstrap: [AppComponent]
 })

@@ -10,7 +10,7 @@ import {Rule} from '../rule/rule';
 import {RuleService} from '../rule/rule.service';
 
 @Component({
-    selector: 'p62-rule-component-update',
+    selector: 'app-rule-component-update',
     template: `
         <h2 mat-dialog-title>Rule</h2>
         <mat-dialog-content>
@@ -32,16 +32,16 @@ import {RuleService} from '../rule/rule.service';
             <button mat-button [disabled]="!form.form.valid" (click)="dialogRef.close(ruleComponent)">Apply</button>
         </mat-dialog-actions>`
 })
-export class EditRuleComponentDialog {
+export class EditRuleComponentDialogComponent {
 
     ruleComponent: RuleComponent;
     availableRules: Rule[];
 
-    constructor(public dialogRef: MatDialogRef<EditRuleComponentDialog>,
+    constructor(public dialogRef: MatDialogRef<EditRuleComponentDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 ruleService: RuleService) {
         // Dialog data
-        let businessRuleArgumentType: string = data.businessRuleArgumentType;
+        const businessRuleArgumentType: string = data.businessRuleArgumentType;
         this.ruleComponent = <RuleComponent> (data && data.ruleComponent || {}); // update or create
 
         ruleService.getAssociableRules(businessRuleArgumentType).subscribe(rs =>
@@ -52,7 +52,7 @@ export class EditRuleComponentDialog {
 }
 
 @Component({
-    selector: 'p62-rule-component-delete',
+    selector: 'app-rule-component-delete',
     template: `
         <h2 mat-dialog-title>Delete</h2>
         <mat-dialog-content>
@@ -63,28 +63,28 @@ export class EditRuleComponentDialog {
             <button mat-button (click)="dialogRef.close(true)">Discard</button>
         </mat-dialog-actions>`
 })
-export class DeleteRuleComponentDialog {
+export class DeleteRuleComponentDialogComponent {
 
-    constructor(public dialogRef: MatDialogRef<DeleteRuleComponentDialog>) {
+    constructor(public dialogRef: MatDialogRef<DeleteRuleComponentDialogComponent>) {
     }
 
 }
 
 @Component({
-    selector: 'p62-rule-component-settings',
+    selector: 'app-rule-component-settings',
     template: `
         <h2 mat-dialog-title>Settings</h2>
         <mat-dialog-content>
             <h3>Parameters</h3>
-            <p62-parameter [ruleComponent]="ruleComponent"></p62-parameter>
+            <app-parameter [ruleComponent]="ruleComponent"></app-parameter>
             <br><!--fix-->
         </mat-dialog-content>`
 })
-export class SettingsRuleComponentDialog {
+export class SettingsRuleComponentDialogComponent {
 
     ruleComponent: RuleComponent;
 
-    constructor(protected dialogRef: MatDialogRef<SettingsRuleComponentDialog>,
+    constructor(protected dialogRef: MatDialogRef<SettingsRuleComponentDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
         this.ruleComponent = <RuleComponent> data;
     }
@@ -92,9 +92,9 @@ export class SettingsRuleComponentDialog {
 }
 
 @Component({
-    selector: 'p62-rule-component',
+    selector: 'app-rule-component',
     template: `
-        <p62-tree [value]="treeNode" (nodeMoved)="ruleMoved($event)">
+        <app-tree [value]="treeNode" (nodeMoved)="ruleMoved($event)">
             <ng-template #label let-node>
                 <code>#{{node.data.ruleComponent.id}}</code> - <!--TODO test-->
                 <b>{{ruleService.getFromKey(node.data.ruleComponent.key)?.name}}</b>
@@ -128,7 +128,7 @@ export class SettingsRuleComponentDialog {
                     </button>
                 </div>
             </ng-template>
-        </p62-tree>`,
+        </app-tree>`,
     styles: [
         '::ng-deep .ui-tree .ui-treenode-label { vertical-align: top !important; }', // vertical align because of element with different height
         '::ng-deep .ui-tree { width: 100%; }', // all screen width
@@ -161,7 +161,7 @@ export class RuleComponentComponent implements OnInit {
     }
 
     ruleMoved(event: NodeMovedEvent<RuleComponentDataTreeNode>): void {
-        let ruleComponent: RuleComponent = {
+        const ruleComponent: RuleComponent = {
             id: event.node.data.ruleComponent.id,
             parent: event.parent.data.ruleComponent.id,
             index: event.index
@@ -172,16 +172,17 @@ export class RuleComponentComponent implements OnInit {
     }
 
     openCreateDialog(parentRuleComponent: RuleComponent): void {
-        let dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
+        const dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
         dialogConfig.data = {
             businessRuleArgumentType: this.businessRule.argumentType,
             ruleComponent: null
         };
-        let createDialog: MatDialogRef<EditRuleComponentDialog> = this.dialog.open(EditRuleComponentDialog, dialogConfig);
+        const createDialog: MatDialogRef<EditRuleComponentDialogComponent> = this.dialog.open(EditRuleComponentDialogComponent, dialogConfig);
         createDialog.afterClosed().subscribe((createdRuleComponent: RuleComponent) => {
             // Canceled
-            if (createdRuleComponent == null)
+            if (createdRuleComponent == null) {
                 return;
+            }
 
             createdRuleComponent.parent = parentRuleComponent.id;
             this.ruleComponentService.create(createdRuleComponent).subscribe(x =>
@@ -191,16 +192,17 @@ export class RuleComponentComponent implements OnInit {
     }
 
     openUpdateDialog(ruleComponent: RuleComponent): void {
-        let dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
+        const dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
         dialogConfig.data = {
             businessRuleArgumentType: this.businessRule.argumentType,
             ruleComponent: Object.assign({}, ruleComponent)
         };
-        let updateDialog: MatDialogRef<EditRuleComponentDialog> = this.dialog.open(EditRuleComponentDialog, dialogConfig);
+        const updateDialog: MatDialogRef<EditRuleComponentDialogComponent> = this.dialog.open(EditRuleComponentDialogComponent, dialogConfig);
         updateDialog.afterClosed().subscribe((updatedRule: RuleComponent) => {
             // Canceled
-            if (updatedRule == null)
+            if (updatedRule == null) {
                 return;
+            }
 
             this.ruleComponentService.update(updatedRule).subscribe(x =>
                 this.refresh()
@@ -209,20 +211,21 @@ export class RuleComponentComponent implements OnInit {
     }
 
     openSettingsDialog(ruleComponent: RuleComponent): void {
-        let dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
+        const dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
         dialogConfig.data = Object.assign({}, ruleComponent);
         dialogConfig.disableClose = false; // override
-        //dialogConfig.width = '800px'; // custom
-        let settingsDialog: MatDialogRef<SettingsRuleComponentDialog> = this.dialog.open(SettingsRuleComponentDialog, dialogConfig);
+        // dialogConfig.width = '800px'; // custom
+        const settingsDialog: MatDialogRef<SettingsRuleComponentDialogComponent> = this.dialog.open(SettingsRuleComponentDialogComponent, dialogConfig);
     }
 
     openDeleteDialog(ruleComponent: RuleComponent): void {
-        let deleteDialog: MatDialogRef<DeleteRuleComponentDialog> = this.dialog.open(DeleteRuleComponentDialog, this.getCommonDialogConfig());
+        const deleteDialog: MatDialogRef<DeleteRuleComponentDialogComponent> = this.dialog.open(DeleteRuleComponentDialogComponent, this.getCommonDialogConfig());
         deleteDialog.afterClosed().subscribe((confirm: boolean) => {
-            if (confirm)
+            if (confirm) {
                 this.ruleComponentService.delete(ruleComponent).subscribe(x =>
                     this.refresh()
                 );
+            }
         });
     }
 

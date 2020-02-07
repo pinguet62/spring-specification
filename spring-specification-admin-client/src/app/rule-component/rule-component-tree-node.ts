@@ -10,7 +10,7 @@ export interface RuleComponentDataTreeNode {
 }
 
 export function convert(ruleComponent: RuleComponent): TreeNode<RuleComponentDataTreeNode> {
-    let treeNode: TreeNode<RuleComponentDataTreeNode> = <TreeNode<RuleComponentDataTreeNode>> {
+    const treeNode: TreeNode<RuleComponentDataTreeNode> = <TreeNode<RuleComponentDataTreeNode>> {
         expanded: true, // TODO test
         acceptChildren: ['fr.pinguet62.springspecification.core.api.AndRule', 'fr.pinguet62.springspecification.core.api.OrRule', 'fr.pinguet62.springspecification.core.api.NotRule'].includes(ruleComponent.key),
         children: [],
@@ -24,13 +24,14 @@ export function convert(ruleComponent: RuleComponent): TreeNode<RuleComponentDat
         treeNode.children = ruleComponent.components.map(convert);
 
         // parent
-        for (let ruleChild of treeNode.children)
+        for (const ruleChild of treeNode.children) {
             ruleChild.data.parent = treeNode;
+        }
 
         // index & first & last
-        let size: number = treeNode.children.length;
-        for (let i: number = 0; i < size; i++) {
-            let ruleChild: TreeNode<RuleComponentDataTreeNode> = treeNode.children[i];
+        const size = treeNode.children.length;
+        for (let i = 0; i < size; i++) {
+            const ruleChild: TreeNode<RuleComponentDataTreeNode> = treeNode.children[i];
             ruleChild.data.index = i;
             ruleChild.data.first = (i === 0);
             ruleChild.data.last = (i === size - 1);

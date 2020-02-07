@@ -6,13 +6,13 @@ import {By} from '@angular/platform-browser';
 
 @Component({
     template: `
-        <p62-tree [value]="value">
+        <app-tree [value]="value">
             <ng-template #label></ng-template>
             <ng-template #options></ng-template>
-        </p62-tree>
+        </app-tree>
     `
 })
-class TreeComponentTester {
+class TreeComponentTesterComponent {
     value: TreeNode<any> = {
         expanded: true,
         acceptChildren: true,
@@ -55,39 +55,39 @@ class TreeComponentTester {
 }
 
 describe('TreeComponent', () => {
-        let fixture: ComponentFixture<TreeComponentTester>;
+        let fixture: ComponentFixture<TreeComponentTesterComponent>;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [TreeModule],
-                declarations: [TreeComponentTester]
+                declarations: [TreeComponentTesterComponent]
             });
-            fixture = TestBed.createComponent(TreeComponentTester);
+            fixture = TestBed.createComponent(TreeComponentTesterComponent);
         });
 
         // Check than all <ul> tree are present
         it('is expanded by default', () => {
             fixture.detectChanges(); // @Input()
-            expect(fixture.debugElement.queryAll(By.css('p62-tree li ul li ul li')).length).not.toBe(0);
+            expect(fixture.debugElement.queryAll(By.css('app-tree li ul li ul li')).length).not.toBe(0);
         });
 
         // Check than all <ul> tree are present
         it('collapse & expand', () => {
-            let getButton = (fixture: ComponentFixture<TreeComponentTester>) => fixture.debugElement.queryAll(By.css('p62-tree li ul li'))[0].query(By.css('.tree-content button[mat-icon-button]'));
+            const getButton = (f: ComponentFixture<TreeComponentTesterComponent>) => f.debugElement.queryAll(By.css('app-tree li ul li'))[0].query(By.css('.tree-content button[mat-icon-button]'));
 
             fixture.detectChanges(); // @Input()
             // expanded
-            expect(fixture.debugElement.queryAll(By.css('p62-tree li ul li')).length).toBe(5);
+            expect(fixture.debugElement.queryAll(By.css('app-tree li ul li')).length).toBe(5);
 
             getButton(fixture).nativeElement.click();
             fixture.detectChanges();
             // collapsed
-            expect(fixture.debugElement.queryAll(By.css('p62-tree li ul li')).length).toBe(4);
+            expect(fixture.debugElement.queryAll(By.css('app-tree li ul li')).length).toBe(4);
 
             getButton(fixture).nativeElement.click();
             fixture.detectChanges();
             // expanded
-            expect(fixture.debugElement.queryAll(By.css('p62-tree li ul li')).length).toBe(5);
+            expect(fixture.debugElement.queryAll(By.css('app-tree li ul li')).length).toBe(5);
         });
     }
 );

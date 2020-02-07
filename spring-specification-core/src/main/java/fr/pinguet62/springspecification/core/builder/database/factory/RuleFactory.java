@@ -41,7 +41,7 @@ public class RuleFactory implements Function<RuleComponentEntity, Optional<Rule<
                         .getComponents()
                         .stream()
                         .map(this::apply)
-                        .map(r -> r.orElseThrow(IllegalArgumentException::new))
+                        .map(r -> (Rule<?>) r.orElseThrow(IllegalArgumentException::new))
                         .collect(toList());
                 RuleInjector.CONTEXT.set(subRules);
 

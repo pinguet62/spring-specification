@@ -56,20 +56,17 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>install</arguments>
+                            <arguments>ci</arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>build</id>
-                        <phase>generate-resources</phase>
+                        <id>lint</id>
+                        <phase>process-sources</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <!-- ng build -->
-                            <!-- &#x002d;&#x002d;environment=embedded -->
-                            <!-- &#x002d;&#x002d;base-href=/spring-specification-admin-client/ -->
-                            <arguments>run ng -- build --environment=embedded --base-href=/spring-specification-admin-client/</arguments>
+                            <arguments>run lint</arguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -79,18 +76,37 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
+                            <environmentVariables>
+                                <CI>true</CI>
+                            </environmentVariables>
                             <!-- &#x002d;&#x002d;single-run : disable watch (stop after execution) -->
-                            <arguments>run ng -- test --code-coverage=true --single-run</arguments>
+                            <arguments>run test -- --code-coverage=true --single-run</arguments>
                         </configuration>
                     </execution>
+<!--                    <execution>-->
+<!--                        <id>e2e</id>-->
+<!--                        <phase>test</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>npm</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <environmentVariables>-->
+<!--                                <CI>true</CI>-->
+<!--                            </environmentVariables>-->
+<!--                            <arguments>run ng &#45;&#45; e2e</arguments>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
                     <execution>
-                        <id>e2e</id>
-                        <phase>test</phase>
+                        <id>build</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>run ng -- e2e</arguments>
+                            <!-- ng build -->
+                            <!-- &#x002d;&#x002d;environment=embedded -->
+                            <!-- &#x002d;&#x002d;base-href=/spring-specification-admin-client/ -->
+                            <arguments>run ng -- build --environment=embedded --base-href=/spring-specification-admin-client/</arguments>
                         </configuration>
                     </execution>
                 </executions>

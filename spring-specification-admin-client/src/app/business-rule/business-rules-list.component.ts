@@ -8,7 +8,7 @@ import {BusinessRuleService} from './business-rule.service';
 import {BusinessRule} from './business-rule';
 
 @Component({
-    selector: 'p62-business-rule-update',
+    selector: 'app-business-rule-update',
     template: `
         <h2 mat-dialog-title>Rule</h2>
         <mat-dialog-content>
@@ -31,17 +31,17 @@ import {BusinessRule} from './business-rule';
             <button mat-button [disabled]="!form.form.valid" (click)="dialogRef.close(businessRule)">Apply</button>
         </mat-dialog-actions>`
 })
-export class CreateBusinessRuleDialog {
+export class CreateBusinessRuleDialogComponent {
 
     businessRule: BusinessRule = {};
 
-    constructor(public dialogRef: MatDialogRef<CreateBusinessRuleDialog>) {
+    constructor(public dialogRef: MatDialogRef<CreateBusinessRuleDialogComponent>) {
     }
 
 }
 
 @Component({
-    selector: 'p62-business-rule-delete',
+    selector: 'app-business-rule-delete',
     template: `
         <h2 mat-dialog-title>Delete</h2>
         <mat-dialog-content>
@@ -52,15 +52,15 @@ export class CreateBusinessRuleDialog {
             <button mat-button (click)="dialogRef.close(true)">Discard</button>
         </mat-dialog-actions>`
 })
-export class DeleteBusinessRuleDialog {
+export class DeleteBusinessRuleDialogComponent {
 
-    constructor(public dialogRef: MatDialogRef<DeleteBusinessRuleDialog>) {
+    constructor(public dialogRef: MatDialogRef<DeleteBusinessRuleDialogComponent>) {
     }
 
 }
 
 @Component({
-    selector: 'p62-business-rule-list',
+    selector: 'app-business-rule-list',
     template: `
         <div style="position: relative;">
             <mat-table [dataSource]="dataSource" style="margin-right: 50px;">
@@ -142,11 +142,12 @@ export class BusinessRuleListComponent {
     }
 
     openCreateDialog(): void {
-        let createDialog: MatDialogRef<CreateBusinessRuleDialog> = this.dialog.open(CreateBusinessRuleDialog, this.getCommonDialogConfig());
+        const createDialog: MatDialogRef<CreateBusinessRuleDialogComponent> = this.dialog.open(CreateBusinessRuleDialogComponent, this.getCommonDialogConfig());
         createDialog.afterClosed().subscribe((createdBusinessRule: BusinessRule) => {
             // Canceled
-            if (createdBusinessRule == null)
+            if (createdBusinessRule == null) {
                 return;
+            }
 
             this.businessRuleService.create(createdBusinessRule).subscribe(x =>
                 this.refresh()
@@ -155,12 +156,13 @@ export class BusinessRuleListComponent {
     }
 
     openDeleteDialog(businessRule: BusinessRule): void {
-        let deleteDialog: MatDialogRef<DeleteBusinessRuleDialog> = this.dialog.open(DeleteBusinessRuleDialog, this.getCommonDialogConfig());
+        const deleteDialog: MatDialogRef<DeleteBusinessRuleDialogComponent> = this.dialog.open(DeleteBusinessRuleDialogComponent, this.getCommonDialogConfig());
         deleteDialog.afterClosed().subscribe((confirm: boolean) => {
-            if (confirm)
+            if (confirm) {
                 this.businessRuleService.delete(businessRule).subscribe(x =>
                     this.refresh()
                 );
+            }
         });
     }
 

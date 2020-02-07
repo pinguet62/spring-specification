@@ -15,29 +15,29 @@ export class ParameterService {
     }
 
     getByRuleComponent(ruleComponent: RuleComponent): Observable<Parameter[]> {
-        let url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter';
+        const url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter';
         return this.http.get<Parameter[]>(url);
     }
 
     getKeyByRule(ruleKey: string): Observable<string[]> {
-        let url: string = RuleService.resourceUrl + '/' + ruleKey + '/parameter/key';
+        const url: string = RuleService.resourceUrl + '/' + ruleKey + '/parameter/key';
         return this.http.get<string[]>(url);
     }
 
     create(ruleComponent: RuleComponent, parameter: Parameter): Observable<Parameter> {
-        let url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter';
-        let body: string = JSON.stringify(parameter);
+        const url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter';
+        const body: string = JSON.stringify(parameter);
         return this.http.put<Parameter>(url, body);
     }
 
     update(ruleComponent: RuleComponent, parameter: Parameter): Observable<Parameter> {
-        let url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter' + '/' + parameter.id;
-        let body: string = JSON.stringify(parameter);
+        const url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter' + '/' + parameter.id;
+        const body: string = JSON.stringify(parameter);
         return this.http.post<Parameter>(url, body);
     }
 
     delete(ruleComponent: RuleComponent, parameter: Parameter): Observable<Parameter> {
-        let url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter' + '/' + parameter.id;
+        const url: string = RuleComponentService.resourceUrl + '/' + ruleComponent.id + '/parameter' + '/' + parameter.id;
         return this.http.delete<Parameter>(url);
     }
 

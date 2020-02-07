@@ -1,24 +1,21 @@
 package fr.pinguet62.springspecification.core.api;
 
-import fr.pinguet62.springspecification.core.TestApplication;
 import lombok.Getter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import static fr.pinguet62.springspecification.core.api.SpelRuleTest.BeanSample;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @see SpelRule
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = {TestApplication.class, BeanSample.class})
+@RunWith(MockitoJUnitRunner.class)
 public class SpelRuleTest {
 
     @Component("foo")
@@ -27,15 +24,13 @@ public class SpelRuleTest {
         public String attr = "ok";
     }
 
-    @Autowired
-    private BeanFactory beanFactory;
-
     /**
      * Sample: value between 0 and 100.
      */
     @Test
     public void test() {
-        SpelRule rule = new SpelRule();
+        SpelRule rule = new SpelRule(mock(BeanFactory.class));
+
         rule.setSpel("0 <= #value && #value <= 18");
 
         assertThat(rule.test(-1), is(false));
@@ -51,7 +46,10 @@ public class SpelRuleTest {
      */
     @Test
     public void test_springContext() {
-        SpelRule rule = beanFactory.getBean(SpelRule.class);
+        BeanFactory beanFactory = mock(BeanFactory.class);
+        when(beanFactory.getBean("foo")).thenReturn(new BeanSample());
+
+        SpelRule rule = new SpelRule(beanFactory);
 
         rule.setSpel("#value == @foo.attr");
 

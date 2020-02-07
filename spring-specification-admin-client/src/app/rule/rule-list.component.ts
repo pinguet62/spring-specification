@@ -5,7 +5,7 @@ import {Rule} from './rule';
 import {RuleService} from './rule.service';
 
 @Component({
-    selector: 'p62-rule-list',
+    selector: 'app-rule-list',
     template: `
         <mat-table [dataSource]="dataSource" style="margin-right: 50px;">
             <ng-container cdkColumnDef="key">

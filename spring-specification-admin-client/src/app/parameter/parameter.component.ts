@@ -9,7 +9,7 @@ import {ParameterService} from './parameter.service';
 import {RuleComponent} from '../rule-component/rule-component';
 
 @Component({
-    selector: 'p62-parameter-edit',
+    selector: 'app-parameter-edit',
     template: `
         <h2 mat-dialog-title>Parameter</h2>
         <mat-dialog-content>
@@ -31,21 +31,21 @@ import {RuleComponent} from '../rule-component/rule-component';
             <button mat-button [disabled]="!form.form.valid" (click)="dialogRef.close(parameter)">Apply</button>
         </mat-dialog-actions>`
 })
-export class EditParameterDialog {
+export class EditParameterDialogComponent {
 
     ruleComponent: RuleComponent;
     parameter: Parameter;
 
     requiredKeys: string[];
 
-    constructor(public dialogRef: MatDialogRef<EditParameterDialog>,
+    constructor(public dialogRef: MatDialogRef<EditParameterDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 parameterService: ParameterService) {
         this.ruleComponent = data.ruleComponent;
         this.parameter = <Parameter> (data && data.parameter || {}); // update or create
 
         parameterService.getKeyByRule(this.ruleComponent.key).subscribe(keys => {
-            let alreadyAssociatedKey: string[] = this.ruleComponent.parameters.map(p => p.key);
+            const alreadyAssociatedKey: string[] = this.ruleComponent.parameters.map(p => p.key);
             this.requiredKeys = keys.filter(k => !alreadyAssociatedKey.includes(k));
         });
     }
@@ -53,7 +53,7 @@ export class EditParameterDialog {
 }
 
 @Component({
-    selector: 'p62-parameter-delete',
+    selector: 'app-parameter-delete',
     template: `
         <h2 mat-dialog-title>Delete</h2>
         <mat-dialog-content>
@@ -64,15 +64,15 @@ export class EditParameterDialog {
             <button mat-button (click)="dialogRef.close(true)">Discard</button>
         </mat-dialog-actions>`
 })
-export class DeleteParameterDialog {
+export class DeleteParameterDialogComponent {
 
-    constructor(public dialogRef: MatDialogRef<DeleteParameterDialog>) {
+    constructor(public dialogRef: MatDialogRef<DeleteParameterDialogComponent>) {
     }
 
 }
 
 @Component({
-    selector: 'p62-parameter',
+    selector: 'app-parameter',
     template: `
         <div class="mat-elevation-z8" style="position: relative;">
             <mat-table [dataSource]="dataSource" style="margin-right: 50px;">
@@ -134,13 +134,14 @@ export class ParameterComponent implements OnInit {
     }
 
     openCreateDialog(): void {
-        let dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
+        const dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
         dialogConfig.data = {ruleComponent: this.ruleComponent};
-        let createDialog: MatDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, dialogConfig);
+        const createDialog: MatDialogRef<EditParameterDialogComponent> = this.dialog.open(EditParameterDialogComponent, dialogConfig);
         createDialog.afterClosed().subscribe((createdParameter: Parameter) => {
             // Canceled
-            if (createdParameter == null)
+            if (createdParameter == null) {
                 return;
+            }
 
             this.parameterService.create(this.ruleComponent, createdParameter).subscribe(x =>
                 this.refresh() // TODO refresh this.ruleComponent
@@ -149,16 +150,17 @@ export class ParameterComponent implements OnInit {
     }
 
     openUpdateDialog(parameter: Parameter): void {
-        let dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
+        const dialogConfig: MatDialogConfig = this.getCommonDialogConfig();
         dialogConfig.data = {
             ruleComponent: this.ruleComponent,
             parameter: Object.assign({}, parameter)
         };
-        let createDialog: MatDialogRef<EditParameterDialog> = this.dialog.open(EditParameterDialog, dialogConfig);
+        const createDialog: MatDialogRef<EditParameterDialogComponent> = this.dialog.open(EditParameterDialogComponent, dialogConfig);
         createDialog.afterClosed().subscribe((updatedParameter: Parameter) => {
             // Canceled
-            if (updatedParameter == null)
+            if (updatedParameter == null) {
                 return;
+            }
 
             this.parameterService.update(this.ruleComponent, updatedParameter).subscribe(x =>
                 this.refresh() // TODO refresh this.ruleComponent
@@ -167,12 +169,13 @@ export class ParameterComponent implements OnInit {
     }
 
     openDeleteDialog(parameter: Parameter): void {
-        let deleteDialog: MatDialogRef<DeleteParameterDialog> = this.dialog.open(DeleteParameterDialog, this.getCommonDialogConfig());
+        const deleteDialog: MatDialogRef<DeleteParameterDialogComponent> = this.dialog.open(DeleteParameterDialogComponent, this.getCommonDialogConfig());
         deleteDialog.afterClosed().subscribe((confirm: boolean) => {
-            if (confirm)
+            if (confirm) {
                 this.parameterService.delete(this.ruleComponent, parameter).subscribe(x =>
                     this.refresh() // TODO refresh this.ruleComponent
                 );
+            }
         });
     }
 

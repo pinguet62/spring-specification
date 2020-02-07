@@ -18,7 +18,7 @@ export class RuleService {
     }
 
     load(): Observable<Rule[]> {
-        let url: string = RuleService.resourceUrl + '/';
+        const url: string = RuleService.resourceUrl + '/';
         return this.http.get<Rule[]>(url);
     }
 
@@ -31,18 +31,20 @@ export class RuleService {
      * @throws
      */
     getFromKey(key: string): Rule {
-        if (this.CACHE == null)
+        if (this.CACHE == null) {
             return null;
-        let found: Rule[] = this.CACHE.filter(ri => ri.key === key);
-        if (found.length === 0)
+        }
+        const found: Rule[] = this.CACHE.filter(ri => ri.key === key);
+        if (found.length === 0) {
             return null;
-        else if (found.length > 1)
+        } else if (found.length > 1) {
             throw new Error('More than 1 value found for key: ' + key);
+        }
         return found[0];
     }
 
     getAssociableRules(argumentType: string): Observable<Rule[]> {
-        let url: string = RuleService.resourceUrl + '?argumentType=' + argumentType;
+        const url: string = RuleService.resourceUrl + '?argumentType=' + argumentType;
         return this.http.get<Rule[]>(url);
     }
 
@@ -56,8 +58,9 @@ export class RuleServiceResolver implements Resolve<Rule[]> {
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Rule[]> | Promise<Rule[]> | Rule[] {
-        if (this.ruleService.CACHE != null)
+        if (this.ruleService.CACHE != null) {
             return this.ruleService.CACHE;
+        }
 
         return this.ruleService.load().map(x =>
             this.ruleService.CACHE = x

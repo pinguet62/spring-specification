@@ -4,9 +4,10 @@ import fr.pinguet62.springspecification.core.RuleDescription;
 import fr.pinguet62.springspecification.core.RuleName;
 import fr.pinguet62.springspecification.core.SpringRule;
 import fr.pinguet62.springspecification.core.builder.database.parameter.RuleParameter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -18,12 +19,13 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
  *
  * @see ExpressionParser
  */
+@RequiredArgsConstructor
 @SpringRule
 @RuleName(value = "Spring Expression Language")
 @RuleDescription("SpEL variables \"#value\" is the input test() parameter")
 public class SpelRule implements Rule<Object> {
 
-    @Autowired
+    @NonNull
     private BeanFactory beanFactory;
 
     @Setter

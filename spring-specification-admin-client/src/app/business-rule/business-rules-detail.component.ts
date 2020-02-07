@@ -5,9 +5,9 @@ import {BusinessRule} from './business-rule';
 import {BusinessRuleService} from './business-rule.service';
 
 @Component({
-    selector: 'p62-business-rule-detail',
+    selector: 'app-business-rule-detail',
     template: `
-        <p62-rule-component *ngIf="businessRule" [businessRule]="businessRule" [ruleComponent]="businessRule.rootRuleComponent"></p62-rule-component>
+        <app-rule-component *ngIf="businessRule" [businessRule]="businessRule" [ruleComponent]="businessRule.rootRuleComponent"></app-rule-component>
     `
 })
 export class BusinessRuleDetailComponent {

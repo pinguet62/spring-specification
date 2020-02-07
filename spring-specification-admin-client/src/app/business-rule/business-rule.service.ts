@@ -15,23 +15,23 @@ export class BusinessRuleService {
     }
 
     getAll(): Observable<BusinessRule[]> {
-        let url: string = BusinessRuleService.resourceUrl;
+        const url: string = BusinessRuleService.resourceUrl;
         return this.http.get<BusinessRule[]>(url);
     }
 
     get(key: string): Observable<BusinessRule> {
-        let url: string = BusinessRuleService.resourceUrl + '/' + key;
+        const url: string = BusinessRuleService.resourceUrl + '/' + key;
         return this.http.get<BusinessRule>(url);
     }
 
     create(businessRule: BusinessRule): Observable<BusinessRule> {
-        let url: string = BusinessRuleService.resourceUrl;
-        let body: string = JSON.stringify(businessRule);
+        const url: string = BusinessRuleService.resourceUrl;
+        const body: string = JSON.stringify(businessRule);
         return this.http.put<BusinessRule>(url, body);
     }
 
     delete(businessRule: BusinessRule): Observable<BusinessRule> {
-        let url: string = BusinessRuleService.resourceUrl + '/' + businessRule.id;
+        const url: string = BusinessRuleService.resourceUrl + '/' + businessRule.id;
         return this.http.delete<BusinessRule>(url);
     }
 

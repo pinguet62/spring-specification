@@ -17,7 +17,7 @@ import {DragulaService} from 'ng2-dragula';
 import {NodeMovedEvent, TreeNode} from './tree-node';
 
 @Component({
-    selector: 'p62-tree-node',
+    selector: 'app-tree-node',
     template: `
         <li>
             <div class="tree-content">
@@ -36,8 +36,8 @@ import {NodeMovedEvent, TreeNode} from './tree-node';
             </div>
 
             <ul #childrenUl *ngIf="node.expanded" [dragula]="dragulaBagId" [dragulaModel]="node.children">
-                <p62-tree-node *ngFor="let child of node.children" [dragulaBagId]="dragulaBagId" [node]="child" [labelTemplate]="labelTemplate"
-                               [optionsTemplate]="optionsTemplate"></p62-tree-node>
+                <app-tree-node *ngFor="let child of node.children" [dragulaBagId]="dragulaBagId" [node]="child" [labelTemplate]="labelTemplate"
+                               [optionsTemplate]="optionsTemplate"></app-tree-node>
                 <li *ngIf="showEmptyDropZones" class="tree-empty">-</li><!-- Workaround to drop into empty node -->
             </ul>
         </li>`,
@@ -47,7 +47,7 @@ export class TreeNodeComponent implements AfterContentInit {
 
     /** Used by Dragula to identify a <i>bag</i>, and so to restrict drag/drop only into current {@link TreeComponent}. */
     @Input() dragulaBagId: string;
-    showEmptyDropZones: boolean = false;
+    showEmptyDropZones = false;
 
     @Input() node: TreeNode<any>;
 
@@ -81,11 +81,11 @@ export class TreeNodeComponent implements AfterContentInit {
 }
 
 @Component({
-    selector: 'p62-tree',
+    selector: 'app-tree',
     template: `
         <div class="tree-container">
-            <p62-tree-node *ngIf="value" #chil [dragulaBagId]="dragulaBagId" [node]="value" [labelTemplate]="labelTemplate"
-                           [optionsTemplate]="optionsTemplate"></p62-tree-node>
+            <app-tree-node *ngIf="value" #chil [dragulaBagId]="dragulaBagId" [node]="value" [labelTemplate]="labelTemplate"
+                           [optionsTemplate]="optionsTemplate"></app-tree-node>
         </div>`,
     styleUrls: ['./tree.component.css'],
     viewProviders: [DragulaService /* fix: multiple-event handling */]
@@ -109,10 +109,10 @@ export class TreeComponent {
             accepts: (el: Element, target: Element, source: Element, sibling: Element): boolean => this.canDropInto(el, target, source, sibling)
         });
         dragulaService.drop.subscribe(values => {
-            let movedTreeNodeElement: Element = values[1];
-            let tgtUlElement: Element = values[2];
-            let found: { node: TreeNode<any>, parent: TreeNode<any>, index: number } = this.findParentTreeNodeComponent(movedTreeNodeElement, tgtUlElement);
-            let event: NodeMovedEvent<any> = {
+            const movedTreeNodeElement: Element = values[1];
+            const tgtUlElement: Element = values[2];
+            const found: { node: TreeNode<any>, parent: TreeNode<any>, index: number } = this.findParentTreeNodeComponent(movedTreeNodeElement, tgtUlElement);
+            const event: NodeMovedEvent<any> = {
                 node: found.node,
                 parent: found.parent,
                 index: found.index
@@ -123,30 +123,35 @@ export class TreeComponent {
 
     /** @return {@code null} if not found. */
     findParentTreeNodeComponent(movedTreeNodeElement: Element, tgtUlElement: Element): { node: TreeNode<any>, parent: TreeNode<any>, index: number } {
-        let result: any = {
+        const result: any = {
             node: null,
             parent: null,
             index: null
         };
 
-        let BreakException = {}; // workaround to use "break" inside "forEach"
+        const BreakException = {}; // workaround to use "break" inside "forEach"
         try {
             this.visitTreeNodes(treeNodeComponent => {
-                if (treeNodeComponent.childrenUlElement && treeNodeComponent.childrenUlElement.nativeElement === tgtUlElement)
+                if (treeNodeComponent.childrenUlElement && treeNodeComponent.childrenUlElement.nativeElement === tgtUlElement) {
                     result.parent = treeNodeComponent.node;
-                if (treeNodeComponent.elementRef.nativeElement === movedTreeNodeElement)
+                }
+                if (treeNodeComponent.elementRef.nativeElement === movedTreeNodeElement) {
                     result.node = treeNodeComponent.node;
+                }
             });
         } catch (e) {
-            if (e !== BreakException) throw e;
+            if (e !== BreakException) {
+                throw e;
+            }
         }
 
         // find index
-        for (let i = 0; i < tgtUlElement.children.length; i++)
+        for (let i = 0; i < tgtUlElement.children.length; i++) {
             if (tgtUlElement.children[i] === movedTreeNodeElement) {
                 result.index = i;
                 break;
             }
+        }
 
         return result;
     }

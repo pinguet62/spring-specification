@@ -5,22 +5,22 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule, MatDialogRef, MatInputModule} from '@angular/material';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
-import {CreateBusinessRuleDialog} from './business-rules-list.component';
+import {CreateBusinessRuleDialogComponent} from './business-rules-list.component';
 
 describe('CreateBusinessRuleDialog', () => {
-        let fixture: ComponentFixture<CreateBusinessRuleDialog>;
+        let fixture: ComponentFixture<CreateBusinessRuleDialogComponent>;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                declarations: [CreateBusinessRuleDialog],
+                declarations: [CreateBusinessRuleDialogComponent],
                 imports: [CommonModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, MatDialogModule, MatInputModule],
                 providers: [{provide: MatDialogRef, useValue: null}]
             }).overrideModule(BrowserDynamicTestingModule, {
                 set: {
-                    entryComponents: [CreateBusinessRuleDialog]
+                    entryComponents: [CreateBusinessRuleDialogComponent]
                 }
             });
-            fixture = TestBed.createComponent(CreateBusinessRuleDialog);
+            fixture = TestBed.createComponent(CreateBusinessRuleDialogComponent);
         });
 
         it('has 2 buttons "Cancel" and "Apply"', () => {

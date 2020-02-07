@@ -27,8 +27,8 @@ exports.config = {
   }
 };
 
-if (process.env.TRAVIS) {
+if (process.env.CI) {
   exports.config.capabilities.chromeOptions = {
-    args: ['--headless', '--disable-gpu', '--window-size=800,600', '--no-sandbox']
+    args: ['--no-sandbox', '--headless']
   }
 };
