@@ -5,16 +5,16 @@
 @import "~dragula/dist/dragula.css";
 
 body {
-    margin: 0;
+  margin: 0;
 }
 
 /* Permanent toolbar and content scrollable */
 
 app-root > mat-toolbar {
-    position: fixed;
-    z-index: 2;
+  position: fixed;
+  z-index: 2;
 }
 
 .mat-sidenav-container[fullscreen] {
-    top: 64px !important;
+  top: 64px !important;
 }

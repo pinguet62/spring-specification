@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 import {environment} from '../../environments/environment';
 import {Rule} from './rule';
@@ -26,11 +26,7 @@ export class RuleService {
         return this.CACHE;
     }
 
-    /**
-     * @return {@code null} if not found.
-     * @throws
-     */
-    getFromKey(key: string): Rule {
+    getFromKey(key: string): Rule | null {
         if (this.CACHE == null) {
             return null;
         }
@@ -62,9 +58,8 @@ export class RuleServiceResolver implements Resolve<Rule[]> {
             return this.ruleService.CACHE;
         }
 
-        return this.ruleService.load().map(x =>
-            this.ruleService.CACHE = x
-        );
+        return this.ruleService.load()
+          .pipe(map(x => this.ruleService.CACHE = x));
     }
 
 }

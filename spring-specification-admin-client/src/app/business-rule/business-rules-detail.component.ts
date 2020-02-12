@@ -17,7 +17,7 @@ export class BusinessRuleDetailComponent {
     constructor(route: ActivatedRoute,
                 private businessRuleService: BusinessRuleService) {
         route.params.subscribe((params: Params) =>
-            this.businessRuleService.get(params['id']).subscribe(br =>
+            this.businessRuleService.get(params.id).subscribe(br =>
                 this.businessRule = br
             )
         );

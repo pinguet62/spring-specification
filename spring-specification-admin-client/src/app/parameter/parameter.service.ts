@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import {Observable} from 'rxjs';
 
 import {RuleService} from '../rule/rule.service';
 import {RuleComponentService} from '../rule-component/rule-component.service';

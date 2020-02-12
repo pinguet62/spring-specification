@@ -1,5 +1,5 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 
 import {NodeMovedEvent, TreeNode} from '../tree/tree-node';
 import {RuleComponentService} from './rule-component.service';
@@ -42,7 +42,7 @@ export class EditRuleComponentDialogComponent {
                 ruleService: RuleService) {
         // Dialog data
         const businessRuleArgumentType: string = data.businessRuleArgumentType;
-        this.ruleComponent = <RuleComponent> (data && data.ruleComponent || {}); // update or create
+        this.ruleComponent = (data && data.ruleComponent || {}); // update or create
 
         ruleService.getAssociableRules(businessRuleArgumentType).subscribe(rs =>
             this.availableRules = rs
@@ -86,7 +86,7 @@ export class SettingsRuleComponentDialogComponent {
 
     constructor(protected dialogRef: MatDialogRef<SettingsRuleComponentDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any) {
-        this.ruleComponent = <RuleComponent> data;
+        this.ruleComponent = data;
     }
 
 }

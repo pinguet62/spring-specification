@@ -56,7 +56,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>ci</arguments>
+                            <arguments>install</arguments>
                         </configuration>
                     </execution>
                     <execution>
@@ -79,23 +79,22 @@
                             <environmentVariables>
                                 <CI>true</CI>
                             </environmentVariables>
-                            <!-- &#x002d;&#x002d;single-run : disable watch (stop after execution) -->
-                            <arguments>run test -- --code-coverage=true --single-run</arguments>
+                            <arguments>run test -- --code-coverage=true</arguments>
                         </configuration>
                     </execution>
-<!--                    <execution>-->
-<!--                        <id>e2e</id>-->
-<!--                        <phase>test</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>npm</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <environmentVariables>-->
-<!--                                <CI>true</CI>-->
-<!--                            </environmentVariables>-->
-<!--                            <arguments>run ng &#45;&#45; e2e</arguments>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
+                    <execution>
+                        <id>e2e</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <environmentVariables>
+                                <CI>true</CI>
+                            </environmentVariables>
+                            <arguments>run e2e</arguments>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>build</id>
                         <phase>package</phase>
@@ -106,31 +105,7 @@
                             <!-- ng build -->
                             <!-- &#x002d;&#x002d;environment=embedded -->
                             <!-- &#x002d;&#x002d;base-href=/spring-specification-admin-client/ -->
-                            <arguments>run ng -- build --environment=embedded --base-href=/spring-specification-admin-client/</arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Configuration files placed into root project -->
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>..</directory>
-                                    <includes>
-                                        <include>tslint.json</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                            <outputDirectory>.</outputDirectory>
+                            <arguments>run ng -- build --prod --base-href=/spring-specification-admin-client/</arguments>
                         </configuration>
                     </execution>
                 </executions>

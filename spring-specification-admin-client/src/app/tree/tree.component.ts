@@ -1,5 +1,5 @@
 import {
-    AfterContentInit,
+    AfterViewInit,
     Component,
     ContentChild,
     ElementRef,
@@ -43,7 +43,7 @@ import {NodeMovedEvent, TreeNode} from './tree-node';
         </li>`,
     styleUrls: ['./tree.component.css']
 })
-export class TreeNodeComponent implements AfterContentInit {
+export class TreeNodeComponent implements AfterViewInit {
 
     /** Used by Dragula to identify a <i>bag</i>, and so to restrict drag/drop only into current {@link TreeComponent}. */
     @Input() dragulaBagId: string;
@@ -61,21 +61,23 @@ export class TreeNodeComponent implements AfterContentInit {
     @ViewChild('childrenUl', {read: ElementRef}) childrenUlElement: ElementRef;
 
     constructor(public elementRef: ElementRef, dragulaService: DragulaService) {
-        dragulaService.drag.subscribe(x =>
+        dragulaService.drag(this.dragulaBagId).subscribe(x =>
             this.showEmptyDropZones = this.node.acceptChildren && this.node.children.length === 0
         );
-        dragulaService.drop.subscribe(x =>
+        dragulaService.drop(this.dragulaBagId).subscribe(x =>
             this.showEmptyDropZones = false
         );
-        dragulaService.cancel.subscribe(x =>
+        dragulaService.cancel(this.dragulaBagId).subscribe(x =>
             this.showEmptyDropZones = false
         );
     }
 
     /** Fill each {@link ViewContainerRef} from corresponding {@link TemplateRef}. */
-    ngAfterContentInit(): void {
-        this.labelView.createEmbeddedView(this.labelTemplate, {'\$implicit': this.node});
-        this.optionsView.createEmbeddedView(this.optionsTemplate, {'\$implicit': this.node});
+    ngAfterViewInit(): void {
+        const labelEmbeddedViewRef = this.labelView.createEmbeddedView(this.labelTemplate, {$implicit: this.node});
+        labelEmbeddedViewRef.detectChanges();
+        const optionsEmbeddedViewRef = this.optionsView.createEmbeddedView(this.optionsTemplate, {$implicit: this.node});
+        optionsEmbeddedViewRef.detectChanges();
     }
 
 }
@@ -104,11 +106,11 @@ export class TreeComponent {
     @ViewChildren(TreeNodeComponent) childrenTreeNodeComponents: QueryList<TreeNodeComponent>;
 
     constructor(dragulaService: DragulaService) {
-        dragulaService.setOptions(this.dragulaBagId, /*options=*/{
+        dragulaService.createGroup(this.dragulaBagId, {
             revertOnSpill: true,
             accepts: (el: Element, target: Element, source: Element, sibling: Element): boolean => this.canDropInto(el, target, source, sibling)
         });
-        dragulaService.drop.subscribe(values => {
+        dragulaService.drop(this.dragulaBagId).subscribe(values => {
             const movedTreeNodeElement: Element = values[1];
             const tgtUlElement: Element = values[2];
             const found: { node: TreeNode<any>, parent: TreeNode<any>, index: number } = this.findParentTreeNodeComponent(movedTreeNodeElement, tgtUlElement);
@@ -121,8 +123,7 @@ export class TreeComponent {
         });
     }
 
-    /** @return {@code null} if not found. */
-    findParentTreeNodeComponent(movedTreeNodeElement: Element, tgtUlElement: Element): { node: TreeNode<any>, parent: TreeNode<any>, index: number } {
+    findParentTreeNodeComponent(movedTreeNodeElement: Element, tgtUlElement: Element): { node: TreeNode<any>, parent: TreeNode<any>, index: number } | null {
         const result: any = {
             node: null,
             parent: null,

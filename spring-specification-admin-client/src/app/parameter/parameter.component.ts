@@ -1,7 +1,6 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
+import {BehaviorSubject} from 'rxjs';
 
 import {ObservableDataSource} from '../simple-data-source';
 import {Parameter} from './parameter';
@@ -42,7 +41,7 @@ export class EditParameterDialogComponent {
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 parameterService: ParameterService) {
         this.ruleComponent = data.ruleComponent;
-        this.parameter = <Parameter> (data && data.parameter || {}); // update or create
+        this.parameter = (data && data.parameter || {}); // update or create
 
         parameterService.getKeyByRule(this.ruleComponent.key).subscribe(keys => {
             const alreadyAssociatedKey: string[] = this.ruleComponent.parameters.map(p => p.key);

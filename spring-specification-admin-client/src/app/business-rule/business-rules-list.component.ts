@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
+import {BehaviorSubject} from 'rxjs';
 
 import {ObservableDataSource} from '../simple-data-source';
 import {BusinessRuleService} from './business-rule.service';

@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
+
 import {ObservableDataSource} from '../simple-data-source';
 import {Rule} from './rule';
 import {RuleService} from './rule.service';
